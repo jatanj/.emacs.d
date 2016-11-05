@@ -1,8 +1,11 @@
+local.el
+auto-save-list
 ido.last
 ido.last~
 init.el~
 recentf
 recentf~
-.emacs.desktop
+.emacs.desktop*
 projectile.cache
 projectile-bookmarks.eld
+server

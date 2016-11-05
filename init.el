@@ -1,4 +1,6 @@
-;; Disable startup screen
+(load "~/.emacs.d/local.el")
+
+;; Startup options
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
 (defun display-startup-echo-area-message () (message ""))
@@ -8,9 +10,6 @@
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (load-theme 'custom-dark t)
-(set-cursor-color "#ffffff")
-(set-face-attribute 'region nil :foreground "#202020")
-(set-face-attribute 'fringe nil :background "#282c34" :foreground "#282c34")
 (set-face-attribute 'mode-line nil :box nil)
 (set-face-attribute 'vertical-border nil :foreground "#202020")
 
@@ -33,8 +32,8 @@
 (prefer-coding-system 'utf-8)
 
 ;; General config
-(setq frame-title-format "Emacs - %b")
 (desktop-save-mode 1)
+(setq frame-title-format "Emacs - %b")
 (show-paren-mode 1)
 (global-linum-mode 1)
 (setq linum-format " %d ")
@@ -60,12 +59,8 @@
      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
+(set-face-attribute 'default nil :font global-font-face)
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#282c34" :foreground "#f8f8f8" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "outline" :family "Inconsolata"))))
  '(ido-subdir ((t (:foreground "#8b7d6b")))))
 
 ;; Packages
@@ -73,21 +68,16 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil)))
- '(tabbar-separator (quote (0.5))))
+    (js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Javascript / HTML / CSS
 (setq js-indent-level 2)
-(setq javascript-indent-level 2) ; javascript-mode
+(setq javascript-indent-level 2)
 (setq js2-basic-offset 2)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
@@ -98,6 +88,7 @@
 (setq css-indent-offset 2)
 
 ;; Evil
+(setq evil-toggle-key "C-`")
 (require 'evil)
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
@@ -151,7 +142,7 @@
 (setq tabbar-use-images nil)
 (require 'tabbar)
 (tabbar-mode 1)
-(set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font "Inconsolata-12")
+(set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
 (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
 (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
 (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
@@ -160,6 +151,7 @@
 ;; Change padding of the tabs
 ;; We also need to set separator to avoid overlapping tabs by highlighted tabs
 ;; Adding spaces
+(setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
   "Return a label for TAB. That is, a string used to represent it on the tab bar."
   (let ((label  (if tabbar--buffer-show-groups
@@ -191,7 +183,7 @@
                    (cond
                     ((equal buffer-name "*cider-repl server*") nil)
                     (t t))))
-            (neotree-dir "D:\\Develop")
+            (neotree-dir develop-dir)
           (let ((dir-name (if (and (fboundp 'projectile-project-p)
                                    (projectile-project-p))
                               (projectile-project-root)
@@ -202,9 +194,18 @@
 
 (require 'general)
 
+(dolist
+  (key '("M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-/"))
+  (global-set-key (kbd key) nil))
+
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
+(global-set-key (kbd "C-r") (general-simulate-keys "C-M-%" t))
+
+(define-key global-map (kbd "C-h") nil)
+(global-unset-key (kbd "C-h"))
+(setq help-char nil)
 
 (general-define-key
   :states '(normal emacs motion)
@@ -217,20 +218,20 @@
 (general-define-key
   :states '(normal insert visual emacs motion)
   "M-<f4>" 'save-buffers-kill-emacs
-  "C-=" 'text-scale-increase
-  "C--" 'text-scale-decrease
-  "M-<up>" (lambda () (interactive) (previous-line 10))
-  "M-<down>" (lambda () (interactive) (next-line 10))
+  "C-z" 'undo-tree-undo
   "C-s" 'save-buffer
-  "C-f" 'isearch-forward
+  "C-f" 'isearch-forward-regexp
+  "C-S-f" 'isearch-backward-regexp
   "C-x" 'kill-region
   "C-c" 'kill-ring-save
   "C-v" 'yank
-  ; "<C-tab>" 'mode-line-other-buffer
+  "<C-tab>" 'mode-line-other-buffer
   "M-C-<left>" 'windmove-left
   "M-C-<right>" 'windmove-right
   "M-C-<up>" 'windmove-up
   "M-C-<down>" 'windmove-down
+  "M-<up>" (lambda () (interactive) (previous-line 10))
+  "M-<down>" (lambda () (interactive) (next-line 10))
   "C-S-p" 'helm-M-x
   "C-p" 'helm-mini)
 
