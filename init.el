@@ -7,11 +7,25 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-;; Load theme
-(setq custom-theme-directory "~/.emacs.d/themes/")
-(load-theme 'custom-dark t)
-(set-face-attribute 'mode-line nil :box nil)
-(set-face-attribute 'vertical-border nil :foreground "#202020")
+(setq configure-frame-functions '())
+
+;; General config
+(if (daemonp)
+  (setq default-frame-alist client-window-attributes)
+  (progn
+    (desktop-save-mode 1)
+    (setq default-frame-alist desktop-window-attributes)))
+(setq frame-title-format "Emacs - %b")
+(show-paren-mode 1)
+(blink-cursor-mode 0)
+(global-linum-mode 1)
+(setq linum-format " %d ")
+(setq resize-mini-windows t)
+(setq scroll-step 1)
+(setq scroll-error-top-bottom t)
+(setq tooltip-use-echo-area t)
+(add-to-list 'configure-frame-functions '(lambda () (toggle-scroll-bar -1)))
+(electric-pair-mode 1)
 
 ;; Indentation
 (setq indent-tabs-mode nil)
@@ -20,6 +34,20 @@
 (setq indent-line-function 'insert-tab)
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+
+;; Face attributes
+(add-to-list 'default-frame-alist `(font . ,global-font-face))
+(set-face-attribute 'default nil :font global-font-face)
+(add-to-list 'configure-frame-functions
+  '(lambda ()
+    (set-face-attribute 'vertical-border nil :foreground "#202020")
+    (set-face-attribute 'ido-subdir nil :foreground "#8b7d6b")
+    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
+    (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
+    (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
+    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
+    (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
+    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
 
 ;; Use UTF-8 throughout
 (setq utf-translate-cjk-mode nil)
@@ -31,61 +59,36 @@
 (set-selection-coding-system 'utf-8))
 (prefer-coding-system 'utf-8)
 
-;; General config
-(desktop-save-mode 1)
-(setq frame-title-format "Emacs - %b")
-(show-paren-mode 1)
-(global-linum-mode 1)
-(setq linum-format " %d ")
-(blink-cursor-mode 0)
-(setq resize-mini-windows t)
-(toggle-scroll-bar -1)
-(setq scroll-step 1)
-(setq scroll-error-top-bottom t)
-(setq tooltip-use-echo-area t)
-
 (defun slick-cut (beg end)
   (interactive
-   (if mark-active
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-beginning-position 2)))))
+    (if mark-active
+      (list (region-beginning) (region-end))
+      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-region :before #'slick-cut)
 
 (defun slick-copy (beg end)
   (interactive
-   (if mark-active
-       (list (region-beginning) (region-end))
-     (message "Copied line")
-     (list (line-beginning-position) (line-beginning-position 2)))))
+    (if mark-active
+      (list (region-beginning) (region-end))
+      (message "Copied line")
+      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
-
-(set-face-attribute 'default nil :font global-font-face)
-(custom-set-faces
- '(ido-subdir ((t (:foreground "#8b7d6b")))))
 
 ;; Packages
 (package-initialize)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
-
-;; Javascript / HTML / CSS
-(setq js-indent-level 2)
-(setq javascript-indent-level 2)
-(setq js2-basic-offset 2)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
-(setq web-mode-markup-indent-offset 4)
-(setq web-mode-css-indent-offset 2)
-(setq web-mode-code-indent-offset 2)
-(setq css-indent-offset 2)
+    (golden-ratio web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
 (setq evil-toggle-key "C-`")
@@ -102,6 +105,9 @@
 (helm-autoresize-mode 1)
 (setq helm-autoresize-max-height 25)
 (setq helm-buffers-fuzzy-matching t)
+(setq helm-M-x-fuzzy-match t)
+(setq helm-recentf-fuzzy-match t)
+(setq helm-semantic-fuzzy-match t)
 
 ;; Projectile
 (use-package projectile
@@ -117,7 +123,7 @@
 (require 'spaceline-config)
 (spaceline-spacemacs-theme)
 (spaceline-helm-mode 1)
-(setq powerline-default-separator 'arrow-fade)
+(setq powerline-default-separator nil)
 (spaceline-toggle-minor-modes-off)
 (spaceline-toggle-hud-off)
 (spaceline-toggle-buffer-size-off)
@@ -126,6 +132,7 @@
 (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
 (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
 (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")
+(spaceline-compile)
 
 ;; Ido
 (require 'flx-ido)
@@ -142,30 +149,24 @@
 (setq tabbar-use-images nil)
 (require 'tabbar)
 (tabbar-mode 1)
-(set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
-(set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
-(set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
-(set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
-(set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
-(set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)
-;; Change padding of the tabs
-;; We also need to set separator to avoid overlapping tabs by highlighted tabs
-;; Adding spaces
+; https://gist.github.com/3demax/1264635
 (setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
   "Return a label for TAB. That is, a string used to represent it on the tab bar."
   (let ((label  (if tabbar--buffer-show-groups
                     (format "[%s]  " (tabbar-tab-tabset tab))
                   (format "%s  " (tabbar-tab-value tab)))))
-    ;; Unless the tab bar auto scrolls to keep the selected tab
-    ;; visible, shorten the tab label to keep as many tabs as possible
-    ;; in the visible area of the tab bar.
     (if tabbar-auto-scroll-flag
         label
       (tabbar-shorten
        label (max 1 (/ (window-width)
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
+(defun emacs-user-tabbar-groups ()
+   (list (cond ((string-equal "*" (substring (buffer-name) 0 1)) "emacs")
+               ((eq major-mode 'dired-mode) "emacs")
+               (t "user"))))
+(setq tabbar-buffer-groups-function 'emacs-user-tabbar-groups)
 
 ;; NeoTree
 (require 'neotree)
@@ -192,7 +193,64 @@
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
 
-(require 'general)
+;; HTML / CSS / JavaScript
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
+(add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
+(setq js-indent-level 2)
+(setq javascript-indent-level 2)
+(setq js2-basic-offset 2)
+(setq js3-indent-level 2)
+(setq sgml-basic-offset 2)
+(setq web-mode-markup-indent-offset 4)
+(setq web-mode-css-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
+(setq css-indent-offset 2)
+
+;; Typescript
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(idle-change mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+(setq company-tooltip-align-annotations t)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+(setq typescript-indent-level 2)
+(setq tide-format-options
+  '(:indentSize 2
+    :tabSize 2
+    :convertTabsToSpaces t))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+
+;; Load theme
+(setq custom-theme-directory "~/.emacs.d/themes/")
+(add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
+
+(defun configure-frame ()
+  (dolist (func configure-frame-functions)
+    (funcall func)))
+(if (daemonp)
+  (add-hook 'after-make-frame-functions
+    (lambda (frame)
+      (select-frame frame)
+      (configure-frame)))
+  (configure-frame))
 
 (dolist
   (key '("M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-/"))
@@ -201,30 +259,56 @@
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
+(global-set-key (kbd "M-C-<prior>") 'enlarge-window)
+(global-set-key (kbd "M-C-<next>") 'shrink-window)
+(global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
+(global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
 (global-set-key (kbd "C-r") (general-simulate-keys "C-M-%" t))
 
 (define-key global-map (kbd "C-h") nil)
 (global-unset-key (kbd "C-h"))
 (setq help-char nil)
 
+(defun switch-to-minibuffer-window ()
+  "switch to minibuffer window (if active)"
+  (interactive)
+  (when (active-minibuffer-window)
+    (select-frame-set-input-focus (window-frame (active-minibuffer-window)))
+    (select-window (active-minibuffer-window))))
+
+(require 'general)
+(setq leader-key "C-l")
+(general-define-key :prefix leader-key)
+(general-define-key
+  :states '(normal)
+  "S-<left>" (lambda () (interactive) (evil-visual-char) (backward-char))
+  "S-<right>" (lambda () (interactive) (evil-visual-char) (forward-char))
+  "S-<up>" (lambda () (interactive) (evil-visual-char) (previous-line))
+  "S-<down>" (lambda () (interactive) (evil-visual-char) (next-line)))
+(general-define-key
+  :states '(visual)
+  "S-<left>" (lambda () (interactive) (backward-char))
+  "S-<right>" (lambda () (interactive) (forward-char))
+  "S-<up>" (lambda () (interactive) (previous-line))
+  "S-<down>" (lambda () (interactive) (next-line)))
 (general-define-key
   :states '(normal emacs motion)
   "SPC" (general-simulate-keys "M-x" t))
-
 (general-define-key
   :states '(insert)
   "TAB" 'tab-to-tab-stop)
-
 (general-define-key
   :states '(normal insert visual emacs motion)
   "M-<f4>" 'save-buffers-kill-emacs
+  "C-w" 'evil-normal-state
   "C-z" 'undo-tree-undo
   "C-s" 'save-buffer
   "C-f" 'isearch-forward-regexp
   "C-S-f" 'isearch-backward-regexp
   "C-x" 'kill-region
-  "C-c" 'kill-ring-save
   "C-v" 'yank
+  "C-q" (lambda () (interactive) (scroll-down 1))
+  "<home>" 'back-to-indentation
   "<C-tab>" 'mode-line-other-buffer
   "M-C-<left>" 'windmove-left
   "M-C-<right>" 'windmove-right
@@ -234,10 +318,12 @@
   "M-<down>" (lambda () (interactive) (next-line 10))
   "C-S-p" 'helm-M-x
   "C-p" 'helm-mini)
-
-(setq leader-key "C-l")
-(general-define-key :prefix leader-key)
-
 (general-define-key
   :keymaps 'ctl-x-map
   "C-b" 'neotree-projectile)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
