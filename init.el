@@ -20,9 +20,10 @@
 (blink-cursor-mode 0)
 (setq-default cursor-in-non-selected-windows nil)
 (global-linum-mode 1)
-(setq linum-format " %d ")
+(setq linum-format "%4d ")
 (setq resize-mini-windows t)
 (setq scroll-step 1)
+(setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
 (setq tooltip-use-echo-area t)
 (add-to-list 'configure-frame-functions '(lambda () (toggle-scroll-bar -1)))
@@ -44,13 +45,7 @@
 (add-to-list 'configure-frame-functions
   '(lambda ()
     (set-face-attribute 'vertical-border nil :foreground "#222222")
-    (set-face-attribute 'ido-subdir nil :foreground "#90788c")
-    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
-    (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
-    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
-    (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
+    (set-face-attribute 'ido-subdir nil :foreground "#90788c")))
 
 ;; Use UTF-8 throughout
 (setq utf-translate-cjk-mode nil)
@@ -91,9 +86,9 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (yasnippet expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
-;; Evil Mode
+;; Evil
 (setq evil-toggle-key "C-S-`")
 (require 'evil)
 (evil-mode 1)
@@ -101,8 +96,8 @@
 (evil-set-initial-state 'dired-mode 'normal)
 (evil-set-initial-state 'Buffer-menu-mode 'normal)
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
-(with-eval-after-load 'evil
-  (defalias #'forward-evil-word #'forward-evil-symbol))
+; (with-eval-after-load 'evil
+;   (defalias #'forward-evil-word #'forward-evil-symbol))
 
 ;; Evil Surround
 (require 'evil-surround)
@@ -117,8 +112,8 @@
 (setq helm-M-x-fuzzy-match t)
 (setq helm-recentf-fuzzy-match t)
 (setq helm-semantic-fuzzy-match t)
-; (add-to-list 'configure-frame-functions '(lambda ()
-;   (set-face-attribute 'helm-match nil :foreground "#5cacee" :underline nil)))
+(global-set-key (kbd "C-S-p") 'helm-M-x)
+(global-set-key (kbd "C-p") 'helm-mini)
 
 ;; Projectile
 (use-package projectile
@@ -149,11 +144,12 @@
 (spaceline-toggle-hud-off)
 (spaceline-toggle-buffer-size-off)
 (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-(add-to-list 'configure-frame-functions '(lambda ()
-  (set-face-attribute 'spaceline-evil-insert nil :background "#7eaefd")
-  (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
-  (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
-  (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")))
+(add-to-list 'configure-frame-functions
+  '(lambda ()
+    (set-face-attribute 'spaceline-evil-insert nil :background "#7eaefd")
+    (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
+    (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
+    (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")))
 (spaceline-compile)
 
 ;; Ido
@@ -163,7 +159,8 @@
 (flx-ido-mode 1)
 (ido-vertical-mode 1)
 (setq ido-enable-flex-matching t)
-(add-to-list 'configure-frame-functions '(lambda ()
+(add-to-list 'configure-frame-functions
+  '(lambda ()
   (set-face-attribute 'ido-vertical-first-match-face nil :background nil :foreground "#5cacee")
   (set-face-attribute 'ido-vertical-only-match-face nil :background nil :foreground "#5cacee")
   (set-face-attribute 'ido-vertical-match-face nil :foreground "#5cacee")))
@@ -172,6 +169,14 @@
 (setq tabbar-use-images nil)
 (require 'tabbar)
 (tabbar-mode 1)
+(add-to-list 'configure-frame-functions
+  '(lambda ()
+    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
+    (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
+    (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
+    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
+    (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
+    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
 ; https://gist.github.com/3demax/1264635
 (setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
@@ -206,12 +211,6 @@
     (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
 (setq tabbar-buffer-groups-function 'tabbar-projectile-tabbar-buffer-groups)
 
-; (tabbar-group-by-projectile-project)
-; (defun emacs-user-tabbar-groups ()
-;    (list (cond ((string-equal "*" (substring (buffer-name) 0 1)) "emacs")
-;                ((eq major-mode 'dired-mode) "emacs")
-;                (t "user"))))
-
 ;; NeoTree
 (require 'neotree)
 (setq neo-theme 'ascii)
@@ -237,12 +236,17 @@
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
 
-;; Guide Key
+;; Expand-Region
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C--") 'er/contract-region)
+
+;; Guide-Key
 ; (require 'guide-key)
 ; (guide-key-mode 1)
 ; (setq guide-key/guide-key-sequence '("C-l p"))
 
-;; HTML / CSS /3 JavaScript
+;; HTML / CSS / JavaScript
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -287,6 +291,10 @@
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
               (setup-tide-mode))))
 
+;; Scala
+(use-package ensime
+  :ensure t)
+
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
@@ -302,17 +310,12 @@
   (configure-frame))
 
 (dolist
-  (key '("M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-/"))
+  (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-/"))
   (global-set-key (kbd key) nil))
 
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
-(global-set-key (kbd "M-C-<prior>") 'enlarge-window)
-(global-set-key (kbd "M-C-<next>") 'shrink-window)
-(global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
-(global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
-(global-set-key (kbd "C-r") (general-simulate-keys "C-M-%" t))
 
 (define-key global-map (kbd "C-h") nil)
 (global-unset-key (kbd "C-h"))
@@ -321,6 +324,18 @@
 (require 'general)
 (setq leader-key "C-l")
 (general-define-key :prefix leader-key)
+(general-define-key
+  "M-C-<prior>" 'enlarge-window
+  "M-C-<next>" 'shrink-window
+  "M-C-<home>" 'enlarge-window-horizontally
+  "M-C-<end>" 'shrink-window-horizontally
+  "M-<f4>" 'save-buffers-kill-emacs
+  "M-C-<left>" 'windmove-left
+  "M-C-<right>" 'windmove-right
+  "M-C-<up>" 'windmove-up
+  "M-C-<down>" 'windmove-down
+  "M-<up>" (lambda () (interactive) (previous-line 10))
+  "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
   :states '(normal)
   "S-<left>" (lambda () (interactive) (evil-visual-char) (backward-char))
@@ -337,11 +352,10 @@
   :states '(normal emacs motion)
   "SPC" (general-simulate-keys "M-x" t))
 (general-define-key
-  :states '(insert)
-  "TAB" 'tab-to-tab-stop)
+ :states '(insert)
+ "TAB" 'tab-to-tab-stop)
 (general-define-key
   :states '(normal insert visual emacs motion)
-  "M-<f4>" 'save-buffers-kill-emacs
   "C-w" 'evil-normal-state
   "C-z" 'undo-tree-undo
   "C-s" 'save-buffer
@@ -350,20 +364,16 @@
   "C-x" 'kill-region
   "C-v" 'yank
   "C-S-v" 'evil-visual-block
+  "C-p" nil
   "C-q" (lambda () (interactive) (scroll-down 1))
   "<home>" 'back-to-indentation
   "<C-tab>" 'mode-line-other-buffer
-  "M-C-<left>" 'windmove-left
-  "M-C-<right>" 'windmove-right
-  "M-C-<up>" 'windmove-up
-  "M-C-<down>" 'windmove-down
-  "M-<up>" (lambda () (interactive) (previous-line 10))
-  "M-<down>" (lambda () (interactive) (next-line 10))
   "C-S-p" 'helm-M-x
-  "C-p" 'helm-mini)
+  "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
   :keymaps 'ctl-x-map
   "w" 'kill-this-buffer
+  "b" 'helm-buffers-list
   "C-b" 'neotree-projectile)
 
 (custom-set-faces

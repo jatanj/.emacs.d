@@ -46,7 +46,7 @@
     `(fringe ((,class (:background "#282c34" :foreground "#282c34"))))
     `(cursor ((,class (:background "#ffffff"))))
         `(show-paren-match-face ((,class (:background ,success2))))
-        `(isearch ((,class (:bold nil :foreground ,fg1 :background ,success))))
+        `(isearch ((,class (:bold nil :foreground "#000000" :background ,success))))
         `(mode-line ((,class (:box nil :bold nil :foreground ,fg2 :background ,bg2))))
         `(mode-line-inactive ((,class (:box (:line-width 1 :color nil :style pressed-button) :foreground ,var :background ,bg1 :weight normal))))
         `(mode-line-buffer-id ((,class (:bold nil :foreground ,func :background nil))))
