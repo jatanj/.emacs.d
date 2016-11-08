@@ -36,6 +36,7 @@
 (setq indent-line-function 'insert-tab)
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Face attributes
 (add-to-list 'default-frame-alist `(font . ,global-font-face))
@@ -75,18 +76,6 @@
       (message "Copied line")
       (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
-
-; ;; Get rid of buffer messages
-; (defun my-ignore-bet-end-of-buffer--around-ad (f &rest args)
-;   (condition-case nil
-;       (apply f args)
-;     ((beginning-of-buffer end-of-buffer))))
-
-; (advice-add 'left-char :around
-;             #'my-ignore-bet-end-of-buffer--around-ad)
-
-; (advice-add 'right-char :around
-;             #'my-ignore-bet-end-of-buffer--around-ad)
 
 ;; Packages
 (package-initialize)
