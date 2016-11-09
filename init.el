@@ -86,7 +86,7 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
 (setq evil-toggle-key "C-S-`")
@@ -296,7 +296,7 @@
 
 ;; Scala
 (use-package ensime
-  :ensure t)
+:ensure t)
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -319,6 +319,10 @@
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
+(global-set-key (kbd "M-C-<prior>") 'enlarge-window)
+(global-set-key (kbd "M-C-<next>") 'shrink-window)
+(global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
+(global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
 
 (define-key global-map (kbd "C-h") nil)
 (global-unset-key (kbd "C-h"))
@@ -331,11 +335,11 @@
 (general-define-key :prefix leader-key)
 (general-define-key
   "C-:" 'eval-expression
-  "M-C-<prior>" 'enlarge-window
-  "M-C-<next>" 'shrink-window
-  "M-C-<home>" 'enlarge-window-horizontally
-  "M-C-<end>" 'shrink-window-horizontally
   "M-<f4>" 'save-buffers-kill-emacs
+  "C-=" 'enlarge-window-horizontally
+  "C--" 'shrink-window-horizontally
+  "C-_" 'enlarge-window
+  "C-+" 'shrink-window
   "M-C-<left>" 'windmove-left
   "M-C-<right>" 'windmove-right
   "M-C-<up>" 'windmove-up
@@ -376,6 +380,7 @@
   "C-q" (lambda () (interactive) (scroll-down 1))
   "<home>" 'back-to-indentation
   "<C-tab>" 'mode-line-other-buffer
+  "C-_" 'enlarge-window-horizontally
   "C-S-p" 'helm-M-x
   "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
