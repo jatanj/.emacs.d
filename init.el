@@ -26,7 +26,7 @@
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
 (setq tooltip-use-echo-area t)
-(add-to-list 'configure-frame-functions '(lambda () (toggle-scroll-bar -1)))
+(add-to-list 'configure-frame-functions (lambda () (toggle-scroll-bar -1)))
 (global-superword-mode 1)
 (electric-pair-mode 1)
 
@@ -43,7 +43,7 @@
 (add-to-list 'default-frame-alist `(font . ,global-font-face))
 (set-face-attribute 'default nil :font global-font-face)
 (add-to-list 'configure-frame-functions
-  '(lambda ()
+  (lambda ()
     (set-face-attribute 'vertical-border nil :foreground "#222222")
     (set-face-attribute 'ido-subdir nil :foreground "#90788c")))
 
@@ -60,16 +60,16 @@
 ;; Copy/cut entire line if no region is selected
 (defun slick-cut (beg end)
   (interactive
-    (if mark-active
-      (list (region-beginning) (region-end))
-      (list (line-beginning-position) (line-beginning-position 2)))))
+   (if mark-active
+       (list (region-beginning) (region-end))
+     (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-region :before #'slick-cut)
 (defun slick-copy (beg end)
   (interactive
-    (if mark-active
-      (list (region-beginning) (region-end))
-      (message "Copied line")
-      (list (line-beginning-position) (line-beginning-position 2)))))
+   (if mark-active
+       (list (region-beginning) (region-end))
+     (message "Copied line")
+     (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
 ;; Packages
@@ -86,7 +86,7 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (yasnippet expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
 (setq evil-toggle-key "C-S-`")
@@ -145,7 +145,7 @@
 (spaceline-toggle-buffer-size-off)
 (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 (add-to-list 'configure-frame-functions
-  '(lambda ()
+  (lambda ()
     (set-face-attribute 'spaceline-evil-insert nil :background "#7eaefd")
     (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
@@ -160,7 +160,7 @@
 (ido-vertical-mode 1)
 (setq ido-enable-flex-matching t)
 (add-to-list 'configure-frame-functions
-  '(lambda ()
+  (lambda ()
   (set-face-attribute 'ido-vertical-first-match-face nil :background nil :foreground "#5cacee")
   (set-face-attribute 'ido-vertical-only-match-face nil :background nil :foreground "#5cacee")
   (set-face-attribute 'ido-vertical-match-face nil :foreground "#5cacee")))
@@ -170,11 +170,13 @@
 (require 'tabbar)
 (tabbar-mode 1)
 (add-to-list 'configure-frame-functions
-  '(lambda ()
+  (lambda ()
     (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
     (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
     (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
-    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
+    (set-face-attribute 'tabbar-modified nil :background "#202328" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#202328" :style nil))
+    (set-face-attribute 'tabbar-selected-modified nil :background "#272b33" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#272b33" :style nil))
+    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :box '(:line-width 5 :color "white" :style nil))
     (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
     (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
 ; https://gist.github.com/3demax/1264635
@@ -238,13 +240,14 @@
 
 ;; Expand-Region
 (require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "C--") 'er/contract-region)
+
+;; Yasnippets
+(add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
 
 ;; Guide-Key
 ; (require 'guide-key)
 ; (guide-key-mode 1)
-; (setq guide-key/guide-key-sequence '("C-l p"))
+; (setq guide-key/guide-key-sequence '("C-c"))
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
@@ -310,7 +313,7 @@
   (configure-frame))
 
 (dolist
-  (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-/"))
+  (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
   (global-set-key (kbd key) nil))
 
 (global-set-key (kbd "C-k") ctl-x-map)
@@ -321,10 +324,13 @@
 (global-unset-key (kbd "C-h"))
 (setq help-char nil)
 
+(defun unset-key () (interactive) ())
+
 (require 'general)
 (setq leader-key "C-l")
 (general-define-key :prefix leader-key)
 (general-define-key
+  "C-:" 'eval-expression
   "M-C-<prior>" 'enlarge-window
   "M-C-<next>" 'shrink-window
   "M-C-<home>" 'enlarge-window-horizontally
@@ -350,7 +356,8 @@
   "S-<down>" (lambda () (interactive) (next-line)))
 (general-define-key
   :states '(normal emacs motion)
-  "SPC" (general-simulate-keys "M-x" t))
+  "SPC" (general-simulate-keys "M-x" t)
+  "q" nil)
 (general-define-key
  :states '(insert)
  "TAB" 'tab-to-tab-stop)
@@ -361,10 +368,11 @@
   "C-s" 'save-buffer
   "C-f" 'isearch-forward-regexp
   "C-S-f" 'isearch-backward-regexp
-  "C-x" 'kill-region
-  "C-v" 'yank
+  "C-h" 'query-replace-regexp
+  "C-v" 'er/expand-region
   "C-S-v" 'evil-visual-block
-  "C-p" nil
+  "C-/" 'comment-line
+  "C-b" 'unset-key
   "C-q" (lambda () (interactive) (scroll-down 1))
   "<home>" 'back-to-indentation
   "<C-tab>" 'mode-line-other-buffer
