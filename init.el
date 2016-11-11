@@ -167,6 +167,15 @@
 (dolist (n (number-sequence 1 9))
   (global-set-key (kbd (format "C-%s" n)) (intern (format "select-window-%s" n))))
 
+;; Anzu
+(require 'anzu)
+(global-anzu-mode +1)
+(set-face-attribute 'anzu-mode-line nil :foreground "#639743" :weight 'normal)
+(global-set-key [remap isearch-query-replace] 'anzu-isearch-query-replace)
+(global-set-key [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
+(global-set-key [remap query-replace] 'anzu-query-replace)
+(global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
+
 ;; Spaceline
 (require 'spaceline-config)
 (spaceline-spacemacs-theme)
@@ -177,6 +186,7 @@
 (spaceline-toggle-minor-modes-off)
 (spaceline-toggle-hud-off)
 (spaceline-toggle-buffer-size-off)
+(spaceline-toggle-anzu-off)
 (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 (add-to-list 'configure-frame-functions
   (lambda ()
@@ -271,15 +281,6 @@
             (neotree-dir dir-name)
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
-
-;; Anzu
-(require 'anzu)
-(global-anzu-mode +1)
-(set-face-attribute 'anzu-mode-line nil :foreground "white" :weight 'normal)
-(global-set-key [remap isearch-query-replace] 'anzu-isearch-query-replace)
-(global-set-key [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
-(global-set-key [remap query-replace] 'anzu-query-replace)
-(global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
 
 ;; Smooth-Scoll
 (use-package smooth-scroll
