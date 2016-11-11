@@ -26,6 +26,7 @@
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
 (setq tooltip-use-echo-area t)
+(setq isearch-allow-scroll t)
 (add-to-list 'configure-frame-functions (lambda () (toggle-scroll-bar -1)))
 (global-superword-mode 1)
 (electric-pair-mode 1)
@@ -72,6 +73,42 @@
      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
+(defun aborn/backward-kill-word ()
+  "Customize/Smart backward-kill-word."
+  (interactive)
+  (let* ((cp (point))
+         (backword)
+         (end)
+         (space-pos)
+         (backword-char (if (bobp)
+                            ""           ;; cursor in begin of buffer
+                          (buffer-substring cp (- cp 1)))))
+    (if (equal (length backword-char) (string-width backword-char))
+        (progn
+          (save-excursion
+            (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
+          (setq ab/debug backword)
+          (save-excursion
+            (when (and backword          ;; when backword contains space
+                       (s-contains? " " backword))
+              (setq space-pos (ignore-errors (search-backward " ")))))
+          (save-excursion
+            (let* ((pos (ignore-errors (search-backward-regexp "\n")))
+                   (substr (when pos (buffer-substring pos cp))))
+              (when (or (and substr (s-blank? (s-trim substr)))
+                        (s-contains? "\n" backword))
+                (setq end pos))))
+          (if end
+              (kill-region cp end)
+            (if space-pos
+                (kill-region cp space-pos)
+              (backward-kill-word 1))))
+      (kill-region cp (- cp 1)))         ;; word is non-english word
+    ))
+
+(global-set-key  [C-backspace]
+            'aborn/backward-kill-word)
+
 ;; Packages
 (package-initialize)
 (require 'package)
@@ -86,16 +123,15 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
-(setq evil-toggle-key "C-S-`")
+(setq evil-toggle-key "C-~")
 (require 'evil)
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
 (evil-set-initial-state 'dired-mode 'normal)
 (evil-set-initial-state 'Buffer-menu-mode 'normal)
-(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 ; (with-eval-after-load 'evil
 ;   (defalias #'forward-evil-word #'forward-evil-symbol))
 
@@ -176,7 +212,7 @@
     (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
     (set-face-attribute 'tabbar-modified nil :background "#202328" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#202328" :style nil))
     (set-face-attribute 'tabbar-selected-modified nil :background "#272b33" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#272b33" :style nil))
-    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :box '(:line-width 5 :color "white" :style nil))
+    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
     (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
     (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
 ; https://gist.github.com/3demax/1264635
@@ -237,6 +273,21 @@
             (neotree-dir dir-name)
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
+
+;; Anzu
+(require 'anzu)
+(global-anzu-mode +1)
+(set-face-attribute 'anzu-mode-line nil :foreground "white" :weight 'normal)
+(global-set-key [remap isearch-query-replace] 'anzu-isearch-query-replace)
+(global-set-key [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
+(global-set-key [remap query-replace] 'anzu-query-replace)
+(global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
+
+;; Smooth-Scoll
+(use-package smooth-scroll
+  :config
+  (smooth-scroll-mode 1)
+  (setq smooth-scroll/vscroll-step-size 5))
 
 ;; Expand-Region
 (require 'expand-region)
@@ -326,6 +377,8 @@
 
 (define-key global-map (kbd "C-h") nil)
 (global-unset-key (kbd "C-h"))
+;; (global-set-key (kbd "r") 'query-replace-regexp)
+
 (setq help-char nil)
 
 (defun unset-key () (interactive) ())
@@ -348,10 +401,15 @@
   "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
   :states '(normal)
+  "q" 'unset-key
+  "r" 'unset-key
   "S-<left>" (lambda () (interactive) (evil-visual-char) (backward-char))
   "S-<right>" (lambda () (interactive) (evil-visual-char) (forward-char))
   "S-<up>" (lambda () (interactive) (evil-visual-char) (previous-line))
   "S-<down>" (lambda () (interactive) (evil-visual-char) (next-line)))
+(general-define-key
+ :states '(insert)
+ "TAB" 'tab-to-tab-stop)
 (general-define-key
   :states '(visual)
   "S-<left>" (lambda () (interactive) (backward-char))
@@ -359,25 +417,24 @@
   "S-<up>" (lambda () (interactive) (previous-line))
   "S-<down>" (lambda () (interactive) (next-line)))
 (general-define-key
-  :states '(normal emacs motion)
-  "SPC" (general-simulate-keys "M-x" t)
-  "q" nil)
+ :states '(normal insert visual)
+ "C-w" 'evil-normal-state
+ "C-z" 'undo-tree-undo
+ "C-s" 'save-buffer
+ "C-f" 'isearch-forward-regexp
+ "C-S-f" 'isearch-backward-regexp
+ "C-h" 'query-replace-regexp
+ "C-v" 'er/expand-region
+ "C-S-v" 'evil-visual-block
+ "C-u" 'evil-scroll-up
+ "C-q" (lambda () (interactive) (scroll-down 1))
+ "C-b" 'unset-key)
 (general-define-key
- :states '(insert)
- "TAB" 'tab-to-tab-stop)
+  :states '(normal emacs motion)
+  "SPC" (general-simulate-keys "M-x" t))
 (general-define-key
   :states '(normal insert visual emacs motion)
-  "C-w" 'evil-normal-state
-  "C-z" 'undo-tree-undo
-  "C-s" 'save-buffer
-  "C-f" 'isearch-forward-regexp
-  "C-S-f" 'isearch-backward-regexp
-  "C-h" 'query-replace-regexp
-  "C-v" 'er/expand-region
-  "C-S-v" 'evil-visual-block
   "C-/" 'comment-line
-  "C-b" 'unset-key
-  "C-q" (lambda () (interactive) (scroll-down 1))
   "<home>" 'back-to-indentation
   "<C-tab>" 'mode-line-other-buffer
   "C-_" 'enlarge-window-horizontally
@@ -385,9 +442,12 @@
   "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
   :keymaps 'ctl-x-map
-  "w" 'kill-this-buffer
   "b" 'helm-buffers-list
   "C-b" 'neotree-projectile)
+(general-define-key
+ :keymaps 'isearch-mode-map
+ "C-f" 'isearch-repeat-forward
+ "C-h" 'isearch-query-replace-regexp)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
