@@ -73,15 +73,14 @@
      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
-(defun aborn/backward-kill-word ()
-  "Customize/Smart backward-kill-word."
+(defun backward-kill-word ()
   (interactive)
   (let* ((cp (point))
          (backword)
          (end)
          (space-pos)
          (backword-char (if (bobp)
-                            ""           ;; cursor in begin of buffer
+                            ""
                           (buffer-substring cp (- cp 1)))))
     (if (equal (length backword-char) (string-width backword-char))
         (progn
@@ -89,7 +88,7 @@
             (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
           (setq ab/debug backword)
           (save-excursion
-            (when (and backword          ;; when backword contains space
+            (when (and backword
                        (s-contains? " " backword))
               (setq space-pos (ignore-errors (search-backward " ")))))
           (save-excursion
@@ -103,8 +102,7 @@
             (if space-pos
                 (kill-region cp space-pos)
               (backward-kill-word 1))))
-      (kill-region cp (- cp 1)))         ;; word is non-english word
-    ))
+      (kill-region cp (- cp 1)))))
 
 (global-set-key  [C-backspace]
             'aborn/backward-kill-word)
@@ -377,8 +375,6 @@
 
 (define-key global-map (kbd "C-h") nil)
 (global-unset-key (kbd "C-h"))
-;; (global-set-key (kbd "r") 'query-replace-regexp)
-
 (setq help-char nil)
 
 (defun unset-key () (interactive) ())
