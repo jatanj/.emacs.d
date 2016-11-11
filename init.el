@@ -107,7 +107,7 @@
 (global-set-key  [C-backspace]
             'aborn/backward-kill-word)
 
-;; Packages
+ ;; Packages
 (package-initialize)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -374,9 +374,9 @@
 (global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
 
-(define-key global-map (kbd "C-h") nil)
-(global-unset-key (kbd "C-h"))
-(setq help-char nil)
+;; (define-key global-map (kbd "C-h") nil)
+;; (global-unset-key (kbd "C-h"))
+;; (setq help-char nil)
 
 (defun unset-key () (interactive) ())
 
