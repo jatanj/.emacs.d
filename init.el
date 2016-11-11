@@ -73,7 +73,7 @@
      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
-(defun backward-kill-word ()
+(defun backward-kill-word-fixed ()
   (interactive)
   (let* ((cp (point))
          (backword)
@@ -103,11 +103,10 @@
                 (kill-region cp space-pos)
               (backward-kill-word 1))))
       (kill-region cp (- cp 1)))))
-
-(global-set-key  [C-backspace]
-            'aborn/backward-kill-word)
+(global-set-key [C-backspace] 'backward-kill-word-fixed)
 
  ;; Packages
+(setq package-enable-at-startup nil)
 (package-initialize)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -121,7 +120,7 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
 (setq evil-toggle-key "C-~")
@@ -178,8 +177,6 @@
 
 ;; Spaceline
 (require 'spaceline-config)
-(spaceline-spacemacs-theme)
-(spaceline-helm-mode 1)
 (setq powerline-default-separator nil)
 (setq spaceline-workspace-numbers-unicode t)
 (setq paceline-window-numbers-unicode t)
@@ -194,7 +191,8 @@
     (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")))
-(spaceline-compile)
+(spaceline-spacemacs-theme)
+(spaceline-helm-mode 1)
 
 ;; Ido
 (require 'flx-ido)
@@ -385,7 +383,7 @@
 (general-define-key :prefix leader-key)
 (general-define-key
   "C-:" 'eval-expression
-  "M-<f4>" 'save-buffers-kill-emacs
+  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
   "C-=" 'enlarge-window-horizontally
   "C--" 'shrink-window-horizontally
   "C-_" 'enlarge-window
@@ -406,7 +404,10 @@
   "S-<down>" (lambda () (interactive) (evil-visual-char) (next-line)))
 (general-define-key
  :states '(insert)
- "TAB" 'tab-to-tab-stop)
+ "TAB" 'tab-to-tab-stop
+ "C-c" 'kill-ring-save
+ "C-x" 'kill-region
+ "C-v" 'yank)
 (general-define-key
   :states '(visual)
   "S-<left>" (lambda () (interactive) (backward-char))
@@ -440,6 +441,7 @@
 (general-define-key
   :keymaps 'ctl-x-map
   "b" 'helm-buffers-list
+  "w" 'kill-this-buffer
   "C-b" 'neotree-projectile)
 (general-define-key
  :keymaps 'isearch-mode-map
