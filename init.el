@@ -16,20 +16,34 @@
 (setq frame-title-format "Emacs - %b")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
-(show-paren-mode 1)
 (blink-cursor-mode 0)
 (setq-default cursor-in-non-selected-windows nil)
+(setq tooltip-use-echo-area t)
+(setq isearch-allow-scroll t)
+(setq load-prefer-newer t)
+;; (show-paren-mode 1)
+;; (electric-pair-mode 1)
+(global-superword-mode 1)
+
+;; Line numbers
 (global-linum-mode 1)
 (setq linum-format "%4d ")
 (setq resize-mini-windows t)
+
+;; Scrolling
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
-(setq tooltip-use-echo-area t)
-(setq isearch-allow-scroll t)
-(add-to-list 'configure-frame-functions (lambda () (toggle-scroll-bar -1)))
-(global-superword-mode 1)
-(electric-pair-mode 1)
+(add-to-list 'configure-frame-functions
+  (lambda ()
+    (toggle-scroll-bar -1)
+    (horizontal-scroll-bar-mode -1)))
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
+(require 'saveplace)
+(setq-default save-place t)
 
 ;; Indentation
 (setq indent-tabs-mode nil)
@@ -120,7 +134,7 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
 (setq evil-toggle-key "C-~")
@@ -280,6 +294,14 @@
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
 
+;; Smartparens
+(require 'smartparens-config)
+(add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
+(show-smartparens-global-mode t)
+(setq sp-highlight-pair-overlay nil)
+(setq sp-highlight-wrap-overlay nil)
+(setq sp-highlight-wrap-tag-overlay nil)
+
 ;; Smooth-Scoll
 (use-package smooth-scroll
   :config
@@ -364,6 +386,40 @@
 (setq cider-show-error-buffer nil)
 (add-hook 'cider-repl-mode-hook #'company-mode)
 (add-hook 'cider-mode-hook #'company-mode)
+(define-clojure-indent
+  (defroutes 'defun)
+  (GET 2)
+  (POST 2)
+  (PUT 2)
+  (DELETE 2)
+  (HEAD 2)
+  (ANY 2)
+  (context 2)
+  (let-routes 1))
+(define-clojure-indent
+  (form-to 1))
+(define-clojure-indent
+  (match 1)
+  (are 2)
+  (checking 2)
+  (async 1))
+(define-clojure-indent
+  (select 1)
+  (insert 1)
+  (update 1)
+  (delete 1))
+(define-clojure-indent
+  (run* 1)
+  (fresh 1))
+(define-clojure-indent
+  (extend-freeze 2)
+  (extend-thaw 1))
+(define-clojure-indent
+  (go-loop 1))
+(define-clojure-indent
+  (this-as 1)
+  (specify 1)
+  (specify! 1))
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -390,8 +446,9 @@
 (global-set-key (kbd "M-C-<next>") 'shrink-window)
 (global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
+(global-set-key (kbd "<C-tab>") 'next-buffer)
 
-;; (define-key global-map (kbd "C-h") nil)
+; (define-key global-map (kbd "C-h") nil)
 ;; (global-unset-key (kbd "C-h"))
 ;; (setq help-char nil)
 
@@ -453,7 +510,6 @@
   :states '(normal insert visual emacs motion)
   "C-/" 'comment-line
   "<home>" 'back-to-indentation
-  "<C-tab>" 'mode-line-other-buffer
   "C-_" 'enlarge-window-horizontally
   "C-S-p" 'helm-M-x
   "C-p" 'helm-projectile-find-file-dwim)
