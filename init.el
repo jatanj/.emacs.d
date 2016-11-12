@@ -21,7 +21,7 @@
 (setq tooltip-use-echo-area t)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
-;; (show-paren-mode 1)
+(show-paren-mode 1)
 ;; (electric-pair-mode 1)
 (global-superword-mode 1)
 
@@ -118,6 +118,15 @@
               (backward-kill-word 1))))
       (kill-region cp (- cp 1)))))
 (global-set-key [C-backspace] 'backward-kill-word-fixed)
+
+(require 'cl)
+(require 'recentf)
+(defun find-last-killed-file ()
+  (interactive)
+  (let ((active-files (loop for buf in (buffer-list)
+                            when (buffer-file-name buf) collect it)))
+    (loop for file in recentf-list
+          unless (member file active-files) return (find-file file))))
 
  ;; Packages
 (setq package-enable-at-startup nil)
@@ -297,7 +306,6 @@
 ;; Smartparens
 (require 'smartparens-config)
 (add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
-(show-smartparens-global-mode t)
 (setq sp-highlight-pair-overlay nil)
 (setq sp-highlight-wrap-overlay nil)
 (setq sp-highlight-wrap-tag-overlay nil)
@@ -447,6 +455,7 @@
 (global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
 (global-set-key (kbd "<C-tab>") 'next-buffer)
+(global-set-key (kbd "C-S-t") 'find-last-killed-file)
 
 ; (define-key global-map (kbd "C-h") nil)
 ;; (global-unset-key (kbd "C-h"))
@@ -515,7 +524,7 @@
   "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
   :keymaps 'ctl-x-map
-  "b" 'helm-buffers-list
+  "b" 'helm-mini
   "w" 'kill-this-buffer
   "C-b" 'neotree-projectile)
 (general-define-key
