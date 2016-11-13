@@ -137,7 +137,7 @@
     (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
-(setq evil-toggle-key "<f2>")
+(setq evil-toggle-key "<f1>")
 (require 'evil)
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
@@ -203,7 +203,8 @@
     (set-face-attribute 'spaceline-evil-insert nil :background "#7eaefd")
     (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
-    (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")))
+    (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")
+    (set-face-attribute 'spaceline-evil-emacs nil :background "#aaaaaa")))
 (spaceline-spacemacs-theme)
 (spaceline-helm-mode 1)
 
@@ -295,7 +296,7 @@
 
 ;; Smartparens
 (require 'smartparens-config)
-(add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
+(smartparens-global-mode 1)
 (setq sp-highlight-pair-overlay nil)
 (setq sp-highlight-wrap-overlay nil)
 (setq sp-highlight-wrap-tag-overlay nil)
@@ -373,6 +374,7 @@
 ;; Clojure
 (require 'clojure-mode)
 (setq clojure-indent-style :always-indent)
+(add-hook 'clojure-mode-hook (lambda () (setq evil-shift-width 2)))
 (define-clojure-indent
   (defroutes 'defun)
   (GET 2)
@@ -448,6 +450,7 @@
 (global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
 (global-set-key (kbd "<C-tab>") 'previous-buffer)
+(global-set-key (kbd "<f5>") 'help)
 
 ; (define-key global-map (kbd "C-h") nil)
 ;; (global-unset-key (kbd "C-h"))
@@ -496,7 +499,7 @@
  "SPC" (general-simulate-keys "M-x" t))
 (general-define-key
  :states '(normal insert visual)
- "C-w" 'evil-normal-state
+ "C-i" 'evil-normal-state
  "C-z" 'undo-tree-undo
  "C-s" 'save-buffer
  "C-f" 'isearch-forward-regexp
