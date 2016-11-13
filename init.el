@@ -119,15 +119,6 @@
       (kill-region cp (- cp 1)))))
 (global-set-key [C-backspace] 'backward-kill-word-fixed)
 
-(require 'cl)
-(require 'recentf)
-(defun find-last-killed-file ()
-  (interactive)
-  (let ((active-files (loop for buf in (buffer-list)
-                            when (buffer-file-name buf) collect it)))
-    (loop for file in recentf-list
-          unless (member file active-files) return (find-file file))))
-
  ;; Packages
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -146,7 +137,7 @@
     (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
-(setq evil-toggle-key "C-~")
+(setq evil-toggle-key "<f2>")
 (require 'evil)
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
@@ -176,11 +167,10 @@
   :init
   (setq projectile-keymap-prefix (kbd "C-l p"))
   :config
-  (setq projectile-use-native-indexing t)
-  (setq projectile-enable-caching t)
+  (setq projectile-indexing-method 'alien)
+  ;; (setq projectile-enable-caching t)
   (add-to-list 'projectile-globally-ignored-directories "elpa")
   (add-to-list 'projectile-globally-ignored-directories ".cache")
-  (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (projectile-global-mode))
 
 ; Window Numbering
@@ -381,19 +371,8 @@
   :ensure t)
 
 ;; Clojure
+(require 'clojure-mode)
 (setq clojure-indent-style :always-indent)
-(setq clojure-align-forms-automatically nil)
-(require 'cider)
-(setq cider-repl-history-file "~/.emacs.d/cider-history")
-(setq cider-repl-use-pretty-printing t)
-(setq cider-repl-use-clojure-font-lock t)
-(setq cider-repl-result-prefix ";; => ")
-(setq cider-repl-wrap-history t)
-(setq cider-repl-history-size 3000)
-(add-hook 'cider-mode-hook #'eldoc-mode)
-(setq cider-show-error-buffer nil)
-(add-hook 'cider-repl-mode-hook #'company-mode)
-(add-hook 'cider-mode-hook #'company-mode)
 (define-clojure-indent
   (defroutes 'defun)
   (GET 2)
@@ -429,6 +408,20 @@
   (specify 1)
   (specify! 1))
 
+;; Cider
+(require 'cider)
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+(setq cider-repl-use-pretty-printing t)
+(setq cider-repl-use-clojure-font-lock t)
+(setq cider-repl-result-prefix ";; => ")
+(setq cider-repl-wrap-history t)
+(setq cider-repl-history-size 3000)
+(add-hook 'cider-mode-hook #'eldoc-mode)
+(setq cider-show-error-buffer nil)
+(add-hook 'cider-repl-mode-hook #'company-mode)
+(add-hook 'cider-mode-hook #'company-mode)
+(add-to-list 'evil-emacs-state-modes 'cider-repl-mode)
+
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
@@ -454,8 +447,7 @@
 (global-set-key (kbd "M-C-<next>") 'shrink-window)
 (global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
-(global-set-key (kbd "<C-tab>") 'next-buffer)
-(global-set-key (kbd "C-S-t") 'find-last-killed-file)
+(global-set-key (kbd "<C-tab>") 'previous-buffer)
 
 ; (define-key global-map (kbd "C-h") nil)
 ;; (global-unset-key (kbd "C-h"))
@@ -500,6 +492,9 @@
   "S-<up>" (lambda () (interactive) (previous-line))
   "S-<down>" (lambda () (interactive) (next-line)))
 (general-define-key
+ :states '(normal visual)
+ "SPC" (general-simulate-keys "M-x" t))
+(general-define-key
  :states '(normal insert visual)
  "C-w" 'evil-normal-state
  "C-z" 'undo-tree-undo
@@ -512,9 +507,6 @@
  "C-u" 'evil-scroll-up
  "C-q" (lambda () (interactive) (scroll-down 1))
  "C-b" 'unset-key)
-(general-define-key
-  :states '(normal emacs motion)
-  "SPC" (general-simulate-keys "M-x" t))
 (general-define-key
   :states '(normal insert visual emacs motion)
   "C-/" 'comment-line

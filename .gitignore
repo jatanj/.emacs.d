@@ -1,4 +1,4 @@
-auto-save-list
+/auto-save-list/
 ido.last
 ido.last~
 init.el~
@@ -7,4 +7,5 @@ recentf~
 .emacs.desktop*
 projectile.cache
 projectile-bookmarks.eld
-server
+cider-history
+/server/
