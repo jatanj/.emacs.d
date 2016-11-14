@@ -8,14 +8,10 @@
 (setq configure-frame-functions '())
 
 ;; General config
-(if (daemonp)
-  (setq default-frame-alist client-window-attributes)
-  (progn
-    (desktop-save-mode 1)
-    (setq default-frame-alist desktop-window-attributes)))
 (setq frame-title-format "Emacs - %b")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(global-auto-revert-mode 1)
 (blink-cursor-mode 0)
 (setq-default cursor-in-non-selected-windows nil)
 (setq tooltip-use-echo-area t)
@@ -137,7 +133,7 @@
     (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
-(setq evil-toggle-key "<f1>")
+(setq evil-toggle-key "<f5>")
 (require 'evil)
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
@@ -159,6 +155,7 @@
 (setq helm-M-x-fuzzy-match t)
 (setq helm-recentf-fuzzy-match t)
 (setq helm-semantic-fuzzy-match t)
+(setq helm-split-window-in-side-p t)
 (global-set-key (kbd "C-S-p") 'helm-M-x)
 (global-set-key (kbd "C-p") 'helm-mini)
 
@@ -188,6 +185,15 @@
 (global-set-key [remap query-replace] 'anzu-query-replace)
 (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
 
+;; Company
+(require 'company)
+(add-to-list 'configure-frame-functions
+  (lambda ()
+    (set-face-attribute 'company-tooltip nil :background "#1d2026")
+    (set-face-attribute 'company-tooltip-annotation nil :foreground "#8787d7")
+    (set-face-attribute 'company-tooltip-selection nil :foreground "#ffffff" :background "#4a4e54")
+    (set-face-attribute 'company-tooltip-common-selection nil :foreground "#66a9d4")))
+
 ;; Spaceline
 (require 'spaceline-config)
 (setq powerline-default-separator nil)
@@ -204,7 +210,7 @@
     (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")
-    (set-face-attribute 'spaceline-evil-emacs nil :background "#aaaaaa")))
+    (set-face-attribute 'spaceline-evil-emacs nil :background "#393d44")))
 (spaceline-spacemacs-theme)
 (spaceline-helm-mode 1)
 
@@ -318,12 +324,6 @@
 ; (guide-key-mode 1)
 ; (setq guide-key/guide-key-sequence '("C-c"))
 
-;; Flycheck
-(flycheck-mode 1)
-
-;; Company
-(company-mode 1)
-
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -351,9 +351,11 @@
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
+  (flycheck-mode 1)
   (setq flycheck-check-syntax-automatically '(idle-change mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1))
+  (eldoc-mode 1)
+  (tide-hl-identifier-mode 1)
+  (company-mode 1))
 (setq company-tooltip-align-annotations t)
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 (setq typescript-indent-level 2)
@@ -413,16 +415,22 @@
 ;; Cider
 (require 'cider)
 (setq cider-repl-history-file "~/.emacs.d/cider-history")
+(setq cider-repl-pop-to-buffer-on-connect nil)
+(setq cider-repl-display-in-current-window t)
 (setq cider-repl-use-pretty-printing t)
 (setq cider-repl-use-clojure-font-lock t)
+(setq nrepl-hide-special-buffers t)
 (setq cider-repl-result-prefix ";; => ")
 (setq cider-repl-wrap-history t)
 (setq cider-repl-history-size 3000)
+(setq cider-use-fringe-indicator nil)
 (add-hook 'cider-mode-hook #'eldoc-mode)
 (setq cider-show-error-buffer nil)
 (add-hook 'cider-repl-mode-hook #'company-mode)
 (add-hook 'cider-mode-hook #'company-mode)
 (add-to-list 'evil-emacs-state-modes 'cider-repl-mode)
+(setq cider-cljs-lein-repl
+   "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -445,14 +453,10 @@
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
-(global-set-key (kbd "M-C-<prior>") 'enlarge-window)
-(global-set-key (kbd "M-C-<next>") 'shrink-window)
-(global-set-key (kbd "M-C-<home>") 'enlarge-window-horizontally)
-(global-set-key (kbd "M-C-<end>") 'shrink-window-horizontally)
 (global-set-key (kbd "<C-tab>") 'previous-buffer)
-(global-set-key (kbd "<f5>") 'help)
+(global-set-key (kbd "<f1>") 'help)
 
-; (define-key global-map (kbd "C-h") nil)
+;; (define-key global-map (kbd "C-h") nil)
 ;; (global-unset-key (kbd "C-h"))
 ;; (setq help-char nil)
 
@@ -484,7 +488,7 @@
   "S-<down>" (lambda () (interactive) (evil-visual-char) (next-line)))
 (general-define-key
  :states '(insert)
- "TAB" 'tab-to-tab-stop
+ "<tab>" 'tab-to-tab-stop
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
@@ -499,7 +503,6 @@
  "SPC" (general-simulate-keys "M-x" t))
 (general-define-key
  :states '(normal insert visual)
- "C-i" 'evil-normal-state
  "C-z" 'undo-tree-undo
  "C-s" 'save-buffer
  "C-f" 'isearch-forward-regexp
@@ -507,9 +510,11 @@
  "C-h" 'query-replace-regexp
  "C-v" 'er/expand-region
  "C-S-v" 'evil-visual-block
- "C-u" 'evil-scroll-up
- "C-q" (lambda () (interactive) (scroll-down 1))
  "C-b" 'unset-key)
+(general-define-key
+ :states '(normal insert visual motion)
+ "C-u" 'evil-scroll-up
+ "C-q" (lambda () (interactive) (scroll-down 1)))
 (general-define-key
   :states '(normal insert visual emacs motion)
   "C-/" 'comment-line
@@ -527,9 +532,16 @@
  "C-f" 'isearch-repeat-forward
  "C-h" 'isearch-query-replace-regexp)
 
+;; Set the window position
+(if (daemonp)
+  (setq default-frame-alist client-window-attributes)
+  (progn
+    (desktop-save-mode 1)
+    (setq default-frame-alist desktop-window-attributes)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+  )
