@@ -1,3 +1,10 @@
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (load "~/.emacs.d/local.el")
 
 ;; Startup options
@@ -124,22 +131,47 @@
       (kill-region cp (- cp 1)))))
 (global-set-key [C-backspace] 'backward-kill-word-fixed)
 
- ;; Packages
-(setq package-enable-at-startup nil)
-(package-initialize)
+;; Packages
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
- '(package-selected-packages
-   (quote
-    (magit smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+(setq package-list '(evil
+		     helm
+		     helm-projectile
+		     helm-ag
+		     spaceline
+		     projectile
+		     ido-vertical-mode
+		     flx-ido
+		     tabbar
+		     use-package
+		     neotree
+		     general
+		     magit
+		     flycheck
+		     company
+		     web-mode
+		     js2-mode
+		     tide
+		     evil-surround
+		     guide-key
+		     window-numbering
+		     expand-region
+		     ensime
+		     anzu
+		     smooth-scroll
+		     esup
+		     clojure-mode
+		     clojure-mode-extra-font-locking
+		     cider
+		     smartparens))
+
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+
+(package-initialize)
+(unless package-archive-contents (package-refresh-contents))
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 ;; Evil
 (setq evil-toggle-key "<f5>")
@@ -280,7 +312,8 @@
     (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
     (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
     (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
-; https://gist.github.com/3demax/1264635
+
+;; https://gist.github.com/3demax/1264635
 (setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
   "Return a label for TAB. That is, a string used to represent it on the tab bar."
@@ -293,9 +326,9 @@
        label (max 1 (/ (window-width)
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
-; Tabbar Ruler projectile groups
-(defvar tabbar-projectile-tabbar-buffer-group-calc nil
-  "Buffer group for projectile.  Should be buffer local and speed up calculation of buffer groups.")
+
+;; Tabbar Ruler projectile groups
+(defvar tabbar-projectile-tabbar-buffer-group-calc nil)
 (defun tabbar-projectile-tabbar-buffer-groups ()
   "Return the list of group names BUFFER belongs to.
     Return only one group for each buffer."
@@ -544,7 +577,8 @@
   "S-<down>" (lambda () (interactive) (next-line)))
 (general-define-key
  :states '(normal visual)
- "SPC" (general-simulate-keys "M-x" t))
+ "SPC" (general-simulate-keys "M-x" t)
+ "C-v" 'er/expand-region)
 (general-define-key
  :states '(normal insert visual)
  "C-z" 'undo-tree-undo
@@ -552,7 +586,6 @@
  "C-f" 'isearch-forward-regexp
  "C-S-f" 'isearch-backward-regexp
  "C-h" 'query-replace-regexp
- "C-v" 'er/expand-region
  "C-S-v" 'evil-visual-block
  "C-b" 'unset-key)
 (general-define-key
@@ -582,3 +615,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime expand-region window-numbering guide-key evil-surround tide web-mode use-package typescript-mode tabbar spaceline neotree magit js2-mode ido-vertical-mode helm-projectile helm-ag general flycheck flx-ido evil company))))
