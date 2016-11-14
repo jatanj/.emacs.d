@@ -5,7 +5,16 @@
 (setq inhibit-startup-message t)
 (defun display-startup-echo-area-message () (message ""))
 
+;; Window position
 (setq configure-frame-functions '())
+(if (daemonp)
+  (setq default-frame-alist client-window-attributes)
+  (progn
+    (desktop-save-mode 1)
+    (setq default-frame-alist desktop-window-attributes)))
+(add-hook 'desktop-after-read-hook (lambda ()
+  (when (string= (frame-parameter nil 'fullscreen) 'maximized)
+    (toggle-frame-maximized))))
 
 ;; General config
 (setq frame-title-format "Emacs - %b")
@@ -169,6 +178,11 @@
   (add-to-list 'projectile-globally-ignored-directories "elpa")
   (add-to-list 'projectile-globally-ignored-directories ".cache")
   (projectile-global-mode))
+
+;; General
+(require 'general)
+(setq leader-key "C-l")
+(general-define-key :prefix leader-key)
 
 ; Window Numbering
 (defun window-numbering-install-mode-line (&optional position))
@@ -430,7 +444,16 @@
 (add-hook 'cider-mode-hook #'company-mode)
 (add-to-list 'evil-emacs-state-modes 'cider-repl-mode)
 (setq cider-cljs-lein-repl
-   "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
+  "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
+(general-define-key
+ :keymaps 'cider-repl-mode-map
+ "C-c C-l" 'cider-repl-clear-buffer)
+
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
+(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
+(setq helm-split-window-preferred-function 'ignore)
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -446,25 +469,16 @@
       (configure-frame)))
   (configure-frame))
 
+;; Keybindings
 (dolist
   (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
   (global-set-key (kbd key) nil))
-
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
 (global-set-key (kbd "<C-tab>") 'previous-buffer)
-(global-set-key (kbd "<f1>") 'help)
-
-;; (define-key global-map (kbd "C-h") nil)
-;; (global-unset-key (kbd "C-h"))
-;; (setq help-char nil)
 
 (defun unset-key () (interactive) ())
-
-(require 'general)
-(setq leader-key "C-l")
-(general-define-key :prefix leader-key)
 (general-define-key
   "C-:" 'eval-expression
   "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
@@ -531,13 +545,6 @@
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
  "C-h" 'isearch-query-replace-regexp)
-
-;; Set the window position
-(if (daemonp)
-  (setq default-frame-alist client-window-attributes)
-  (progn
-    (desktop-save-mode 1)
-    (setq default-frame-alist desktop-window-attributes)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
