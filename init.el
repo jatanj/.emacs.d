@@ -1,11 +1,10 @@
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
+;;; init.el -- Emacs configuration
 
 (load "~/.emacs.d/local.el")
+(when (not (boundp 'default-dir)) (setq default-dir "~/"))
+(when (not (boundp 'custom-font-face)) (setq custom-font-face "Inconsolata-12"))
+(when (not (boundp 'desktop-window-attributes)) (setq desktop-window-attributes '()))
+(when (not (boundp 'client-window-attributes)) (setq client-window-attributes '()))
 
 ;; Startup options
 (setq inhibit-startup-screen t)
@@ -67,8 +66,8 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Face attributes
-(add-to-list 'default-frame-alist `(font . ,global-font-face))
-(set-face-attribute 'default nil :font global-font-face)
+(add-to-list 'default-frame-alist `(font . ,custom-font-face))
+(set-face-attribute 'default nil :font custom-font-face)
 (add-to-list 'configure-frame-functions
   (lambda ()
     (set-face-attribute 'vertical-border nil :foreground "#222222")
@@ -146,7 +145,6 @@
 		     neotree
 		     general
 		     magit
-		     flycheck
 		     company
 		     web-mode
 		     js2-mode
@@ -304,7 +302,7 @@
 (tabbar-mode 1)
 (add-to-list 'configure-frame-functions
   (lambda ()
-    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font global-font-face)
+    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font custom-font-face)
     (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
     (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
     (set-face-attribute 'tabbar-modified nil :background "#202328" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#202328" :style nil))
@@ -363,7 +361,7 @@
                    (cond
                     ((equal buffer-name "*cider-repl server*") nil)
                     (t t))))
-            (neotree-dir develop-dir)
+            (neotree-dir default-dir)
           (let ((dir-name (if (and (fboundp 'projectile-project-p)
                                    (projectile-project-p))
                               (projectile-project-root)
