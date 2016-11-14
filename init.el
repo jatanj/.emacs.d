@@ -139,7 +139,7 @@
     ("7968290e621e86fb44ebfcaa4d17601087ae17b28dd689ddff467179c2983164" "f080d47fc227ba4d7129df8ff5b2aaa9ec50ea242cff220dc3758b3fadd3ef78" "fcaa761fedb6bacfc7b0c0551d3b710568d0da4eb3124bf86f7c6bedf3170296" default)))
  '(package-selected-packages
    (quote
-    (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
+    (magit smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime yasnippets expand-region window-numbering guide-key evil-surround web-mode tide company flycheck js2-mode helm-ag ag helm-projectile general neotree use-package flx-ido tabbar ido-vertical-mode projectile spaceline helm evil))))
 
 ;; Evil
 (setq evil-toggle-key "<f5>")
@@ -183,6 +183,31 @@
 (require 'general)
 (setq leader-key "C-l")
 (general-define-key :prefix leader-key)
+
+;; Magit
+(setq magit-display-buffer-function
+      (lambda (buffer)
+        (display-buffer
+         buffer (if (and (derived-mode-p 'magit-mode)
+                         (memq (with-current-buffer buffer major-mode)
+                               '(magit-process-mode
+                                 magit-revision-mode
+                                 magit-diff-mode
+                                 magit-stash-mode
+                                 magit-status-mode)))
+                    nil
+                  '(display-buffer-same-window)))))
+(general-define-key
+ :keymaps 'magit-mode-map
+  "C-k" (general-simulate-keys "C-x")
+  "SPC" (general-simulate-keys "M-x" t)
+  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
+  "C-:" 'eval-expression
+  "C-<tab>" 'previous-buffer
+  "C-<prior>" 'tabbar-backward-tab
+  "C-<next>" 'tabbar-forward-tab
+  "C-u" 'evil-scroll-up
+  "C-d" 'evil-scroll-down)
 
 ; Window Numbering
 (defun window-numbering-install-mode-line (&optional position))
@@ -446,9 +471,13 @@
 (setq cider-cljs-lein-repl
   "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
 (general-define-key
+ :keymaps 'cider-mode-map
+ "C-c C-n" 'cider-repl-set-ns)
+(general-define-key
  :keymaps 'cider-repl-mode-map
  "C-c C-l" 'cider-repl-clear-buffer)
 
+;; Popwin
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
 (push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
@@ -470,13 +499,14 @@
   (configure-frame))
 
 ;; Keybindings
-(dolist
-  (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
-  (global-set-key (kbd key) nil))
 (global-set-key (kbd "C-k") ctl-x-map)
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
 (global-set-key (kbd "<C-tab>") 'previous-buffer)
+
+(dolist
+  (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
+  (global-set-key (kbd key) nil))
 
 (defun unset-key () (interactive) ())
 (general-define-key
@@ -533,7 +563,7 @@
   :states '(normal insert visual emacs motion)
   "C-/" 'comment-line
   "<home>" 'back-to-indentation
-  "C-_" 'enlarge-window-horizontally
+  "C-_" 'enlarge-window
   "C-S-p" 'helm-M-x
   "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
@@ -551,4 +581,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-  )
+ )
