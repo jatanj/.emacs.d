@@ -249,7 +249,7 @@
     (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
     (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")
-    (set-face-attribute 'spaceline-evil-emacs nil :background "#393d44")))
+    (set-face-attribute 'spaceline-evil-emacs nil :background "#393d44" :foreground "#ffffff")))
 (spaceline-spacemacs-theme)
 (spaceline-helm-mode 1)
 
