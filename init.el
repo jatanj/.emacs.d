@@ -19,8 +19,20 @@
     (desktop-save-mode 1)
     (setq default-frame-alist desktop-window-attributes)))
 (add-hook 'desktop-after-read-hook (lambda ()
-  (when (string= (frame-parameter nil 'fullscreen) 'maximized)
-    (toggle-frame-maximized))))
+  (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
+	 (toggle-frame-maximized))
+	((string= (frame-parameter nil 'fullscreen) 'fullboth)
+	 (toggle-frame-fullscreen)
+	 (toggle-frame-maximized)))))
+
+;; Fix toggle-frame-fullscreen to preserve our window position
+(defun force-maximized-with-fullscreen (orig-fun &rest args)
+  (let ((fullscreen-parameter (frame-parameter nil 'fullscreen)))
+    (unless (or (string= fullscreen-parameter 'fullboth)
+		(string= fullscreen-parameter 'maximized))
+      (toggle-frame-maximized)))
+  (apply orig-fun args))
+(advice-add 'toggle-frame-fullscreen :around #'force-maximized-with-fullscreen)
 
 ;; General config
 (setq frame-title-format "Emacs - %b")
