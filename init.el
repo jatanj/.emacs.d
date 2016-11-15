@@ -309,7 +309,9 @@
     (set-face-attribute 'tabbar-selected-modified nil :background "#272b33" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#272b33" :style nil))
     (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
     (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)))
+    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)
+    (tabbar-forward-tab) ; Force redraw to fix colors
+    (tabbar-backward-tab)))
 
 ;; https://gist.github.com/3demax/1264635
 (setq tabbar-separator (quote (0.5)))
@@ -521,7 +523,9 @@
 
 (defun configure-frame ()
   (dolist (func configure-frame-functions)
-    (funcall func)))
+    (funcall func))
+  (redraw-frame))
+
 (if (daemonp)
   (add-hook 'after-make-frame-functions
     (lambda (frame)
