@@ -1,10 +1,56 @@
 ;;; init.el -- Emacs configuration
 
+;; Packages
+;; http://stackoverflow.com/questions/10092322#answer-10093312
+(require 'package)
+(setq package-list '(evil
+		     helm
+		     helm-projectile
+		     helm-ag
+		     spaceline
+		     projectile
+		     ido-vertical-mode
+		     flx-ido
+		     tabbar
+		     use-package
+		     neotree
+		     general
+		     magit
+		     company
+		     web-mode
+		     js2-mode
+		     tide
+		     evil-surround
+		     guide-key
+		     window-numbering
+		     expand-region
+		     ensime
+		     anzu
+		     smooth-scroll
+		     esup
+		     clojure-mode
+		     clojure-mode-extra-font-locking
+		     cider
+		     smartparens
+		     iflipb))
+
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+
+(package-initialize)
+(unless package-archive-contents (package-refresh-contents))
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+;; Load machine-specific settings
 (load "~/.emacs.d/local.el")
-(when (not (boundp 'default-dir)) (setq default-dir "~/"))
-(when (not (boundp 'custom-font-face)) (setq custom-font-face "Inconsolata-12"))
-(when (not (boundp 'desktop-window-attributes)) (setq desktop-window-attributes '()))
-(when (not (boundp 'client-window-attributes)) (setq client-window-attributes '()))
+(dolist (local-setting '((default-dir . "~/")
+			 (custom-font-face . "Inconsolata-12")
+			 (desktop-window-attributes . '())
+			 (client-window-attributes . '())))
+  (when (not (boundp (car local-setting)))
+    (set (car local-setting) (cdr local-setting))))
 
 ;; Startup options
 (setq inhibit-startup-screen t)
@@ -95,21 +141,24 @@
 (set-selection-coding-system 'utf-8))
 (prefer-coding-system 'utf-8)
 
-;; Copy/cut entire line if no region is selected
+;; Copy/cut entire line when no region is active
+;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
 (defun slick-cut (beg end)
   (interactive
    (if mark-active
        (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-beginning-position 2)))))
+       (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-region :before #'slick-cut)
 (defun slick-copy (beg end)
   (interactive
    (if mark-active
        (list (region-beginning) (region-end))
-     (message "Copied line")
-     (list (line-beginning-position) (line-beginning-position 2)))))
+       (message "Copied line")
+       (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
+;; Fix Ctrl+Backspace
+;; http://stackoverflow.com/questions/28221079#answer-39438119
 (defun backward-kill-word-fixed ()
   (interactive)
   (let* ((cp (point))
@@ -142,47 +191,6 @@
       (kill-region cp (- cp 1)))))
 (global-set-key [C-backspace] 'backward-kill-word-fixed)
 
-;; Packages
-(require 'package)
-(setq package-list '(evil
-		     helm
-		     helm-projectile
-		     helm-ag
-		     spaceline
-		     projectile
-		     ido-vertical-mode
-		     flx-ido
-		     tabbar
-		     use-package
-		     neotree
-		     general
-		     magit
-		     company
-		     web-mode
-		     js2-mode
-		     tide
-		     evil-surround
-		     guide-key
-		     window-numbering
-		     expand-region
-		     ensime
-		     anzu
-		     smooth-scroll
-		     esup
-		     clojure-mode
-		     clojure-mode-extra-font-locking
-		     cider
-		     smartparens))
-
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-
-(package-initialize)
-(unless package-archive-contents (package-refresh-contents))
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
 ;; Evil
 (setq evil-toggle-key "<f5>")
 (require 'evil)
@@ -207,6 +215,8 @@
 (setq helm-recentf-fuzzy-match t)
 (setq helm-semantic-fuzzy-match t)
 (setq helm-split-window-in-side-p t)
+(setq helm-boring-buffer-regexp-list
+  '("\\` " "\\Messages" "\\*scratch" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
 (global-set-key (kbd "C-S-p") 'helm-M-x)
 (global-set-key (kbd "C-p") 'helm-mini)
 
@@ -324,7 +334,10 @@
     (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)
     (tabbar-forward-tab) ; Force redraw to fix colors
     (tabbar-backward-tab)))
+(global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
+(global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
 
+;; Tabbar visual tweaks
 ;; https://gist.github.com/3demax/1264635
 (setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
@@ -339,7 +352,8 @@
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
 
-;; Tabbar Ruler projectile groups
+;; Tabbar-Ruler projectile groups
+;; https://github.com/mattfidler/tabbar-ruler.el
 (defvar tabbar-projectile-tabbar-buffer-group-calc nil)
 (defun tabbar-projectile-tabbar-buffer-groups ()
   "Return the list of group names BUFFER belongs to.
@@ -410,17 +424,18 @@
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
+(dolist (assoc '(("\\.phtml\\'"     . web-mode)
+	         ("\\.tpl\\.php\\'" . web-mode)
+	         ("\\.[agj]sp\\'"   . web-mode)
+	         ("\\.as[cp]x\\'"   . web-mode)
+	         ("\\.erb\\'"       . web-mode)
+	         ("\\.mustache\\'"  . web-mode)
+	         ("\\.djhtml\\'"    . web-mode)
+	         ("\\.html?\\'"     . web-mode)
+	         ("\\.js\\'"        . js2-mode)
+	         ("\\.jsx?\\'"      . js2-jsx-mode)
+		 ("node"            . js2-jsx-mode)))
+  (add-to-list 'auto-mode-alist assoc))
 (setq js-indent-level 2)
 (setq javascript-indent-level 2)
 (setq js2-basic-offset 2)
@@ -462,33 +477,10 @@
 (setq clojure-indent-style :always-indent)
 (add-hook 'clojure-mode-hook (lambda () (setq evil-shift-width 2)))
 (define-clojure-indent
-  (defroutes 'defun)
-  (GET 2)
-  (POST 2)
-  (PUT 2)
-  (DELETE 2)
-  (HEAD 2)
-  (ANY 2)
-  (context 2)
-  (let-routes 1))
-(define-clojure-indent
-  (form-to 1))
-(define-clojure-indent
   (match 1)
   (are 2)
   (checking 2)
   (async 1))
-(define-clojure-indent
-  (select 1)
-  (insert 1)
-  (update 1)
-  (delete 1))
-(define-clojure-indent
-  (run* 1)
-  (fresh 1))
-(define-clojure-indent
-  (extend-freeze 2)
-  (extend-thaw 1))
 (define-clojure-indent
   (go-loop 1))
 (define-clojure-indent
@@ -529,15 +521,21 @@
 (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
 (setq helm-split-window-preferred-function 'ignore)
 
+;; Iflipb
+(require 'iflipb)
+(global-set-key (kbd "C-<tab>") 'iflipb-next-buffer)
+(global-set-key (kbd "C-S-<tab>") 'iflipb-previous-buffer)
+(setq iflipb-wrap-around t)
+
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
 
+;; Fix fonts and other stuff in clients
 (defun configure-frame ()
   (dolist (func configure-frame-functions)
     (funcall func))
   (redraw-frame))
-
 (if (daemonp)
   (add-hook 'after-make-frame-functions
     (lambda (frame)
@@ -547,9 +545,6 @@
 
 ;; Keybindings
 (global-set-key (kbd "C-k") ctl-x-map)
-(global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
-(global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
-(global-set-key (kbd "<C-tab>") 'previous-buffer)
 
 (dolist
   (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
@@ -563,20 +558,16 @@
   "C--" 'shrink-window-horizontally
   "C-_" 'enlarge-window
   "C-+" 'shrink-window
-  "M-C-<left>" 'windmove-left
-  "M-C-<right>" 'windmove-right
-  "M-C-<up>" 'windmove-up
-  "M-C-<down>" 'windmove-down
+  "S-<left>" 'windmove-left
+  "S-<right>" 'windmove-right
+  "S-<up>" 'windmove-up
+  "S-<down>" 'windmove-down
   "M-<up>" (lambda () (interactive) (previous-line 10))
   "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
   :states '(normal)
   "q" 'unset-key
-  "r" 'unset-key
-  "S-<left>" (lambda () (interactive) (evil-visual-char) (backward-char))
-  "S-<right>" (lambda () (interactive) (evil-visual-char) (forward-char))
-  "S-<up>" (lambda () (interactive) (evil-visual-char) (previous-line))
-  "S-<down>" (lambda () (interactive) (evil-visual-char) (next-line)))
+  "r" 'unset-key)
 (general-define-key
  :states '(insert)
  "<tab>" 'tab-to-tab-stop
@@ -615,9 +606,10 @@
   "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
   :keymaps 'ctl-x-map
-  "b" 'helm-mini
   "w" 'kill-this-buffer
-  "C-b" 'neotree-projectile)
+  "C-b" 'helm-mini
+  "C-k" 'ido-kill-buffer
+  "C-n" 'neotree-projectile)
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
