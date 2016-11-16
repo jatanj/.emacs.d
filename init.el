@@ -1,7 +1,6 @@
 ;;; init.el -- Emacs configuration
 
 ;; Packages
-;; http://stackoverflow.com/questions/10092322#answer-10093312
 (require 'package)
 (setq package-list '(evil
 		     helm
@@ -21,7 +20,6 @@
 		     js2-mode
 		     tide
 		     evil-surround
-		     guide-key
 		     window-numbering
 		     expand-region
 		     ensime
@@ -37,6 +35,7 @@
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
+;; http://stackoverflow.com/questions/10092322#answer-10093312
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
 (dolist (package package-list)
@@ -416,11 +415,6 @@
 
 ;; Yasnippets
 (add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
-
-;; Guide-Key
-; (require 'guide-key)
-; (guide-key-mode 1)
-; (setq guide-key/guide-key-sequence '("C-c"))
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
