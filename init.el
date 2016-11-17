@@ -9,6 +9,7 @@
 		     spaceline
 		     projectile
 		     ido-vertical-mode
+		     flx
 		     flx-ido
 		     tabbar
 		     use-package
@@ -35,6 +36,7 @@
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
+;; Install missing packages
 ;; http://stackoverflow.com/questions/10092322#answer-10093312
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
@@ -277,12 +279,20 @@
 
 ;; Company
 (require 'company)
+(general-define-key
+ :keymaps 'company-active-map
+ "<tab>" (general-simulate-keys "<return>"))
+(setq company-frontends
+      '(company-pseudo-tooltip-frontend
+        company-echo-metadata-frontend))
+(setq company-require-match nil)
 (add-to-list 'configure-frame-functions
   (lambda ()
     (set-face-attribute 'company-tooltip nil :background "#1d2026")
     (set-face-attribute 'company-tooltip-annotation nil :foreground "#8787d7")
     (set-face-attribute 'company-tooltip-selection nil :foreground "#ffffff" :background "#4a4e54")
     (set-face-attribute 'company-tooltip-common-selection nil :foreground "#66a9d4")))
+(add-hook 'emacs-lisp-mode-hook #'company-mode)
 
 ;; Spaceline
 (require 'spaceline-config)
@@ -469,6 +479,7 @@
 ;; Clojure
 (require 'clojure-mode)
 (setq clojure-indent-style :always-indent)
+(add-hook 'clojure-mode-hook #'company-mode)
 (add-hook 'clojure-mode-hook (lambda () (setq evil-shift-width 2)))
 (define-clojure-indent
   (match 1)
@@ -493,7 +504,7 @@
 (setq cider-repl-result-prefix ";; => ")
 (setq cider-repl-wrap-history t)
 (setq cider-repl-history-size 3000)
-(setq cider-use-fringe-indicator nil)
+(setq cider-use-fringe-indicators nil)
 (add-hook 'cider-mode-hook #'eldoc-mode)
 (setq cider-show-error-buffer nil)
 (add-hook 'cider-repl-mode-hook #'company-mode)
@@ -518,7 +529,7 @@
 ;; Iflipb
 (require 'iflipb)
 (global-set-key (kbd "C-<tab>") 'iflipb-next-buffer)
-(global-set-key (kbd "C-S-<tab>") 'iflipb-previous-buffer)
+(global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
 (setq iflipb-wrap-around t)
 
 ;; Load theme
@@ -593,7 +604,7 @@
  "C-q" (lambda () (interactive) (scroll-down 1)))
 (general-define-key
   :states '(normal insert visual emacs motion)
-  "C-/" 'comment-line
+  "C-/" 'comment-region
   "<home>" 'back-to-indentation
   "C-_" 'enlarge-window
   "C-S-p" 'helm-M-x
@@ -601,9 +612,9 @@
 (general-define-key
   :keymaps 'ctl-x-map
   "w" 'kill-this-buffer
-  "C-b" 'helm-mini
-  "C-k" 'ido-kill-buffer
-  "C-n" 'neotree-projectile)
+  "b" 'helm-mini
+  "k" 'ido-kill-buffer
+  "C-b" 'neotree-projectile)
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
