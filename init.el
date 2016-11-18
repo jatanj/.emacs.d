@@ -3,6 +3,9 @@
 ;; Packages
 (require 'package)
 (setq package-list '(evil
+		     evil-surround
+		     evil-visualstar
+		     evil-matchit
 		     helm
 		     helm-projectile
 		     helm-ag
@@ -16,11 +19,11 @@
 		     neotree
 		     general
 		     magit
+		     evil-magit
 		     company
 		     web-mode
 		     js2-mode
 		     tide
-		     evil-surround
 		     window-numbering
 		     expand-region
 		     ensime
@@ -124,6 +127,13 @@
 (defvaralias 'cperl-indent-level 'tab-width)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; Custom comment function
+(defun comment-line-or-region ()
+  (interactive)
+  (if (use-region-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+      (comment-line 1)))
+
 ;; Face attributes
 (add-to-list 'default-frame-alist `(font . ,custom-font-face))
 (set-face-attribute 'default nil :font custom-font-face)
@@ -199,12 +209,19 @@
 (setq evil-disable-insert-state-bindings t)
 (evil-set-initial-state 'dired-mode 'normal)
 (evil-set-initial-state 'Buffer-menu-mode 'normal)
-; (with-eval-after-load 'evil
-;   (defalias #'forward-evil-word #'forward-evil-symbol))
+;; (with-eval-after-load 'evil
+;;   (defalias #'forward-evil-word #'forward-evil-symbol))
 
-;; Evil Surround
+;; Evil-Surround
 (require 'evil-surround)
 (global-evil-surround-mode 1)
+
+;; Evil-Visualstar
+(global-evil-visualstar-mode 1)
+
+;; Evil-Matchit
+(require 'evil-matchit)
+(global-evil-matchit-mode 1)
 
 ;; Helm
 (require 'helm)
@@ -238,6 +255,9 @@
 (general-define-key :prefix leader-key)
 
 ;; Magit
+(require 'magit)
+(require 'evil-magit)
+;; https://github.com/magit/magit/issues/2541
 (setq magit-display-buffer-function
       (lambda (buffer)
         (display-buffer
@@ -258,9 +278,7 @@
   "C-:" 'eval-expression
   "C-<tab>" 'previous-buffer
   "C-<prior>" 'tabbar-backward-tab
-  "C-<next>" 'tabbar-forward-tab
-  "C-u" 'evil-scroll-up
-  "C-d" 'evil-scroll-down)
+  "C-<next>" 'tabbar-forward-tab)
 
 ; Window Numbering
 (defun window-numbering-install-mode-line (&optional position))
@@ -413,6 +431,7 @@
 (setq sp-highlight-pair-overlay nil)
 (setq sp-highlight-wrap-overlay nil)
 (setq sp-highlight-wrap-tag-overlay nil)
+(setq sp-escape-quotes-after-insert nil)
 
 ;; Smooth-Scoll
 (use-package smooth-scroll
@@ -481,6 +500,9 @@
 (setq clojure-indent-style :always-indent)
 (add-hook 'clojure-mode-hook #'company-mode)
 (add-hook 'clojure-mode-hook (lambda () (setq evil-shift-width 2)))
+(general-define-key
+ :keymaps 'clojure-mode-map
+ "C-:" 'eval-expression)
 (define-clojure-indent
   (match 1)
   (are 2)
@@ -563,10 +585,6 @@
   "C--" 'shrink-window-horizontally
   "C-_" 'enlarge-window
   "C-+" 'shrink-window
-  "S-<left>" 'windmove-left
-  "S-<right>" 'windmove-right
-  "S-<up>" 'windmove-up
-  "S-<down>" 'windmove-down
   "M-<up>" (lambda () (interactive) (previous-line 10))
   "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
@@ -576,6 +594,7 @@
 (general-define-key
  :states '(insert)
  "<tab>" 'tab-to-tab-stop
+ "C-g" 'evil-normal-state
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
@@ -603,8 +622,14 @@
  "C-u" 'evil-scroll-up
  "C-q" (lambda () (interactive) (scroll-down 1)))
 (general-define-key
+ :states '(normal visual emacs motion)
+ "S-<left>" 'windmove-left
+ "S-<right>" 'windmove-right
+ "S-<up>" 'windmove-up
+ "S-<down>" 'windmove-down)
+(general-define-key
   :states '(normal insert visual emacs motion)
-  "C-/" 'comment-region
+  "C-/" 'comment-line-or-region
   "<home>" 'back-to-indentation
   "C-_" 'enlarge-window
   "C-S-p" 'helm-M-x
