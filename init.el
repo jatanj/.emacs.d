@@ -202,6 +202,19 @@
       (kill-region cp (- cp 1)))))
 (global-set-key [C-backspace] 'backward-kill-word-fixed)
 
+;; Improve shift to keep selection
+;; http://superuser.com/questions/684540/#answer-789156
+(defun evil-shift-left-visual ()
+  (interactive)
+  (evil-shift-left (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+(defun evil-shift-right-visual ()
+  (interactive)
+  (evil-shift-right (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+
 ;; Evil
 (setq evil-toggle-key "<f5>")
 (require 'evil)
@@ -310,7 +323,6 @@
     (set-face-attribute 'company-tooltip-annotation nil :foreground "#8787d7")
     (set-face-attribute 'company-tooltip-selection nil :foreground "#ffffff" :background "#4a4e54")
     (set-face-attribute 'company-tooltip-common-selection nil :foreground "#66a9d4")))
-(add-hook 'emacs-lisp-mode-hook #'company-mode)
 
 ;; Spaceline
 (require 'spaceline-config)
@@ -445,6 +457,10 @@
 ;; Yasnippets
 (add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
 
+;; Emacs Lisp
+(add-hook 'emacs-lisp-mode-hook #'company-mode)
+(add-hook 'emacs-lisp-mode '(lambda () (setq evil-shift-width 2)))
+
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
 (dolist (assoc '(("\\.phtml\\'"     . web-mode)
@@ -497,7 +513,7 @@
 
 ;; Clojure
 (require 'clojure-mode)
-(setq clojure-indent-style :always-indent)
+(setq clojure-indent-style :always-align)
 (add-hook 'clojure-mode-hook #'company-mode)
 (add-hook 'clojure-mode-hook (lambda () (setq evil-shift-width 2)))
 (general-define-key
@@ -570,40 +586,45 @@
       (configure-frame)))
   (configure-frame))
 
-;; Keybindings
-(global-set-key (kbd "C-k") ctl-x-map)
-
+;; Unbind some keys
 (dolist
   (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
   (global-set-key (kbd key) nil))
 
+;; Keybindings
 (defun unset-key () (interactive) ())
 (general-define-key
-  "C-:" 'eval-expression
-  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
-  "C-=" 'enlarge-window-horizontally
-  "C--" 'shrink-window-horizontally
-  "C-_" 'enlarge-window
-  "C-+" 'shrink-window
-  "M-<up>" (lambda () (interactive) (previous-line 10))
-  "M-<down>" (lambda () (interactive) (next-line 10)))
+ "C-k" ctl-x-map
+ "C-:" 'eval-expression
+ "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
+ "C-=" 'enlarge-window-horizontally
+ "C--" 'shrink-window-horizontally
+ "C-_" 'enlarge-window
+ "C-+" 'shrink-window
+ "M-<up>" (lambda () (interactive) (previous-line 10))
+ "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
-  :states '(normal)
-  "q" 'unset-key
-  "r" 'unset-key)
+ :states '(normal)
+ "q" 'unset-key
+ "r" 'unset-key)
 (general-define-key
  :states '(insert)
  "<tab>" 'tab-to-tab-stop
+ "C-k" ctl-x-map
  "C-g" 'evil-normal-state
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
 (general-define-key
-  :states '(visual)
-  "S-<left>" (lambda () (interactive) (backward-char))
-  "S-<right>" (lambda () (interactive) (forward-char))
-  "S-<up>" (lambda () (interactive) (previous-line))
-  "S-<down>" (lambda () (interactive) (next-line)))
+ :states '(visual)
+ ">" 'evil-shift-right-visual
+ "<" 'evil-shift-left-visual
+ "<tab>" 'evil-shift-right-visual
+ "<S-iso-lefttab>" 'evil-shift-left-visual
+ "S-<left>" (lambda () (interactive) (backward-char))
+ "S-<right>" (lambda () (interactive) (forward-char))
+ "S-<up>" (lambda () (interactive) (previous-line))
+ "S-<down>" (lambda () (interactive) (next-line)))
 (general-define-key
  :states '(normal visual)
  "SPC" (general-simulate-keys "M-x" t)
@@ -628,18 +649,18 @@
  "S-<up>" 'windmove-up
  "S-<down>" 'windmove-down)
 (general-define-key
-  :states '(normal insert visual emacs motion)
-  "C-/" 'comment-line-or-region
-  "<home>" 'back-to-indentation
-  "C-_" 'enlarge-window
-  "C-S-p" 'helm-M-x
-  "C-p" 'helm-projectile-find-file-dwim)
+ :states '(normal insert visual emacs motion)
+ "C-/" 'comment-line-or-region
+ "<home>" 'back-to-indentation
+ "C-_" 'enlarge-window
+ "C-S-p" 'helm-M-x
+ "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
-  :keymaps 'ctl-x-map
-  "w" 'kill-this-buffer
-  "b" 'helm-mini
-  "k" 'ido-kill-buffer
-  "C-b" 'neotree-projectile)
+ :keymaps 'ctl-x-map
+ "w" 'kill-this-buffer
+ "b" 'helm-mini
+ "k" 'ido-kill-buffer
+ "C-b" 'neotree-projectile)
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
