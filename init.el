@@ -317,12 +317,7 @@
       '(company-pseudo-tooltip-frontend
         company-echo-metadata-frontend))
 (setq company-require-match nil)
-(add-to-list 'configure-frame-functions
-  (lambda ()
-    (set-face-attribute 'company-tooltip nil :background "#1d2026")
-    (set-face-attribute 'company-tooltip-annotation nil :foreground "#8787d7")
-    (set-face-attribute 'company-tooltip-selection nil :foreground "#ffffff" :background "#4a4e54")
-    (set-face-attribute 'company-tooltip-common-selection nil :foreground "#66a9d4")))
+(add-hook 'emacs-lisp-mode-hook #'company-mode)
 
 ;; Spaceline
 (require 'spaceline-config)
