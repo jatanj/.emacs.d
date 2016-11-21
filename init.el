@@ -21,20 +21,22 @@
 		     magit
 		     evil-magit
 		     company
-		     web-mode
-		     js2-mode
 		     tide
 		     window-numbering
 		     expand-region
-		     ensime
 		     anzu
 		     smooth-scroll
+		     smartparens
 		     esup
+		     iflipb
+		     stupid-indent-mode
+		     web-mode
+		     js2-mode
+		     ensime
 		     clojure-mode
 		     clojure-mode-extra-font-locking
 		     cider
-		     smartparens
-		     iflipb))
+		     fsharp-mode))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
@@ -94,8 +96,9 @@
 (setq tooltip-use-echo-area t)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
+(setq w32-pipe-read-delay 0)
 (show-paren-mode 1)
-;; (electric-pair-mode 1)
+(electric-pair-mode 1)
 (global-superword-mode 1)
 
 ;; Line numbers
@@ -119,12 +122,10 @@
 (setq-default save-place t)
 
 ;; Indentation
-(setq indent-tabs-mode nil)
-(setq tab-width 2)
-(setq tab-stop-list (number-sequence 2 120 2))
-(setq indent-line-function 'insert-tab)
-(defvaralias 'c-basic-offset 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default tab-stop-list (number-sequence 2 120 2))
+(setq-default indent-line-function 'insert-tab)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Custom comment function
@@ -216,10 +217,11 @@
   (evil-visual-restore))
 
 ;; Evil
-(setq evil-toggle-key "<f5>")
 (require 'evil)
+(setq evil-toggle-key "<f5>")
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
+;; (setq-default evil-shift-width 2)
 (evil-set-initial-state 'dired-mode 'normal)
 (evil-set-initial-state 'Buffer-menu-mode 'normal)
 ;; (with-eval-after-load 'evil
@@ -230,6 +232,7 @@
 (global-evil-surround-mode 1)
 
 ;; Evil-Visualstar
+(require 'evil-visualstar)
 (global-evil-visualstar-mode 1)
 
 ;; Evil-Matchit
@@ -263,7 +266,6 @@
   (projectile-global-mode))
 
 ;; General
-(require 'general)
 (setq leader-key "C-l")
 (general-define-key :prefix leader-key)
 
@@ -323,7 +325,7 @@
 (require 'spaceline-config)
 (setq powerline-default-separator nil)
 (setq spaceline-workspace-numbers-unicode t)
-(setq paceline-window-numbers-unicode t)
+;; (setq spaceline-window-numbers-unicode t)
 (spaceline-toggle-minor-modes-off)
 (spaceline-toggle-hud-off)
 (spaceline-toggle-buffer-size-off)
@@ -452,9 +454,38 @@
 ;; Yasnippets
 (add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
 
+;; Popwin
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
+(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
+(setq helm-split-window-preferred-function 'ignore)
+
+;; Iflipb
+(require 'iflipb)
+(global-set-key (kbd "C-<tab>") 'iflipb-next-buffer)
+(global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
+(setq iflipb-wrap-around t)
+
+;; Stupid-indent-mode
+(require 'stupid-indent-mode)
+(setq-default stupid-indent-level 2)
+
 ;; Emacs Lisp
 (add-hook 'emacs-lisp-mode-hook #'company-mode)
-(add-hook 'emacs-lisp-mode '(lambda () (setq evil-shift-width 2)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (setq evil-shift-width 2)))
+
+;; C/C++
+(setq c-basic-offset 4)
+(setq c-indent-level 4)
+(setq-default c-default-style "k&r")
+(defun custom-c-mode-hook ()
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'case-label '+)
+  (setq tab-width 4)
+  (setq tab-stop-list (number-sequence 4 120 4))
+  (setq evil-shift-width 4))
+(add-hook 'c-mode-common-hook 'custom-c-mode-hook)
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
@@ -525,6 +556,8 @@
   (this-as 1)
   (specify 1)
   (specify! 1))
+(define-clojure-indent
+  (.then 1))
 
 ;; Cider
 (require 'cider)
@@ -552,18 +585,14 @@
  :keymaps 'cider-repl-mode-map
  "C-c C-l" 'cider-repl-clear-buffer)
 
-;; Popwin
-(require 'popwin)
-(setq display-buffer-function 'popwin:display-buffer)
-(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
-(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
-(setq helm-split-window-preferred-function 'ignore)
-
-;; Iflipb
-(require 'iflipb)
-(global-set-key (kbd "C-<tab>") 'iflipb-next-buffer)
-(global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
-(setq iflipb-wrap-around t)
+;; F#
+(setq-default fsharp-indent-offset 2)
+(add-hook 'fsharp-mode-hook
+  (lambda ()
+    (stupid-indent-mode)
+    (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
+    (setq evil-shift-width 2)))
+(setq fsharp-ac-use-popup t)
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -583,7 +612,7 @@
 
 ;; Unbind some keys
 (dolist
-  (key '("M-<DEL>" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
+  (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
   (global-set-key (kbd key) nil))
 
 ;; Keybindings
@@ -594,8 +623,8 @@
  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
  "C-=" 'enlarge-window-horizontally
  "C--" 'shrink-window-horizontally
- "C-_" 'enlarge-window
- "C-+" 'shrink-window
+ "C-+" 'enlarge-window
+ "C-_" 'shrink-window
  "M-<up>" (lambda () (interactive) (previous-line 10))
  "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
@@ -647,7 +676,7 @@
  :states '(normal insert visual emacs motion)
  "C-/" 'comment-line-or-region
  "<home>" 'back-to-indentation
- "C-_" 'enlarge-window
+ "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file-dwim)
 (general-define-key
@@ -655,6 +684,7 @@
  "w" 'kill-this-buffer
  "b" 'helm-mini
  "k" 'ido-kill-buffer
+ "f" 'ido-find-file
  "C-b" 'neotree-projectile)
 (general-define-key
  :keymaps 'isearch-mode-map
