@@ -96,9 +96,10 @@
 (setq tooltip-use-echo-area t)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
+(setq-default next-line-add-newlines nil)
 (setq w32-pipe-read-delay 0)
 (show-paren-mode 1)
-(electric-pair-mode 1)
+;; (electric-pair-mode 1)
 (global-superword-mode 1)
 
 ;; Line numbers
@@ -441,6 +442,11 @@
 (setq sp-highlight-wrap-overlay nil)
 (setq sp-highlight-wrap-tag-overlay nil)
 (setq sp-escape-quotes-after-insert nil)
+(setq sp-escape-wrapped-region nil)
+(setq sp-autoinsert-quote-if-followed-by-closing-pair nil)
+(sp-pair "(" nil :unless '(sp-point-before-word-p))
+(sp-pair "[" nil :unless '(sp-point-before-word-p))
+(sp-pair "{" nil :unless '(sp-point-before-word-p))
 
 ;; Smooth-Scoll
 (use-package smooth-scroll
