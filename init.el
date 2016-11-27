@@ -401,9 +401,7 @@
          (cond
           ((or (get-buffer-process (current-buffer)) (memq major-mode '(comint-mode compilation-mode))) '("Term"))
           ((string-equal "*" (substring (buffer-name) 0 1)) '("Emacs"))
-          ((condition-case err
-               (projectile-project-root)
-             (error nil)) (list (projectile-project-name)))
+          ((condition-case err (projectile-project-root) (error nil)) (list (projectile-project-name)))
           ((memq major-mode '(org-mode calendar-mode diary-mode)) '("Org"))
           ((memq major-mode '(dired-mode)) '("Dir"))
           (t '("User"))))
@@ -479,19 +477,28 @@
 
 ;; Emacs Lisp
 (add-hook 'emacs-lisp-mode-hook #'company-mode)
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq evil-shift-width 2)))
+(add-hook 'emacs-lisp-mode-hook
+  (lambda ()
+    (setq evil-shift-width 2)))
 
 ;; C/C++
 (setq c-basic-offset 4)
 (setq c-indent-level 4)
 (setq-default c-default-style "k&r")
-(defun custom-c-mode-hook ()
-  (c-set-offset 'substatement-open 0)
-  (c-set-offset 'case-label '+)
-  (setq tab-width 4)
-  (setq tab-stop-list (number-sequence 4 120 4))
-  (setq evil-shift-width 4))
-(add-hook 'c-mode-common-hook 'custom-c-mode-hook)
+(add-hook 'c-mode-common-hook
+  '(lambda ()
+    (c-set-offset 'substatement-open 0)
+    (c-set-offset 'case-label '+)
+    (setq tab-width 4)
+    (setq tab-stop-list (number-sequence 4 120 4))
+    (setq evil-shift-width 4)))
+(defun newline-and-enter-sexp (&rest _ignored)
+  (newline)
+  (indent-according-to-mode)
+  (forward-line -1)
+  (indent-according-to-mode))
+(sp-local-pair 'c-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+(sp-local-pair 'c++-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
@@ -631,6 +638,8 @@
  "C--" 'shrink-window-horizontally
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
+ "<prior>" 'evil-scroll-up
+ "<next>" 'evil-scroll-down
  "M-<up>" (lambda () (interactive) (previous-line 10))
  "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
