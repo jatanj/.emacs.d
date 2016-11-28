@@ -107,7 +107,7 @@
 (setq linum-format "%4d ")
 (setq resize-mini-windows t)
 
-;; Scrolling
+;; Vertical scrolling
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
@@ -115,6 +115,12 @@
   (lambda ()
     (toggle-scroll-bar -1)
     (horizontal-scroll-bar-mode -1)))
+
+;; Horizontal scrolling
+(setq-default truncate-lines t)
+(setq hscroll-margin 1)
+(setq auto-hscroll-mode 1)
+(setq automatic-hscrolling t)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
@@ -222,7 +228,7 @@
 (setq evil-toggle-key "<f5>")
 (evil-mode 1)
 (setq evil-disable-insert-state-bindings t)
-;; (setq-default evil-shift-width 2)
+(setq-default evil-shift-width 2)
 (evil-set-initial-state 'dired-mode 'normal)
 (evil-set-initial-state 'Buffer-menu-mode 'normal)
 ;; (with-eval-after-load 'evil
@@ -253,7 +259,7 @@
 (setq helm-boring-buffer-regexp-list
   '("\\` " "\\Messages" "\\*scratch" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
 (global-set-key (kbd "C-S-p") 'helm-M-x)
-(global-set-key (kbd "C-p") 'helm-mini)
+(global-set-key (kbd "C-p") 'helm-buffers-list)
 
 ;; Projectile
 (use-package projectile
@@ -471,7 +477,7 @@
 (global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
 (setq iflipb-wrap-around t)
 
-;; Stupid-indent-mode
+;; Stupid-Indent
 (require 'stupid-indent-mode)
 (setq-default stupid-indent-level 2)
 
@@ -697,7 +703,7 @@
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
- "b" 'helm-mini
+ "b" 'helm-buffers-list
  "k" 'ido-kill-buffer
  "f" 'ido-find-file
  "C-b" 'neotree-projectile)
