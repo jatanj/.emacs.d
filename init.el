@@ -160,54 +160,62 @@
 (set-selection-coding-system 'utf-8))
 (prefer-coding-system 'utf-8)
 
-;; Copy/cut entire line when no region is active
-;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
-(defun slick-cut (beg end)
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end))
-       (list (line-beginning-position) (line-beginning-position 2)))))
+;; Backup files
+(setq backup-by-copying t)
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+(setq delete-old-versions t)
+(setq kept-new-versions 16)
+(setq kept-old-versions 2)
+
+  ;; Copy/cut entire line when no region is active
+  ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
+  (defun slick-cut (beg end)
+(interactive
+  (if mark-active
+      (list (region-beginning) (region-end))
+      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-region :before #'slick-cut)
 (defun slick-copy (beg end)
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end))
-       (message "Copied line")
-       (list (line-beginning-position) (line-beginning-position 2)))))
+(interactive
+  (if mark-active
+      (list (region-beginning) (region-end))
+      (message "Copied line")
+      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
 ;; Fix Ctrl+Backspace
 ;; http://stackoverflow.com/questions/28221079#answer-39438119
 (defun backward-kill-word-fixed ()
-  (interactive)
-  (let* ((cp (point))
-         (backword)
-         (end)
-         (space-pos)
-         (backword-char (if (bobp)
-                            ""
-                          (buffer-substring cp (- cp 1)))))
-    (if (equal (length backword-char) (string-width backword-char))
-        (progn
-          (save-excursion
-            (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
-          (setq ab/debug backword)
-          (save-excursion
-            (when (and backword
-                       (s-contains? " " backword))
-              (setq space-pos (ignore-errors (search-backward " ")))))
-          (save-excursion
-            (let* ((pos (ignore-errors (search-backward-regexp "\n")))
-                   (substr (when pos (buffer-substring pos cp))))
-              (when (or (and substr (s-blank? (s-trim substr)))
-                        (s-contains? "\n" backword))
-                (setq end pos))))
-          (if end
-              (kill-region cp end)
-            (if space-pos
-                (kill-region cp space-pos)
-              (backward-kill-word 1))))
-      (kill-region cp (- cp 1)))))
+(interactive)
+(let* ((cp (point))
+        (backword)
+        (end)
+        (space-pos)
+        (backword-char (if (bobp)
+                          ""
+                        (buffer-substring cp (- cp 1)))))
+  (if (equal (length backword-char) (string-width backword-char))
+      (progn
+        (save-excursion
+          (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
+        (setq ab/debug backword)
+        (save-excursion
+          (when (and backword
+                      (s-contains? " " backword))
+            (setq space-pos (ignore-errors (search-backward " ")))))
+        (save-excursion
+          (let* ((pos (ignore-errors (search-backward-regexp "\n")))
+                  (substr (when pos (buffer-substring pos cp))))
+            (when (or (and substr (s-blank? (s-trim substr)))
+                      (s-contains? "\n" backword))
+              (setq end pos))))
+        (if end
+            (kill-region cp end)
+          (if space-pos
+              (kill-region cp space-pos)
+            (backward-kill-word 1))))
+    (kill-region cp (- cp 1)))))
 (global-set-key [C-backspace] 'backward-kill-word-fixed)
 
 ;; Improve shift to keep selection
@@ -635,7 +643,7 @@
   (global-set-key (kbd key) nil))
 
 ;; Keybindings
-(defun unset-key () (interactive) ())
+(defun unset-key () (interactive) nil)
 (general-define-key
  "C-k" ctl-x-map
  "C-:" 'eval-expression
