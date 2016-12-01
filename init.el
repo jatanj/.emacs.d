@@ -3,40 +3,41 @@
 ;; Packages
 (require 'package)
 (setq package-list '(evil
-		     evil-surround
-		     evil-visualstar
-		     evil-matchit
-		     helm
-		     helm-projectile
-		     helm-ag
-		     spaceline
-		     projectile
-		     ido-vertical-mode
-		     flx
-		     flx-ido
-		     tabbar
-		     use-package
-		     neotree
-		     general
-		     magit
-		     evil-magit
-		     company
-		     tide
-		     window-numbering
-		     expand-region
-		     anzu
-		     smooth-scroll
-		     smartparens
-		     esup
-		     iflipb
-		     web-mode
-		     js2-mode
-		     ensime
-		     clojure-mode
-		     clojure-mode-extra-font-locking
-		     cider
-		     fsharp-mode
-         d-mode))
+                     evil-surround
+                     evil-visualstar
+                     evil-matchit
+                     helm
+                     helm-projectile
+                     helm-ag
+                     spaceline
+                     projectile
+                     ido-vertical-mode
+                     flx
+                     flx-ido
+                     tabbar
+                     use-package
+                     neotree
+                     general
+                     magit
+                     evil-magit
+                     company
+                     tide
+                     window-numbering
+                     expand-region
+                     anzu
+                     smooth-scroll
+                     smartparens
+                     esup
+                     iflipb
+                     markdown-mode
+                     web-mode
+                     js2-mode
+                     ensime
+                     clojure-mode
+                     clojure-mode-extra-font-locking
+                     cider
+                     fsharp-mode
+                     d-mode))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
@@ -51,10 +52,10 @@
 
 ;; Load machine-specific settings
 (load "~/.emacs.d/local.el")
-(dolist (local-setting '((default-dir . "~/")
-			 (custom-font-face . "Inconsolata-12")
-			 (desktop-window-attributes . '())
-			 (client-window-attributes . '())))
+(dolist (local-setting '((default-dir               . "~/")
+                         (custom-font-face          . "Inconsolata-12")
+                         (desktop-window-attributes . nil)
+                         (client-window-attributes  . nil)))
   (when (not (boundp (car local-setting)))
     (set (car local-setting) (cdr local-setting))))
 
@@ -489,6 +490,12 @@
 (global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
 (setq iflipb-wrap-around t)
 
+;; Markdown
+(dolist (assoc '(("README\\.md\\'" . gfm-mode)
+                 ("\\.md\\'"       . markdown-mode)
+                 ("\\.markdown\\'" . markdown-mode)))
+  (add-to-list 'auto-mode-alist assoc))
+
 ;; Emacs Lisp
 (add-hook 'emacs-lisp-mode-hook #'company-mode)
 (add-hook 'emacs-lisp-mode-hook
@@ -525,22 +532,22 @@
     (c-set-offset 'case-label '+)
     (set-local-tab-width 3)
     (set (make-local-variable 'c-basic-offset) 3)
-    (set (make-local-variable 'c-indent-level 3))))
+    (set (make-local-variable 'c-indent-level) 3)))
 (sp-local-pair 'd-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
 (dolist (assoc '(("\\.phtml\\'"     . web-mode)
-	         ("\\.tpl\\.php\\'" . web-mode)
-	         ("\\.[agj]sp\\'"   . web-mode)
-	         ("\\.as[cp]x\\'"   . web-mode)
-	         ("\\.erb\\'"       . web-mode)
-	         ("\\.mustache\\'"  . web-mode)
-	         ("\\.djhtml\\'"    . web-mode)
-	         ("\\.html?\\'"     . web-mode)
-	         ("\\.js\\'"        . js2-mode)
-	         ("\\.jsx?\\'"      . js2-jsx-mode)
-		 ("node"            . js2-jsx-mode)))
+                 ("\\.tpl\\.php\\'" . web-mode)
+                 ("\\.[agj]sp\\'"   . web-mode)
+                 ("\\.as[cp]x\\'"   . web-mode)
+                 ("\\.erb\\'"       . web-mode)
+                 ("\\.mustache\\'"  . web-mode)
+                 ("\\.djhtml\\'"    . web-mode)
+                 ("\\.html?\\'"     . web-mode)
+                 ("\\.js\\'"        . js2-mode)
+                 ("\\.jsx?\\'"      . js2-jsx-mode)
+                 ("node"            . js2-jsx-mode)))
   (add-to-list 'auto-mode-alist assoc))
 (setq js-indent-level 2)
 (setq javascript-indent-level 2)
