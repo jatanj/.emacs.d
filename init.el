@@ -572,8 +572,8 @@
               (setup-tide-mode))))
 
 ;; Scala
-(use-package ensime
-  :ensure t)
+(setq scala-indent:use-javadoc-style t)
+(sp-local-pair 'scala-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
 
 ;; Clojure
 (require 'clojure-mode)
