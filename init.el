@@ -29,14 +29,14 @@
 		     smartparens
 		     esup
 		     iflipb
-		     stupid-indent-mode
 		     web-mode
 		     js2-mode
 		     ensime
 		     clojure-mode
 		     clojure-mode-extra-font-locking
 		     cider
-		     fsharp-mode))
+		     fsharp-mode
+         d-mode))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
@@ -131,9 +131,13 @@
 ;; Indentation
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-(setq-default tab-stop-list (number-sequence 2 120 2))
+(setq tab-stop-list (number-sequence 2 200 2))
 (setq-default indent-line-function 'insert-tab)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defun set-local-tab-width (n)
+  (setq tab-width n)
+  (setq evil-shift-width 2)
+  (set (make-local-variable 'tab-stop-list) (number-sequence n 200 n)))
 
 ;; Custom comment function
 (defun comment-line-or-region ()
@@ -168,20 +172,20 @@
 (setq kept-new-versions 16)
 (setq kept-old-versions 2)
 
-  ;; Copy/cut entire line when no region is active
-  ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
-  (defun slick-cut (beg end)
-(interactive
-  (if mark-active
-      (list (region-beginning) (region-end))
-      (list (line-beginning-position) (line-beginning-position 2)))))
+;; Copy/cut entire line when no region is active
+;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
+(defun slick-cut (beg end)
+  (interactive
+    (if mark-active
+        (list (region-beginning) (region-end))
+        (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-region :before #'slick-cut)
 (defun slick-copy (beg end)
-(interactive
-  (if mark-active
-      (list (region-beginning) (region-end))
-      (message "Copied line")
-      (list (line-beginning-position) (line-beginning-position 2)))))
+  (interactive
+    (if mark-active
+        (list (region-beginning) (region-end))
+        (message "Copied line")
+        (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
 ;; Fix Ctrl+Backspace
@@ -485,27 +489,23 @@
 (global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
 (setq iflipb-wrap-around t)
 
-;; Stupid-Indent
-(require 'stupid-indent-mode)
-(setq-default stupid-indent-level 2)
-
 ;; Emacs Lisp
 (add-hook 'emacs-lisp-mode-hook #'company-mode)
 (add-hook 'emacs-lisp-mode-hook
   (lambda ()
-    (setq evil-shift-width 2)))
+    (company-mode -1)
+    (set-local-tab-width 2)))
 
 ;; C/C++
-(setq c-basic-offset 4)
-(setq c-indent-level 4)
+(setq c-basic-offset 2)
+(setq c-indent-level 2)
 (setq-default c-default-style "k&r")
-(add-hook 'c-mode-common-hook
-  '(lambda ()
-    (c-set-offset 'substatement-open 0)
-    (c-set-offset 'case-label '+)
-    (setq tab-width 4)
-    (setq tab-stop-list (number-sequence 4 120 4))
-    (setq evil-shift-width 4)))
+(defun customize-cc-mode ()
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'case-label '+)
+  (c-set-offset 'arglist-intro '+)
+  (set-local-tab-width 4))
+(add-hook 'c-mode-common-hook 'customize-cc-mode)
 (defun newline-and-enter-sexp (&rest _ignored)
   (newline)
   (indent-according-to-mode)
@@ -513,6 +513,17 @@
   (indent-according-to-mode))
 (sp-local-pair 'c-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
 (sp-local-pair 'c++-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+
+;; Java
+(add-hook 'java-mode-hook 'customize-cc-mode)
+(sp-local-pair 'java-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+
+;; D
+(add-hook 'd-mode-hook
+  (lambda ()
+    (c-set-offset 'substatement-open 0)
+    (c-set-offset 'case-label '+)
+    (set-local-tab-width 3)))
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
@@ -613,12 +624,12 @@
  "C-c C-l" 'cider-repl-clear-buffer)
 
 ;; F#
-(setq-default fsharp-indent-offset 2)
+(setq fsharp-indent-offset 2)
 (add-hook 'fsharp-mode-hook
   (lambda ()
-    (stupid-indent-mode)
-    (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
-    (setq evil-shift-width 2)))
+    (setq indent-line-function 'indent-relative-maybe)
+    (set-local-tab-width 2)
+    (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)))
 (setq fsharp-ac-use-popup t)
 
 ;; Load theme
