@@ -497,8 +497,8 @@
     (set-local-tab-width 2)))
 
 ;; C/C++
-(setq c-basic-offset 2)
-(setq c-indent-level 2)
+(setq c-basic-offset 4)
+(setq c-indent-level 4)
 (setq-default c-default-style "k&r")
 (defun customize-cc-mode ()
   (c-set-offset 'substatement-open 0)
@@ -523,7 +523,10 @@
   (lambda ()
     (c-set-offset 'substatement-open 0)
     (c-set-offset 'case-label '+)
-    (set-local-tab-width 3)))
+    (set-local-tab-width 3)
+    (set (make-local-variable 'c-basic-offset) 3)
+    (set (make-local-variable 'c-indent-level 3))))
+(sp-local-pair 'd-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
 
 ;; HTML / CSS / JavaScript
 (require 'web-mode)
