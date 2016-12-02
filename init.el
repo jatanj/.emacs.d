@@ -118,6 +118,7 @@
     (horizontal-scroll-bar-mode -1)))
 
 ;; Horizontal scrolling
+(setq hscroll-step 1)
 (setq-default truncate-lines t)
 (setq hscroll-margin 1)
 (setq auto-hscroll-mode 1)
@@ -221,7 +222,27 @@
               (kill-region cp space-pos)
             (backward-kill-word 1))))
     (kill-region cp (- cp 1)))))
-(global-set-key [C-backspace] 'backward-kill-word-fixed)
+
+;; Backspace previous tab stop
+;; https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop
+(defun backspace-whitespace-to-tab-stop ()
+  "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
+  (interactive)
+  (if (or indent-tabs-mode
+          (region-active-p)
+          (save-excursion
+            (> (point) (progn (back-to-indentation)
+                              (point)))))
+      (call-interactively 'backward-delete-char-untabify)
+    (let ((movement (% (current-column) tab-width))
+          (p (point)))
+      (when (= movement 0) (setq movement tab-width))
+      ;; Account for edge case near beginning of buffer
+      (setq movement (min (- p 1) movement))
+      (save-match-data
+        (if (string-match "[^\t ]*\\([\t ]+\\)$" (buffer-substring-no-properties (- p movement) p))
+            (backward-delete-char (- (match-end 1) (match-beginning 1)))
+          (call-interactively 'backward-delete-char))))))
 
 ;; Improve shift to keep selection
 ;; http://superuser.com/questions/684540/#answer-789156
@@ -271,8 +292,6 @@
 (setq helm-split-window-in-side-p t)
 (setq helm-boring-buffer-regexp-list
   '("\\` " "\\Messages" "\\*scratch" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
-(global-set-key (kbd "C-S-p") 'helm-M-x)
-(global-set-key (kbd "C-p") 'helm-buffers-list)
 
 ;; Projectile
 (use-package projectile
@@ -288,6 +307,7 @@
 ;; General
 (setq leader-key "C-l")
 (general-define-key :prefix leader-key)
+(defun unset-key () (interactive) nil)
 
 ;; Magit
 (require 'magit)
@@ -332,9 +352,6 @@
 
 ;; Company
 (require 'company)
-(general-define-key
- :keymaps 'company-active-map
- "<tab>" (general-simulate-keys "<return>"))
 (setq company-frontends
       '(company-pseudo-tooltip-frontend
         company-echo-metadata-frontend))
@@ -390,8 +407,6 @@
     (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)
     (tabbar-forward-tab) ; Force redraw to fix colors
     (tabbar-backward-tab)))
-(global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
-(global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
 
 ;; Tabbar visual tweaks
 ;; https://gist.github.com/3demax/1264635
@@ -486,13 +501,10 @@
 
 ;; Iflipb
 (require 'iflipb)
-(global-set-key (kbd "C-<tab>") 'iflipb-next-buffer)
-(global-set-key (kbd "<C-iso-lefttab>") 'iflipb-previous-buffer)
 (setq iflipb-wrap-around t)
 
 ;; Markdown
-(dolist (assoc '(("README\\.md\\'" . gfm-mode)
-                 ("\\.md\\'"       . markdown-mode)
+(dolist (assoc '(("\\.md\\'"       . markdown-mode)
                  ("\\.markdown\\'" . markdown-mode)))
   (add-to-list 'auto-mode-alist assoc))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
@@ -670,7 +682,6 @@
   (global-set-key (kbd key) nil))
 
 ;; Keybindings
-(defun unset-key () (interactive) nil)
 (general-define-key
  "C-k" ctl-x-map
  "C-:" 'eval-expression
@@ -679,16 +690,24 @@
  "C--" 'shrink-window-horizontally
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
+ "C-S-p" 'helm-M-x
+ "C-p" 'helm-buffers-list
+ "C-<backspace>" 'backward-kill-word-fixed
+ "C-<tab>" 'backspace-whitespace-to-tab-stop
  "<prior>" 'evil-scroll-up
  "<next>" 'evil-scroll-down
+ "C-<prior>" 'tabbar-backward-tab
+ "C-<next>" 'tabbar-forward-tab
+ "C-S-<prior>" 'iflipb-previous-buffer
+ "C-S-<next>" 'iflipb-next-buffer
  "M-<up>" (lambda () (interactive) (previous-line 10))
  "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
- :states '(normal)
+ :states 'normal
  "q" 'unset-key
  "r" 'unset-key)
 (general-define-key
- :states '(insert)
+ :states 'insert
  "<tab>" 'tab-to-tab-stop
  "C-k" ctl-x-map
  "C-g" 'evil-normal-state
@@ -696,11 +715,11 @@
  "C-x" 'kill-region
  "C-v" 'yank)
 (general-define-key
- :states '(visual)
+ :states 'visual
  ">" 'evil-shift-right-visual
  "<" 'evil-shift-left-visual
  "<tab>" 'evil-shift-right-visual
- "<S-iso-lefttab>" 'evil-shift-left-visual
+ "C-S-<tab>" 'evil-shift-left-visual
  "S-<left>" (lambda () (interactive) (backward-char))
  "S-<right>" (lambda () (interactive) (forward-char))
  "S-<up>" (lambda () (interactive) (previous-line))
