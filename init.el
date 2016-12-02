@@ -119,10 +119,14 @@
 
 ;; Horizontal scrolling
 (setq hscroll-step 1)
-(setq-default truncate-lines t)
 (setq hscroll-margin 1)
-(setq auto-hscroll-mode 1)
-(setq automatic-hscrolling t)
+(setq-default truncate-lines t)
+(defun toggle-horizontal-scrolling ()
+  (interactive)
+  (let ((config-vars '(auto-hscroll-mode truncate-lines)))
+    (if (bound-and-true-p auto-hscroll-mode)
+        (dolist (var config-vars) (set var nil))
+      (dolist (var config-vars) (set var t)))))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
@@ -760,7 +764,8 @@
  "b" 'helm-buffers-list
  "k" 'ido-kill-buffer
  "f" 'ido-find-file
- "C-b" 'neotree-projectile)
+ "C-b" 'neotree-projectile
+ "C-h" 'toggle-horizontal-scrolling)
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
