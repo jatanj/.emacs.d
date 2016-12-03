@@ -248,421 +248,37 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
-;; Improve shift to keep selection
-;; http://superuser.com/questions/684540/#answer-789156
-(defun evil-shift-left-visual ()
-  (interactive)
-  (evil-shift-left (region-beginning) (region-end))
-  (evil-normal-state)
-  (evil-visual-restore))
-(defun evil-shift-right-visual ()
-  (interactive)
-  (evil-shift-right (region-beginning) (region-end))
-  (evil-normal-state)
-  (evil-visual-restore))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 
-;; Evil
-(require 'evil)
-(setq evil-toggle-key "<f5>")
-(evil-mode 1)
-(setq evil-disable-insert-state-bindings t)
-(setq-default evil-shift-width 2)
-(evil-set-initial-state 'dired-mode 'normal)
-(evil-set-initial-state 'Buffer-menu-mode 'normal)
-;; (with-eval-after-load 'evil
-;;   (defalias #'forward-evil-word #'forward-evil-symbol))
+(require 'config-evil)
+(require 'config-helm)
+(require 'config-projectile)
+(require 'config-general)
+(require 'config-magit)
+(require 'config-window-numbering)
+(require 'config-anzu)
+(require 'config-company)
+(require 'config-spaceline)
+(require 'config-ido)
+(require 'config-tabbar)
+(require 'config-neotree)
+(require 'config-smartparens)
+(require 'config-smooth-scroll)
+(require 'config-expand-region)
+(require 'config-yasnippets)
+(require 'config-popwin)
+(require 'config-iflipb)
 
-;; Evil-Surround
-(require 'evil-surround)
-(global-evil-surround-mode 1)
-
-;; Evil-Visualstar
-(require 'evil-visualstar)
-(global-evil-visualstar-mode 1)
-
-;; Evil-Matchit
-(require 'evil-matchit)
-(global-evil-matchit-mode 1)
-
-;; Helm
-(require 'helm)
-(require 'helm-config)
-(helm-autoresize-mode 1)
-(setq helm-autoresize-max-height 25)
-(setq helm-buffers-fuzzy-matching t)
-(setq helm-M-x-fuzzy-match t)
-(setq helm-recentf-fuzzy-match t)
-(setq helm-semantic-fuzzy-match t)
-(setq helm-split-window-in-side-p t)
-(setq helm-boring-buffer-regexp-list
-  '("\\` " "\\Messages" "\\*scratch" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
-
-;; Projectile
-(use-package projectile
-  :init
-  (setq projectile-keymap-prefix (kbd "C-l p"))
-  :config
-  (setq projectile-indexing-method 'alien)
-  ;; (setq projectile-enable-caching t)
-  (add-to-list 'projectile-globally-ignored-directories "elpa")
-  (add-to-list 'projectile-globally-ignored-directories ".cache")
-  (projectile-global-mode))
-
-;; General
-(setq leader-key "C-l")
-(general-define-key :prefix leader-key)
-(defun unset-key () (interactive) nil)
-
-;; Magit
-(require 'magit)
-(require 'evil-magit)
-;; https://github.com/magit/magit/issues/2541
-(setq magit-display-buffer-function
-      (lambda (buffer)
-        (display-buffer
-         buffer (if (and (derived-mode-p 'magit-mode)
-                         (memq (with-current-buffer buffer major-mode)
-                               '(magit-process-mode
-                                 magit-revision-mode
-                                 magit-diff-mode
-                                 magit-stash-mode
-                                 magit-status-mode)))
-                    nil
-                  '(display-buffer-same-window)))))
-(general-define-key
- :keymaps 'magit-mode-map
-  "C-k" (general-simulate-keys "C-x")
-  "SPC" (general-simulate-keys "M-x" t)
-  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
-  "C-:" 'eval-expression
-  "C-<tab>" 'previous-buffer
-  "C-<prior>" 'tabbar-backward-tab
-  "C-<next>" 'tabbar-forward-tab)
-
-; Window Numbering
-(defun window-numbering-install-mode-line (&optional position))
-(window-numbering-mode 1)
-(dolist (n (number-sequence 1 9))
-  (global-set-key (kbd (format "C-%s" n)) (intern (format "select-window-%s" n))))
-
-;; Anzu
-(require 'anzu)
-(global-anzu-mode +1)
-(set-face-attribute 'anzu-mode-line nil :foreground "#639743" :weight 'normal)
-(global-set-key [remap isearch-query-replace] 'anzu-isearch-query-replace)
-(global-set-key [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
-(global-set-key [remap query-replace] 'anzu-query-replace)
-(global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
-
-;; Company
-(require 'company)
-(setq company-frontends
-      '(company-pseudo-tooltip-frontend
-        company-echo-metadata-frontend))
-(setq company-require-match nil)
-(add-hook 'emacs-lisp-mode-hook #'company-mode)
-
-;; Spaceline
-(require 'spaceline-config)
-(setq powerline-default-separator nil)
-(setq spaceline-workspace-numbers-unicode t)
-;; (setq spaceline-window-numbers-unicode t)
-(spaceline-toggle-minor-modes-off)
-(spaceline-toggle-hud-off)
-(spaceline-toggle-buffer-size-off)
-(spaceline-toggle-anzu-off)
-(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-(add-to-list 'configure-frame-functions
-  (lambda ()
-    (set-face-attribute 'spaceline-evil-insert nil :background "#7eaefd")
-    (set-face-attribute 'spaceline-evil-normal nil :background "#4f3598" :foreground "#ffffff")
-    (set-face-attribute 'spaceline-evil-replace nil :background "#005154" :foreground "#ffffff")
-    (set-face-attribute 'spaceline-evil-visual nil :background "#e6987a")
-    (set-face-attribute 'spaceline-evil-emacs nil :background "#393d44" :foreground "#ffffff")))
-(spaceline-spacemacs-theme)
-(spaceline-helm-mode 1)
-
-;; Ido
-(require 'flx-ido)
-(require 'ido-vertical-mode)
-(ido-mode 1)
-(flx-ido-mode 1)
-(ido-vertical-mode 1)
-(setq ido-enable-flex-matching t)
-(add-to-list 'configure-frame-functions
-  (lambda ()
-  (set-face-attribute 'ido-vertical-first-match-face nil :background nil :foreground "#5cacee")
-  (set-face-attribute 'ido-vertical-only-match-face nil :background nil :foreground "#5cacee")
-  (set-face-attribute 'ido-vertical-match-face nil :foreground "#5cacee")))
-
-;; Tabbar
-(setq tabbar-use-images nil)
-(require 'tabbar)
-(tabbar-mode 1)
-(add-to-list 'configure-frame-functions
-  (lambda ()
-    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font custom-font-face)
-    (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
-    (set-face-attribute 'tabbar-modified nil :background "#202328" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-selected-modified nil :background "#272b33" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#272b33" :style nil))
-    (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
-    (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)
-    (tabbar-forward-tab) ; Force redraw to fix colors
-    (tabbar-backward-tab)))
-
-;; Tabbar visual tweaks
-;; https://gist.github.com/3demax/1264635
-(setq tabbar-separator (quote (0.5)))
-(defun tabbar-buffer-tab-label (tab)
-  "Return a label for TAB. That is, a string used to represent it on the tab bar."
-  (let ((label  (if tabbar--buffer-show-groups
-                    (format "[%s]  " (tabbar-tab-tabset tab))
-                  (format "%s  " (tabbar-tab-value tab)))))
-    (if tabbar-auto-scroll-flag
-        label
-      (tabbar-shorten
-       label (max 1 (/ (window-width)
-                       (length (tabbar-view
-                                (tabbar-current-tabset)))))))))
-
-;; Tabbar-Ruler projectile groups
-;; https://github.com/mattfidler/tabbar-ruler.el
-(defvar tabbar-projectile-tabbar-buffer-group-calc nil)
-(defun tabbar-projectile-tabbar-buffer-groups ()
-  "Return the list of group names BUFFER belongs to.
-    Return only one group for each buffer."
-  (if tabbar-projectile-tabbar-buffer-group-calc
-      (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)
-    (set (make-local-variable 'tabbar-projectile-tabbar-buffer-group-calc)
-         (cond
-          ((or (get-buffer-process (current-buffer)) (memq major-mode '(comint-mode compilation-mode))) '("Term"))
-          ((string-equal "*" (substring (buffer-name) 0 1)) '("Emacs"))
-          ((condition-case err (projectile-project-root) (error nil)) (list (projectile-project-name)))
-          ((memq major-mode '(org-mode calendar-mode diary-mode)) '("Org"))
-          ((memq major-mode '(dired-mode)) '("Dir"))
-          (t '("User"))))
-    (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
-(setq tabbar-buffer-groups-function 'tabbar-projectile-tabbar-buffer-groups)
-
-;; NeoTree
-(require 'neotree)
-(setq neo-theme 'ascii)
-(defun neotree-projectile ()
-  "Open neotree with projectile as root and open node for current file.
-  If projectile unavailable or not in a project, open node at file path.
-  If file path is not available, open $HOME."
-    (interactive)
-    (if (neo-global--window-exists-p)
-        (call-interactively 'neotree-hide)
-      (let ((file-name (buffer-file-name)))
-        (if (and (not file-name)
-                 (let ((buffer-name (buffer-name)))
-                   (cond
-                    ((equal buffer-name "*cider-repl server*") nil)
-                    (t t))))
-            (neotree-dir default-dir)
-          (let ((dir-name (if (and (fboundp 'projectile-project-p)
-                                   (projectile-project-p))
-                              (projectile-project-root)
-                            (file-name-directory file-name))))
-            (neotree-dir dir-name)
-            (when file-name
-              (neo-buffer--select-file-node file-name)))))))
-
-;; Smartparens
-(require 'smartparens-config)
-(smartparens-global-mode 1)
-(setq sp-highlight-pair-overlay nil)
-(setq sp-highlight-wrap-overlay nil)
-(setq sp-highlight-wrap-tag-overlay nil)
-(setq sp-escape-quotes-after-insert nil)
-(setq sp-escape-wrapped-region nil)
-(setq sp-autoinsert-quote-if-followed-by-closing-pair nil)
-(sp-pair "(" nil :unless '(sp-point-before-word-p))
-(sp-pair "[" nil :unless '(sp-point-before-word-p))
-(sp-pair "{" nil :unless '(sp-point-before-word-p))
-
-;; Smooth-Scoll
-(use-package smooth-scroll
-  :config
-  (smooth-scroll-mode 1)
-  (setq smooth-scroll/vscroll-step-size 5))
-
-;; Expand-Region
-(require 'expand-region)
-
-;; Yasnippets
-(add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
-
-;; Popwin
-(require 'popwin)
-(setq display-buffer-function 'popwin:display-buffer)
-(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
-(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
-(setq helm-split-window-preferred-function 'ignore)
-
-;; Iflipb
-(require 'iflipb)
-(setq iflipb-wrap-around t)
-
-;; Markdown
-(dolist (assoc '(("\\.md\\'"       . markdown-mode)
-                 ("\\.markdown\\'" . markdown-mode)))
-  (add-to-list 'auto-mode-alist assoc))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
-(ignore-errors (require 'livedown))
-(general-define-key
- :keymaps '(markdown-mode-map gfm-mode-map)
- "C-c C-k" 'livedown-preview
- "C-c C-q" 'livedown-kill)
-
-;; Emacs Lisp
-(add-hook 'emacs-lisp-mode-hook #'company-mode)
-(add-hook 'emacs-lisp-mode-hook
-  (lambda ()
-    (company-mode -1)
-    (set-local-tab-width 2)))
-
-;; C/C++
-(setq c-basic-offset 4)
-(setq c-indent-level 4)
-(setq-default c-default-style "k&r")
-(defun customize-cc-mode ()
-  (c-set-offset 'substatement-open 0)
-  (c-set-offset 'case-label '+)
-  (c-set-offset 'arglist-intro '+)
-  (set-local-tab-width 4))
-(add-hook 'c-mode-common-hook 'customize-cc-mode)
-(defun newline-and-enter-sexp (&rest _ignored)
-  (newline)
-  (indent-according-to-mode)
-  (forward-line -1)
-  (indent-according-to-mode))
-(sp-local-pair 'c-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-(sp-local-pair 'c++-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-
-;; Java
-(add-hook 'java-mode-hook 'customize-cc-mode)
-(sp-local-pair 'java-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-
-;; D
-(add-hook 'd-mode-hook
-  (lambda ()
-    (c-set-offset 'substatement-open 0)
-    (c-set-offset 'case-label '+)
-    (set-local-tab-width 3)
-    (set (make-local-variable 'c-basic-offset) 3)
-    (set (make-local-variable 'c-indent-level) 3)))
-(sp-local-pair 'd-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-
-;; HTML / CSS / JavaScript
-(require 'web-mode)
-(dolist (assoc '(("\\.phtml\\'"     . web-mode)
-                 ("\\.tpl\\.php\\'" . web-mode)
-                 ("\\.[agj]sp\\'"   . web-mode)
-                 ("\\.as[cp]x\\'"   . web-mode)
-                 ("\\.erb\\'"       . web-mode)
-                 ("\\.mustache\\'"  . web-mode)
-                 ("\\.djhtml\\'"    . web-mode)
-                 ("\\.html?\\'"     . web-mode)
-                 ("\\.js\\'"        . js2-mode)
-                 ("\\.jsx?\\'"      . js2-jsx-mode)
-                 ("node"            . js2-jsx-mode)))
-  (add-to-list 'auto-mode-alist assoc))
-(setq js-indent-level 2)
-(setq javascript-indent-level 2)
-(setq js2-basic-offset 2)
-(setq js3-indent-level 2)
-(setq sgml-basic-offset 2)
-(setq web-mode-markup-indent-offset 4)
-(setq web-mode-css-indent-offset 2)
-(setq web-mode-code-indent-offset 2)
-(setq css-indent-offset 2)
-
-;; Typescript
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode 1)
-  (setq flycheck-check-syntax-automatically '(idle-change mode-enabled))
-  (eldoc-mode 1)
-  (tide-hl-identifier-mode 1)
-  (company-mode 1))
-(setq company-tooltip-align-annotations t)
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-(setq typescript-indent-level 2)
-(setq tide-format-options
-  '(:indentSize 2
-    :tabSize 2
-    :convertTabsToSpaces t))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
-
-;; Scala
-(setq scala-indent:use-javadoc-style t)
-(sp-local-pair 'scala-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-
-;; Clojure
-(require 'clojure-mode)
-(setq clojure-indent-style :always-align)
-(add-hook 'clojure-mode-hook #'company-mode)
-(add-hook 'clojure-mode-hook (lambda () (setq evil-shift-width 2)))
-(general-define-key
- :keymaps 'clojure-mode-map
- "C-:" 'eval-expression)
-(define-clojure-indent
-  (match 1)
-  (are 2)
-  (checking 2)
-  (async 1))
-(define-clojure-indent
-  (go-loop 1))
-(define-clojure-indent
-  (this-as 1)
-  (specify 1)
-  (specify! 1))
-(define-clojure-indent
-  (.then 1))
-
-;; Cider
-(require 'cider)
-(setq cider-repl-history-file "~/.emacs.d/cider-history")
-(setq cider-repl-pop-to-buffer-on-connect nil)
-(setq cider-repl-display-in-current-window t)
-(setq cider-repl-use-pretty-printing t)
-(setq cider-repl-use-clojure-font-lock t)
-(setq nrepl-hide-special-buffers t)
-(setq cider-repl-result-prefix ";; => ")
-(setq cider-repl-wrap-history t)
-(setq cider-repl-history-size 3000)
-(setq cider-use-fringe-indicators nil)
-(add-hook 'cider-mode-hook #'eldoc-mode)
-(setq cider-show-error-buffer nil)
-(add-hook 'cider-repl-mode-hook #'company-mode)
-(add-hook 'cider-mode-hook #'company-mode)
-(add-to-list 'evil-emacs-state-modes 'cider-repl-mode)
-(setq cider-cljs-lein-repl
-  "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
-(general-define-key
- :keymaps 'cider-mode-map
- "C-c C-n" 'cider-repl-set-ns)
-(general-define-key
- :keymaps 'cider-repl-mode-map
- "C-c C-l" 'cider-repl-clear-buffer)
-
-;; F#
-(setq fsharp-indent-offset 2)
-(add-hook 'fsharp-mode-hook
-  (lambda ()
-    (setq indent-line-function 'indent-relative-maybe)
-    (set-local-tab-width 2)
-    (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)))
-(setq fsharp-ac-use-popup t)
+(require 'config-emacs-lisp)
+(require 'config-c-cpp)
+(require 'config-java)
+(require 'config-d)
+(require 'config-web-mode)
+(require 'config-markdown)
+(require 'config-typescript)
+(require 'config-scala)
+(require 'config-fsharp)
+(require 'config-clojure)
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -706,10 +322,11 @@
  "C-S-<next>" 'iflipb-next-buffer
  "M-<up>" (lambda () (interactive) (previous-line 10))
  "M-<down>" (lambda () (interactive) (next-line 10)))
+
 (general-define-key
  :states 'normal
- "q" 'unset-key
- "r" 'unset-key)
+ "q" 'unset-key)
+
 (general-define-key
  :states 'insert
  "<tab>" 'tab-to-tab-stop
@@ -718,6 +335,7 @@
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
+
 (general-define-key
  :states 'visual
  ">" 'evil-shift-right-visual
@@ -728,10 +346,12 @@
  "S-<right>" (lambda () (interactive) (forward-char))
  "S-<up>" (lambda () (interactive) (previous-line))
  "S-<down>" (lambda () (interactive) (next-line)))
+
 (general-define-key
  :states '(normal visual)
  "SPC" (general-simulate-keys "M-x" t)
- "C-v" 'er/expand-region)
+ "r" 'er/expand-region)
+
 (general-define-key
  :states '(normal insert visual)
  "C-z" 'undo-tree-undo
@@ -739,18 +359,20 @@
  "C-f" 'isearch-forward-regexp
  "C-S-f" 'isearch-backward-regexp
  "C-h" 'query-replace-regexp
- "C-S-v" 'evil-visual-block
  "C-b" 'unset-key)
+
 (general-define-key
  :states '(normal insert visual motion)
  "C-u" 'evil-scroll-up
  "C-q" (lambda () (interactive) (scroll-down 1)))
+
 (general-define-key
  :states '(normal visual emacs motion)
  "S-<left>" 'windmove-left
  "S-<right>" 'windmove-right
  "S-<up>" 'windmove-up
  "S-<down>" 'windmove-down)
+
 (general-define-key
  :states '(normal insert visual emacs motion)
  "C-/" 'comment-line-or-region
@@ -758,6 +380,7 @@
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file-dwim)
+
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
@@ -766,6 +389,7 @@
  "f" 'ido-find-file
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
+
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
