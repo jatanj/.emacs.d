@@ -254,7 +254,7 @@
 (require 'config-helm)
 (require 'config-projectile)
 (require 'config-general)
-(require 'config-magit)
+;; (require 'config-magit)
 (require 'config-window-numbering)
 (require 'config-anzu)
 (require 'config-company)
@@ -322,11 +322,9 @@
  "C-S-<next>" 'iflipb-next-buffer
  "M-<up>" (lambda () (interactive) (previous-line 10))
  "M-<down>" (lambda () (interactive) (next-line 10)))
-
 (general-define-key
  :states 'normal
  "q" 'unset-key)
-
 (general-define-key
  :states 'insert
  "<tab>" 'tab-to-tab-stop
@@ -335,7 +333,6 @@
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
-
 (general-define-key
  :states 'visual
  ">" 'evil-shift-right-visual
@@ -346,12 +343,10 @@
  "S-<right>" (lambda () (interactive) (forward-char))
  "S-<up>" (lambda () (interactive) (previous-line))
  "S-<down>" (lambda () (interactive) (next-line)))
-
 (general-define-key
  :states '(normal visual)
  "SPC" (general-simulate-keys "M-x" t)
  "r" 'er/expand-region)
-
 (general-define-key
  :states '(normal insert visual)
  "C-z" 'undo-tree-undo
@@ -360,19 +355,16 @@
  "C-S-f" 'isearch-backward-regexp
  "C-h" 'query-replace-regexp
  "C-b" 'unset-key)
-
 (general-define-key
  :states '(normal insert visual motion)
  "C-u" 'evil-scroll-up
  "C-q" (lambda () (interactive) (scroll-down 1)))
-
 (general-define-key
  :states '(normal visual emacs motion)
  "S-<left>" 'windmove-left
  "S-<right>" 'windmove-right
  "S-<up>" 'windmove-up
  "S-<down>" 'windmove-down)
-
 (general-define-key
  :states '(normal insert visual emacs motion)
  "C-/" 'comment-line-or-region
@@ -380,7 +372,6 @@
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file-dwim)
-
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
@@ -389,7 +380,6 @@
  "f" 'ido-find-file
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
-
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
