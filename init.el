@@ -142,7 +142,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (defun set-local-tab-width (n)
   (setq tab-width n)
-  (setq evil-shift-width 2)
+  (setq evil-shift-width n)
   (set (make-local-variable 'tab-stop-list) (number-sequence n 200 n)))
 
 ;; Custom comment function
