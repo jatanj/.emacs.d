@@ -18,6 +18,12 @@
 (setq js2-basic-offset 2)
 (setq js3-indent-level 2)
 
+(setq js2-mode-assume-strict t)
+(setq js2-mode-show-parse-errors nil)
+(setq js2-idle-timer-delay 0.2)
+
+(sp-local-pair 'js2-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+
 (setq sgml-basic-offset 2)
 (setq web-mode-markup-indent-offset 4)
 (setq web-mode-css-indent-offset 2)

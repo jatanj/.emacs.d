@@ -22,4 +22,13 @@
     (when (string-equal "tsx" (file-name-extension buffer-file-name))
       (setup-tide-mode))))
 
+(add-hook 'js2-mode-hook #'setup-tide-mode)
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "jsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+
+(sp-local-pair 'typescript-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+
 (provide 'config-typescript)
