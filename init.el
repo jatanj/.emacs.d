@@ -258,6 +258,7 @@
 (require 'config-window-numbering)
 (require 'config-anzu)
 (require 'config-company)
+(require 'config-flycheck)
 (require 'config-spaceline)
 (require 'config-ido)
 (require 'config-tabbar)

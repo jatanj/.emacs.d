@@ -12,7 +12,7 @@
 (setq helm-split-window-in-side-p t)
 
 (setq helm-boring-buffer-regexp-list
-      '("\\` " "\\Messages" "\\*scratch" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
+      '("\\` " "\\*scratch\\*" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
 
 (global-set-key (kbd "C-S-p") 'helm-M-x)
 (global-set-key (kbd "C-p") 'helm-buffers-list)
