@@ -40,6 +40,7 @@
         `(font-lock-variable-name-face ((,class (:foreground ,var))))
         `(font-lock-match-face ((,class (:foreground ,var :background ,success))))
         `(font-lock-warning-face ((,class (:foreground ,warning :background ,bg1))))
+        `(match ((,class (:background "#4c4f54" :foreground ,fg1))))
         `(region ((,class (:background "#4c4f54" :foreground ,fg1))))
         `(highlight ((,class (:foreground ,fg1 :background "#3d4148"))))
     `(hl-line ((,class (:foreground ,fg1 :background ,bg3))))

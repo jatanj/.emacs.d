@@ -273,7 +273,7 @@
 (require 'config-c-cpp)
 (require 'config-java)
 (require 'config-d)
-(require 'config-web-mode)
+(require 'config-web)
 (require 'config-markdown)
 (require 'config-typescript)
 (require 'config-scala)
@@ -324,7 +324,7 @@
  "M-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
  :states 'normal
- "q" 'unset-key)
+ "q" 'do-nothing)
 (general-define-key
  :states 'insert
  "<tab>" 'tab-to-tab-stop
@@ -354,7 +354,7 @@
  "C-f" 'isearch-forward-regexp
  "C-S-f" 'isearch-backward-regexp
  "C-h" 'query-replace-regexp
- "C-b" 'unset-key)
+ "C-b" 'do-nothing)
 (general-define-key
  :states '(normal insert visual motion)
  "C-u" 'evil-scroll-up
