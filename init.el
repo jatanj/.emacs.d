@@ -372,7 +372,7 @@
  "<home>" 'back-to-indentation
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
- "C-p" 'helm-projectile-find-file-dwim)
+ "C-p" 'helm-projectile-find-file)
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer

@@ -1,5 +1,8 @@
 (require 'helm)
 (require 'helm-config)
+(require 'helm-projectile)
+
+(helm-projectile-on)
 
 (helm-autoresize-mode 1)
 (setq helm-autoresize-max-height 25)
