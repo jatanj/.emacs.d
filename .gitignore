@@ -1,14 +1,13 @@
 /auto-save-list/
 /elpa/
 ido.last
-ido.last~
-init.el~
+local.el
 recentf
-recentf~
 .emacs.desktop*
 projectile.cache
 projectile-bookmarks.eld
 cider-history
 /server/
 /emacs-livedown/
+*~
 .\#*
