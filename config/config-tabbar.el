@@ -19,7 +19,32 @@
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
 
-;; Tabbar visual tweaks
+(defun select-tab-by-number (n)
+  (interactive)
+  (let* ((tabset (tabbar-current-tabset))
+         (tabs (tabbar-tabs tabset)))
+    (when (<= n (length tabs))
+      (tabbar-click-on-tab (nth (- n 1) tabs)))))
+
+(dolist (n (number-sequence 1 9))
+  (global-set-key (kbd (format "C-%s" n)) `(lambda () (interactive) (select-tab-by-number ,n))))
+
+;; Sort tabs by name
+;; https://emacswiki.org/emacs/TabBarMode#toc7
+(defun tabbar-add-tab (tabset object &optional append_ignored)
+ "Add to TABSET a tab with value OBJECT if there isn't one there yet.
+ If the tab is added, it is added at the beginning of the tab list,
+ unless the optional argument APPEND is non-nil, in which case it is
+ added at the end."
+  (let ((tabs (tabbar-tabs tabset)))
+    (if (tabbar-get-tab object tabset)
+        tabs
+      (let ((tab (tabbar-make-tab object tabset)))
+        (tabbar-set-template tabset nil)
+        (set tabset (sort (cons tab tabs)
+                          (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
+
+;; Visual tweaks
 ;; https://gist.github.com/3demax/1264635
 (setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
@@ -34,7 +59,7 @@
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
 
-;; Tabbar-Ruler projectile groups
+;; Tabbar Ruler projectile groups
 ;; https://github.com/mattfidler/tabbar-ruler.el
 (defvar tabbar-projectile-tabbar-buffer-group-calc nil)
 (defun tabbar-projectile-tabbar-buffer-groups ()

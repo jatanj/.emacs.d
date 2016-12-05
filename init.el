@@ -99,8 +99,9 @@
 (setq load-prefer-newer t)
 (setq-default next-line-add-newlines nil)
 (setq w32-pipe-read-delay 0)
+(setq uniquify-buffer-name-style 'forward)
+(setq-default save-place t)
 (show-paren-mode 1)
-;; (electric-pair-mode 1)
 (global-superword-mode 1)
 
 ;; Line numbers
@@ -127,12 +128,6 @@
     (if (bound-and-true-p auto-hscroll-mode)
         (dolist (var config-vars) (set var nil))
       (dolist (var config-vars) (set var t)))))
-
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
-(require 'saveplace)
-(setq-default save-place t)
 
 ;; Indentation
 (setq-default indent-tabs-mode nil)
@@ -250,10 +245,10 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 
+(require 'config-general)
 (require 'config-evil)
 (require 'config-helm)
 (require 'config-projectile)
-(require 'config-general)
 ;; (require 'config-magit)
 (require 'config-window-numbering)
 (require 'config-anzu)
@@ -276,7 +271,7 @@
 (require 'config-d)
 (require 'config-web)
 (require 'config-markdown)
-(require 'config-typescript)
+ (require 'config-typescript)
 (require 'config-scala)
 (require 'config-fsharp)
 (require 'config-clojure)
@@ -321,8 +316,12 @@
  "C-<next>" 'tabbar-forward-tab
  "C-S-<prior>" 'iflipb-previous-buffer
  "C-S-<next>" 'iflipb-next-buffer
- "M-<up>" (lambda () (interactive) (previous-line 10))
- "M-<down>" (lambda () (interactive) (next-line 10)))
+ "M-<left>" 'windmove-left
+ "M-<right>" 'windmove-right
+ "M-<up>" 'windmove-up
+ "M-<down>" 'windmove-down
+ "S-<up>" (lambda () (interactive) (previous-line 10))
+ "S-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
  :states 'normal
  "q" 'do-nothing)
@@ -339,11 +338,7 @@
  ">" 'evil-shift-right-visual
  "<" 'evil-shift-left-visual
  "<tab>" 'evil-shift-right-visual
- "C-S-<tab>" 'evil-shift-left-visual
- "S-<left>" (lambda () (interactive) (backward-char))
- "S-<right>" (lambda () (interactive) (forward-char))
- "S-<up>" (lambda () (interactive) (previous-line))
- "S-<down>" (lambda () (interactive) (next-line)))
+ "C-S-<tab>" 'evil-shift-left-visual)
 (general-define-key
  :states '(normal visual)
  "SPC" (general-simulate-keys "M-x" t)
@@ -358,14 +353,11 @@
  "C-b" 'do-nothing)
 (general-define-key
  :states '(normal insert visual motion)
- "C-u" 'evil-scroll-up
- "C-q" (lambda () (interactive) (scroll-down 1)))
+ "C-q" (lambda () (interactive) (scroll-down 1))
+ "S-<up>" (lambda () (interactive) (evil-previous-line 10))
+ "S-<down>" (lambda () (interactive) (evil-next-line 10)))
 (general-define-key
- :states '(normal visual emacs motion)
- "S-<left>" 'windmove-left
- "S-<right>" 'windmove-right
- "S-<up>" 'windmove-up
- "S-<down>" 'windmove-down)
+ :states '(normal visual emacs motion))
 (general-define-key
  :states '(normal insert visual emacs motion)
  "C-/" 'comment-line-or-region

@@ -1,6 +1,7 @@
-(require 'evil)
-
+(setq evil-want-C-u-scroll t)
 (setq evil-toggle-key "<f5>")
+
+(require 'evil)
 
 (evil-mode 1)
 

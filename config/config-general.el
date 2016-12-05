@@ -1,5 +1,5 @@
 (setq leader-key "C-l")
-(general-define-key :prefix leader-key)
+(global-set-key (kbd leader-key) nil)
 
 (defun do-nothing ()
   (interactive)
