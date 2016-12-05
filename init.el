@@ -271,7 +271,7 @@
 (require 'config-d)
 (require 'config-web)
 (require 'config-markdown)
- (require 'config-typescript)
+(require 'config-typescript)
 (require 'config-scala)
 (require 'config-fsharp)
 (require 'config-clojure)
