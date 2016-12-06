@@ -3,6 +3,7 @@
 ido.last
 local.el
 recentf
+auto-save-list
 .emacs.desktop*
 projectile.cache
 projectile-bookmarks.eld
