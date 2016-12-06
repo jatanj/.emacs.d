@@ -21,7 +21,6 @@
                      magit
                      evil-magit
                      company
-                     tide
                      window-numbering
                      expand-region
                      anzu
@@ -32,6 +31,8 @@
                      markdown-mode
                      web-mode
                      js2-mode
+                     tide
+                     ts-comint
                      ensime
                      clojure-mode
                      clojure-mode-extra-font-locking

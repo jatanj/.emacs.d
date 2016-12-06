@@ -1,3 +1,6 @@
+(require 'tide)
+(require 'ts-comint)
+
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
@@ -21,6 +24,20 @@
   (lambda ()
     (when (string-equal "tsx" (file-name-extension buffer-file-name))
       (setup-tide-mode))))
+
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*Typescript*" eos)
+               (display-buffer-reuse-window
+                display-buffer-below-selected)
+               (window-height   . 0.20)))
+
+(general-define-key
+ :keymaps 'typescript-mode-map
+ "C-c C-." 'tide-jump-to-definition
+ "C-c C-," 'tide-jump-back
+ "C-c C-e" 'ts-send-last-sexp
+ "C-c C-k" 'ts-send-buffer
+ "C-c C-l" 'ts-load-file-and-go)
 
 (add-hook 'js2-mode-hook #'setup-tide-mode)
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))

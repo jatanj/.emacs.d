@@ -8,7 +8,7 @@
     (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)))
 
 (add-to-list 'display-buffer-alist
-             `("\\*inferior-fsharp\\*"
+             `(,(rx bos "*inferior-fsharp*" eos)
                (display-buffer-reuse-window
                 display-buffer-below-selected)
                (window-height   . 0.20)))
