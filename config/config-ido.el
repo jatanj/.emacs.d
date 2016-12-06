@@ -7,10 +7,4 @@
 
 (setq ido-enable-flex-matching t)
 
-(add-to-list 'configure-frame-functions
-  (lambda ()
-  (set-face-attribute 'ido-vertical-first-match-face nil :background nil :foreground "#5cacee")
-  (set-face-attribute 'ido-vertical-only-match-face nil :background nil :foreground "#5cacee")
-  (set-face-attribute 'ido-vertical-match-face nil :foreground "#5cacee")))
-
 (provide 'config-ido)

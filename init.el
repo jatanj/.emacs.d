@@ -151,10 +151,6 @@
 ;; Face attributes
 (add-to-list 'default-frame-alist `(font . ,custom-font-face))
 (set-face-attribute 'default nil :font custom-font-face)
-(add-to-list 'configure-frame-functions
-  (lambda ()
-    (set-face-attribute 'vertical-border nil :foreground "#222222")
-    (set-face-attribute 'ido-subdir nil :foreground "#90788c")))
 
 ;; Use UTF-8 throughout
 (setq utf-translate-cjk-mode nil)
@@ -162,8 +158,7 @@
 (setq locale-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
-(unless (eq system-type 'windows-nt)
-(set-selection-coding-system 'utf-8))
+(set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16-le 'utf-8))
 (prefer-coding-system 'utf-8)
 
 ;; Backup files
