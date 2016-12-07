@@ -116,7 +116,7 @@
 (setq scroll-error-top-bottom t)
 (add-to-list 'configure-frame-functions
   (lambda ()
-    (toggle-scroll-bar -1)
+    (scroll-bar-mode -1)
     (horizontal-scroll-bar-mode -1)))
 
 ;; Horizontal scrolling
