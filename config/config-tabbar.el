@@ -1,5 +1,6 @@
 (setq tabbar-use-images nil)
 
+(require 'cl)
 (require 'tabbar)
 (tabbar-mode 1)
 
@@ -30,7 +31,6 @@
 ;;   (global-set-key (kbd (format "C-%s" n)) `(lambda () (interactive) (select-tab-by-number ,n))))
 
 ;; Sort tabs by name
-;; https://emacswiki.org/emacs/TabBarMode#toc7
 (defun tabbar-add-tab (tabset object &optional append_ignored)
  "Add to TABSET a tab with value OBJECT if there isn't one there yet.
  If the tab is added, it is added at the beginning of the tab list,

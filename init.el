@@ -27,6 +27,7 @@
                      smooth-scroll
                      smartparens
                      esup
+                     guide-key
                      iflipb
                      markdown-mode
                      web-mode
@@ -259,6 +260,7 @@
 (require 'config-expand-region)
 ;; (require 'config-yasnippets)
 ;; (require 'config-popwin)
+(require 'config-guide-key)
 (require 'config-iflipb)
 
 (require 'config-emacs-lisp)
