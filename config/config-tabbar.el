@@ -26,8 +26,8 @@
     (when (<= n (length tabs))
       (tabbar-click-on-tab (nth (- n 1) tabs)))))
 
-(dolist (n (number-sequence 1 9))
-  (global-set-key (kbd (format "C-%s" n)) `(lambda () (interactive) (select-tab-by-number ,n))))
+;; (dolist (n (number-sequence 1 9))
+;;   (global-set-key (kbd (format "C-%s" n)) `(lambda () (interactive) (select-tab-by-number ,n))))
 
 ;; Sort tabs by name
 ;; https://emacswiki.org/emacs/TabBarMode#toc7
