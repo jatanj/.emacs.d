@@ -13,4 +13,10 @@
                 display-buffer-below-selected)
                (window-height   . 0.20)))
 
+(general-define-key
+ :keymaps 'fsharp-mode-map
+ "<f12>" 'fsharp-ac/gotodefn-at-point
+ "C-<f12>" 'fsharp-ac/pop-gotodefn-stack
+ "C-c C-d" 'do-nothing)
+
 (provide 'config-fsharp)

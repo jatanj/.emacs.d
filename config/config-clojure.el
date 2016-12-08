@@ -48,7 +48,8 @@
 
 (general-define-key
  :keymaps 'cider-mode-map
- "C-c C-n" 'cider-repl-set-ns)
+ "C-c C-n" 'cider-repl-set-ns
+ "C-c C-." 'cider-find-var)
 (general-define-key
  :keymaps 'cider-repl-mode-map
  "C-c C-l" 'cider-repl-clear-buffer)

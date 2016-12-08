@@ -2,6 +2,8 @@
 
 (setq neo-theme 'ascii)
 
+(evil-set-initial-state 'neotree-mode 'emacs)
+
 (defun neotree-projectile ()
   "Open neotree with projectile as root and open node for current file.
   If projectile unavailable or not in a project, open node at file path.

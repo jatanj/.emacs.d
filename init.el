@@ -164,7 +164,7 @@
 ;; Backup files
 (setq backup-by-copying t)
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;; (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 (setq delete-old-versions t)
 (setq kept-new-versions 16)
 (setq kept-old-versions 2)
@@ -252,6 +252,7 @@
 (require 'config-flycheck)
 (require 'config-spaceline)
 (require 'config-ido)
+(require 'config-ibuffer)
 (require 'config-tabbar)
 (require 'config-neotree)
 (require 'config-smartparens)
