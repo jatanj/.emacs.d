@@ -14,6 +14,12 @@
 
 (setq helm-split-window-in-side-p t)
 
+(add-to-list 'display-buffer-alist
+  `(,(rx bos "*helm" (* not-newline) "*" eos)
+        (display-buffer-in-side-window)
+        (inhibit-same-window . t)
+        (window-height . 0.25)))
+
 (setq helm-boring-buffer-regexp-list
       '("\\` " "\\*scratch\\*" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
 

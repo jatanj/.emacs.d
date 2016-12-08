@@ -320,13 +320,16 @@
  "M-<down>" 'windmove-down
  "S-<up>" (lambda () (interactive) (previous-line 10))
  "S-<down>" (lambda () (interactive) (next-line 10)))
+
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
  "C-d" (general-simulate-keys "<next>")
  "C-u" (general-simulate-keys "<prior>"))
+
 (general-define-key
  :states 'normal
  "q" 'do-nothing)
+
 (general-define-key
  :states 'insert
  "<tab>" 'tab-to-tab-stop
@@ -335,16 +338,19 @@
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
+
 (general-define-key
  :states 'visual
  ">" 'evil-shift-right-visual
  "<" 'evil-shift-left-visual
  "<tab>" 'evil-shift-right-visual
  "C-S-<tab>" 'evil-shift-left-visual)
+
 (general-define-key
  :states '(normal visual)
  "SPC" (general-simulate-keys "M-x" t)
  "r" 'er/expand-region)
+
 (general-define-key
  :states '(normal insert visual)
  "C-z" 'undo-tree-undo
@@ -353,13 +359,16 @@
  "C-S-f" 'isearch-backward-regexp
  "C-h" 'query-replace-regexp
  "C-b" 'do-nothing)
+
 (general-define-key
  :states '(normal insert visual motion)
  "C-q" (lambda () (interactive) (scroll-down 1))
  "S-<up>" (lambda () (interactive) (evil-previous-line 10))
  "S-<down>" (lambda () (interactive) (evil-next-line 10)))
+
 (general-define-key
  :states '(normal visual emacs motion))
+
 (general-define-key
  :states '(normal insert visual emacs motion)
  "C-/" 'comment-line-or-region
@@ -367,6 +376,7 @@
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file)
+
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
@@ -375,6 +385,7 @@
  "f" 'ido-find-file
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
+
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
