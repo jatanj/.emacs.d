@@ -252,14 +252,13 @@
 (require 'config-flycheck)
 (require 'config-spaceline)
 (require 'config-ido)
-(require 'config-ibuffer)
 (require 'config-tabbar)
 (require 'config-neotree)
 (require 'config-smartparens)
 (require 'config-smooth-scroll)
 (require 'config-expand-region)
-(require 'config-yasnippets)
-(require 'config-popwin)
+;; (require 'config-yasnippets)
+;; (require 'config-popwin)
 (require 'config-iflipb)
 
 (require 'config-emacs-lisp)
@@ -319,6 +318,10 @@
  "M-<down>" 'windmove-down
  "S-<up>" (lambda () (interactive) (previous-line 10))
  "S-<down>" (lambda () (interactive) (next-line 10)))
+(general-define-key
+ :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
+ "C-d" (general-simulate-keys "<next>")
+ "C-u" (general-simulate-keys "<prior>"))
 (general-define-key
  :states 'normal
  "q" 'do-nothing)
