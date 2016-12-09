@@ -1,4 +1,5 @@
-;;; init.el -- Emacs configuration
+; git clone https://github.com/daniruiz/Flat-Remix
+;; init.el -- Emacs configuration
 
 ;; Packages
 (require 'package)
@@ -379,7 +380,10 @@
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
 (general-define-key
- :prefix leader-key)
+ :prefix leader-key
+ "p" projectile-command-map
+ "v" 'magit-status
+ "b" 'ibuffer)
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
  "C-d" (general-simulate-keys "<next>")
