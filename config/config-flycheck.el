@@ -4,7 +4,7 @@
                 display-buffer-in-side-window)
                (side            . bottom)
                (reusable-frames . visible)
-               (window-height   . 0.125)))
+               (window-height   . 0.115)))
 
 (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
 
