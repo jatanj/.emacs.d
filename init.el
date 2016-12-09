@@ -26,6 +26,7 @@
                      smooth-scroll
                      smartparens
                      esup
+                     popwin
                      guide-key
                      iflipb
                      markdown-mode
@@ -102,6 +103,7 @@
 (setq w32-pipe-read-delay 0)
 (setq uniquify-buffer-name-style 'forward)
 (setq-default save-place t)
+(setq ad-redefinition-action 'accept)
 (show-paren-mode 1)
 (global-superword-mode 1)
 
@@ -260,7 +262,7 @@
 (require 'config-smooth-scroll)
 (require 'config-expand-region)
 ;; (require 'config-yasnippets)
-;; (require 'config-popwin)
+(require 'config-popwin)
 (require 'config-guide-key)
 (require 'config-iflipb)
 
@@ -299,6 +301,7 @@
 ;; Keybindings
 (general-define-key
  "C-k" ctl-x-map
+ "C-;" 'execute-extended-command
  "C-:" 'eval-expression
  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
  "C-=" 'enlarge-window-horizontally
@@ -341,7 +344,7 @@
  "C-S-<tab>" 'evil-shift-left-visual)
 (general-define-key
  :states '(normal visual)
- "SPC" (general-simulate-keys "M-x" t))
+ "SPC" (general-simulate-keys "C-k"))
 (general-define-key
  :states '(normal insert visual)
  "C-z" 'undo-tree-undo
@@ -367,9 +370,12 @@
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
- "b" 'helm-buffers-list
  "k" 'ido-kill-buffer
+ "p" projectile-command-map
  "f" 'ido-find-file
+ "v" 'magit-status
+ "b" 'helm-buffers-list
+ "m" (general-simulate-keys "C-c")
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
 (general-define-key

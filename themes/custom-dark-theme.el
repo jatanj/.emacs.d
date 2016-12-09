@@ -49,6 +49,7 @@
       `(hl-line ((,class (:foreground ,fg1 :background ,bg3))))
       `(linum ((,class (:foreground ,bg4 :background ,bg1))))
       `(fringe ((,class (:background "#282c34" :foreground "#282c34"))))
+      `(header-line ((,class (:background "#202328"))))
       `(cursor ((,class (:background "#ffffff"))))
       `(show-paren-match-face ((,class (:foreground ,fg1 :background ,info3))))
       `(show-paren-mismatch-face ((,class (:foreground ,fg1 :background ,error))))

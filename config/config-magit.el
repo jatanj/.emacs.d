@@ -1,5 +1,6 @@
 (require 'magit)
 
+(magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
 (evil-set-initial-state 'magit-mode 'emacs)
 
 ;; https://github.com/magit/magit/issues/2541
@@ -15,9 +16,5 @@
                                  magit-status-mode)))
                     nil
                   '(display-buffer-same-window)))))
-
-(general-define-key
- :prefix leader-key
- "v" 'magit-status)
 
 (provide 'config-magit)
