@@ -20,6 +20,19 @@
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
 
+;; Disable default tabbar keybindings
+(general-define-key
+  :keymaps 'tabbar-mode-map
+  :prefix "C-c"
+  "C-<up>" nil
+  "C-<down>" nil
+  "C-<left>" nil
+  "C-<right>" nil
+  "C-<prior>" nil
+  "C-<next>" nil
+  "C-<home>" nil
+  "C-<f10>" nil)
+
 (defun select-tab-by-number (n)
   (interactive)
   (let* ((tabset (tabbar-current-tabset))
