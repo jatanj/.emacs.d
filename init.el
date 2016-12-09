@@ -19,7 +19,6 @@
                      neotree
                      general
                      magit
-                     evil-magit
                      company
                      window-numbering
                      expand-region
@@ -247,13 +246,14 @@
 (require 'config-evil)
 (require 'config-helm)
 (require 'config-projectile)
-;; (require 'config-magit)
+(require 'config-magit)
 (require 'config-window-numbering)
 (require 'config-anzu)
 (require 'config-company)
 (require 'config-flycheck)
 (require 'config-spaceline)
 (require 'config-ido)
+(require 'config-term)
 (require 'config-tabbar)
 (require 'config-neotree)
 (require 'config-smartparens)
@@ -322,11 +322,9 @@
  "S-<up>" (lambda () (interactive) (previous-line 10))
  "S-<down>" (lambda () (interactive) (next-line 10)))
 (general-define-key
- :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
- "C-d" (general-simulate-keys "<next>")
- "C-u" (general-simulate-keys "<prior>"))
-(general-define-key
- :states 'normal)
+ :states 'normal
+ "=" 'er/expand-region
+ "q" 'do-nothing)
 (general-define-key
  :states 'insert
  "<tab>" 'tab-to-tab-stop
@@ -343,8 +341,7 @@
  "C-S-<tab>" 'evil-shift-left-visual)
 (general-define-key
  :states '(normal visual)
- "SPC" (general-simulate-keys "M-x" t)
- "q" 'er/expand-region)
+ "SPC" (general-simulate-keys "M-x" t))
 (general-define-key
  :states '(normal insert visual)
  "C-z" 'undo-tree-undo
@@ -375,6 +372,12 @@
  "f" 'ido-find-file
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
+(general-define-key
+ :prefix leader-key)
+(general-define-key
+ :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
+ "C-d" (general-simulate-keys "<next>")
+ "C-u" (general-simulate-keys "<prior>"))
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward

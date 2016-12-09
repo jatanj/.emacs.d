@@ -1,5 +1,6 @@
 (require 'magit)
-(require 'evil-magit)
+
+(evil-set-initial-state 'magit-mode 'emacs)
 
 ;; https://github.com/magit/magit/issues/2541
 (setq magit-display-buffer-function
@@ -16,13 +17,7 @@
                   '(display-buffer-same-window)))))
 
 (general-define-key
- :keymaps 'magit-mode-map
-  "C-k" (general-simulate-keys "C-x")
-  "SPC" (general-simulate-keys "M-x" t)
-  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
-  "C-:" 'eval-expression
-  "C-<tab>" 'previous-buffer
-  "C-<prior>" 'tabbar-backward-tab
-  "C-<next>" 'tabbar-forward-tab)
+ :prefix leader-key
+ "v" 'magit-status)
 
 (provide 'config-magit)
