@@ -13,6 +13,8 @@
                 display-buffer-below-selected)
                (window-height   . 0.20)))
 
+(evil-set-initial-state 'inferior-fsharp-mode 'emacs)
+
 (general-define-key
  :keymaps 'fsharp-mode-map
  "<f12>" 'fsharp-ac/gotodefn-at-point
