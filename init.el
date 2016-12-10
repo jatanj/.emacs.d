@@ -243,6 +243,8 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
+(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode))
+
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 
 (require 'config-general)
@@ -256,6 +258,7 @@
 (require 'config-flycheck)
 (require 'config-spaceline)
 (require 'config-ido)
+(require 'config-ibuffer)
 (require 'config-term)
 (require 'config-tabbar)
 (require 'config-neotree)

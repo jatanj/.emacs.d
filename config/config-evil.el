@@ -8,7 +8,6 @@
 (setq evil-disable-insert-state-bindings t)
 (setq-default evil-shift-width 2)
 
-(evil-set-initial-state 'fundamental-mode 'emacs)
 (evil-set-initial-state 'dired-mode 'emacs)
 (evil-set-initial-state 'Buffer-menu-mode 'emacs)
 
