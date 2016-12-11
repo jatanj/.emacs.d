@@ -25,6 +25,7 @@
                      anzu
                      smooth-scroll
                      smartparens
+                     org-bullets
                      esup
                      popwin
                      which-key
@@ -255,26 +256,27 @@
 (require 'config-anzu)
 (require 'config-company)
 (require 'config-flycheck)
-(require 'config-spaceline)
-(require 'config-ido)
-(require 'config-ibuffer)
-(require 'config-term)
 (require 'config-tabbar)
 (require 'config-neotree)
 (require 'config-smartparens)
 (require 'config-smooth-scroll)
 (require 'config-expand-region)
-;; (require 'config-yasnippets)
+(require 'config-spaceline)
 (require 'config-popwin)
 (require 'config-which-key)
 (require 'config-iflipb)
+(require 'config-ido)
+(require 'config-ibuffer)
+(require 'config-term)
+(require 'config-org)
+;; (require 'config-yasnippets)
 
 (require 'config-emacs-lisp)
+(require 'config-markdown)
 (require 'config-c-cpp)
 (require 'config-java)
 (require 'config-d)
 (require 'config-web)
-(require 'config-markdown)
 (require 'config-typescript)
 (require 'config-scala)
 (require 'config-fsharp)
