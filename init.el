@@ -2,45 +2,45 @@
 
 ;; Packages
 (require 'package)
-(setq package-list '(evil
-                     evil-surround
-                     evil-visualstar
-                     evil-matchit
-                     helm
-                     helm-projectile
-                     helm-ag
-                     spaceline
-                     projectile
-                     ido-vertical-mode
-                     flx
-                     flx-ido
-                     tabbar
-                     use-package
-                     neotree
-                     general
-                     magit
-                     company
-                     window-numbering
-                     expand-region
-                     anzu
-                     smooth-scroll
-                     smartparens
-                     org-bullets
-                     esup
-                     popwin
-                     which-key
-                     iflipb
-                     markdown-mode
-                     web-mode
-                     js2-mode
-                     tide
-                     ts-comint
-                     ensime
+(setq package-list '(anzu
+                     cider
                      clojure-mode
                      clojure-mode-extra-font-locking
-                     cider
+                     company
+                     d-mode
+                     ensime
+                     esup
+                     evil
+                     evil-matchit
+                     evil-surround
+                     evil-visualstar
+                     expand-region
+                     flx
+                     flx-ido
                      fsharp-mode
-                     d-mode))
+                     general
+                     helm
+                     helm-ag
+                     helm-projectile
+                     ido-vertical-mode
+                     iflipb
+                     js2-mode
+                     magit
+                     markdown-mode
+                     neotree
+                     org-bullets
+                     popwin
+                     projectile
+                     smartparens
+                     smooth-scroll
+                     spaceline
+                     tabbar
+                     tide
+                     ts-comint
+                     use-package
+                     web-mode
+                     which-key
+                     window-numbering))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
