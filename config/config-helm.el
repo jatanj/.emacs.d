@@ -7,10 +7,11 @@
 (helm-autoresize-mode 1)
 (setq helm-autoresize-max-height 25)
 
-(setq helm-buffers-fuzzy-matching t)
 (setq helm-M-x-fuzzy-match t)
+(setq helm-buffers-fuzzy-matching t)
 (setq helm-recentf-fuzzy-match t)
 (setq helm-semantic-fuzzy-match t)
+(setq helm-ag-fuzzy-match t)
 
 (setq helm-split-window-in-side-p t)
 

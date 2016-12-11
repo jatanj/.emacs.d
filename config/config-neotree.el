@@ -1,7 +1,6 @@
 (require 'neotree)
 
 (setq neo-theme 'ascii)
-
 (evil-set-initial-state 'neotree-mode 'emacs)
 
 (defun neotree-projectile ()

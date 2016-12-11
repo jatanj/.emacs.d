@@ -6,11 +6,6 @@
 
 (setq company-require-match nil)
 
-(defun company-newline ()
-  (interactive)
-  (company-abort)
-  (newline))
-
 (general-define-key
  :keymaps 'company-active-map
  "<tab>" 'company-complete

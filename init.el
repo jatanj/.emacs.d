@@ -1,4 +1,3 @@
-; git clone https://github.com/daniruiz/Flat-Remix
 ;; init.el -- Emacs configuration
 
 ;; Packages
@@ -28,7 +27,7 @@
                      smartparens
                      esup
                      popwin
-                     guide-key
+                     which-key
                      iflipb
                      markdown-mode
                      web-mode
@@ -267,7 +266,7 @@
 (require 'config-expand-region)
 ;; (require 'config-yasnippets)
 (require 'config-popwin)
-(require 'config-guide-key)
+(require 'config-which-key)
 (require 'config-iflipb)
 
 (require 'config-emacs-lisp)
@@ -328,69 +327,30 @@
  "M-<down>" 'windmove-down
  "S-<up>" (lambda () (interactive) (previous-line 10))
  "S-<down>" (lambda () (interactive) (next-line 10)))
-(general-define-key
- :states 'normal
- "=" 'er/expand-region
- "q" 'do-nothing)
-(general-define-key
- :states 'insert
- "<tab>" 'tab-to-tab-stop
- "C-k" ctl-x-map
- "C-g" 'evil-normal-state
- "C-c" 'kill-ring-save
- "C-x" 'kill-region
- "C-v" 'yank)
-(general-define-key
- :states 'visual
- ">" 'evil-shift-right-visual
- "<" 'evil-shift-left-visual
- "<tab>" 'evil-shift-right-visual
- "C-S-<tab>" 'evil-shift-left-visual)
-(general-define-key
- :states '(normal visual)
- "SPC" (general-simulate-keys "C-k"))
-(general-define-key
- :states '(normal insert visual)
- "C-z" 'undo-tree-undo
- "C-s" 'save-buffer
- "C-f" 'isearch-forward-regexp
- "C-S-f" 'isearch-backward-regexp
- "C-h" 'query-replace-regexp
- "C-b" 'do-nothing)
-(general-define-key
- :states '(normal insert visual motion)
- "C-q" (lambda () (interactive) (scroll-down 1))
- "S-<up>" (lambda () (interactive) (evil-previous-line 10))
- "S-<down>" (lambda () (interactive) (evil-next-line 10)))
-(general-define-key
- :states '(normal visual emacs motion))
-(general-define-key
- :states '(normal insert visual emacs motion)
- "C-/" 'comment-line-or-region
- "<home>" 'back-to-indentation
- "C-_" 'shrink-window
- "C-S-p" 'helm-M-x
- "C-p" 'helm-projectile-find-file)
+
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
  "k" 'ido-kill-buffer
- "p" projectile-command-map
+ "p" 'helm-projectile-find-file-in-known-projects
  "f" 'ido-find-file
- "v" 'magit-status
  "b" 'helm-buffers-list
  "m" (general-simulate-keys "C-c")
+ "C-v" 'magit-status
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
+
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
  "v" 'magit-status
  "b" 'ibuffer)
+
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
  "C-d" (general-simulate-keys "<next>")
  "C-u" (general-simulate-keys "<prior>"))
+
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
