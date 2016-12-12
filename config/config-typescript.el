@@ -5,7 +5,6 @@
   (interactive)
   (tide-setup)
   (flycheck-mode 1)
-  (setq flycheck-check-syntax-automatically '(idle-change mode-enabled))
   (eldoc-mode 1)
   (tide-hl-identifier-mode 1)
   (company-mode 1))

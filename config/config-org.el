@@ -3,7 +3,7 @@
 (use-package org-bullets
   :init
   (setq org-ellipsis " …")
-  (setq org-bullets-bullet-list '("•")))
+  (setq org-bullets-bullet-list '("●")))
 
 (setq org-hide-emphasis-markers t)
 (setq org-startup-folded 'content)
