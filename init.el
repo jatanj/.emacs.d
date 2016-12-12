@@ -279,6 +279,7 @@
 (require 'config-d)
 (require 'config-web)
 (require 'config-typescript)
+(require 'config-javascript)
 (require 'config-scala)
 (require 'config-fsharp)
 (require 'config-clojure)
