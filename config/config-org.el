@@ -6,7 +6,7 @@
   (setq org-bullets-bullet-list '("●")))
 
 (setq org-hide-emphasis-markers t)
-(setq org-startup-folded 'content)
+(setq-default org-startup-folded 'showall)
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -22,13 +22,13 @@
  :keymaps 'org-mode-map
  "C-k" nil
  "S-<return>" 'org-insert-heading
- "M-<up>" nil
- "M-<down>" nil
- "M-<left>" nil
- "M-<right>" nil
  "C-c C-<up>" 'org-metaup
  "C-c C-<down>" 'org-metadown
  "C-c C-<left>" 'org-metaleft
- "C-c C-<right>" 'org-metaright)
+ "C-c C-<right>" 'org-metaright
+ "M-<up>" nil
+ "M-<down>" nil
+ "M-<left>" nil
+ "M-<right>" nil)
 
 (provide 'config-org)
