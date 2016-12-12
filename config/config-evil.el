@@ -5,7 +5,6 @@
 (require 'evil-surround)
 (require 'evil-visualstar)
 (require 'evil-matchit)
-(require 'evil-god-state)
 
 (evil-mode 1)
 
