@@ -22,6 +22,7 @@
                      helm
                      helm-ag
                      helm-projectile
+                     ibuffer-projectile
                      ido-vertical-mode
                      iflipb
                      js2-mode
