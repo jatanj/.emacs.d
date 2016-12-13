@@ -22,6 +22,7 @@
                      helm
                      helm-ag
                      helm-projectile
+                     hydra
                      ibuffer-projectile
                      ido-vertical-mode
                      iflipb

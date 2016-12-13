@@ -87,6 +87,7 @@
       `(link ((,class (:foreground ,const :underline t))))
       `(evil-ex-info ((,class (:foreground ,warning2))))
       `(evil-ex-substitute-replacement ((,class (:foreground ,warning2))))
+      `(hydra-face-red ((,class (:foreground ,warning2))))
       `(org-level-1 ((,class (:bold t :foreground ,keyword :height 1.3))))
       `(org-level-2 ((,class (:bold t :foreground ,info :height 1.2))))
       `(org-level-3 ((,class (:bold t :foreground ,type :height 1.1))))
