@@ -19,6 +19,6 @@
  :keymaps 'fsharp-mode-map
  "<f12>" 'fsharp-ac/gotodefn-at-point
  "C-<f12>" 'fsharp-ac/pop-gotodefn-stack
- "C-c C-d" 'do-nothing)
+ "C-c C-d" 'ignore)
 
 (provide 'config-fsharp)

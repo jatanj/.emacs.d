@@ -21,7 +21,7 @@
 (general-define-key
  :states 'normal
  "=" 'er/expand-region
- "q" 'do-nothing)
+ "q" 'ignore)
 
 (general-define-key
  :states 'insert

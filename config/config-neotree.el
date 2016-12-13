@@ -25,4 +25,9 @@
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
 
+(general-define-key
+ :keymaps 'neotree-mode-map
+ "C-<prior>" 'ignore
+ "C-<next>" 'ignore)
+
 (provide 'config-neotree)
