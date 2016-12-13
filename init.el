@@ -174,6 +174,9 @@
 (setq undo-tree-history-directory-alist `((".*" . ,temporary-file-directory)))
 (setq undo-tree-auto-save-history t)
 
+;; File extension associations
+(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode))
+
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
 (defun slick-cut (beg end)
@@ -243,8 +246,6 @@
         (if (string-match "[^\t ]*\\([\t ]+\\)$" (buffer-substring-no-properties (- p movement) p))
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
-
-(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode))
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 
