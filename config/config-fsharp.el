@@ -1,3 +1,5 @@
+(require 'fsharp-mode)
+
 (setq fsharp-ac-use-popup t)
 (setq fsharp-indent-offset 2)
 

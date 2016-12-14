@@ -338,11 +338,12 @@
 (general-define-key
  :keymaps 'ctl-x-map
  "w" 'kill-this-buffer
- "k" 'ido-kill-buffer
  "p" 'helm-projectile-find-file-in-known-projects
+ "k" 'ido-kill-buffer
  "f" 'ido-find-file
  "b" 'helm-buffers-list
  "m" (general-simulate-keys "C-c")
+ "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" 'neotree-projectile
  "C-h" 'toggle-horizontal-scrolling)
