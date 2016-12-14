@@ -50,6 +50,7 @@
  "C-f" 'isearch-forward-regexp
  "C-S-f" 'isearch-backward-regexp
  "C-h" 'query-replace-regexp
+ "C-S-h" 'anzu-query-replace-at-cursor-thing
  "C-b" 'do-nothing)
 
 (general-define-key

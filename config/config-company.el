@@ -6,6 +6,8 @@
 
 (setq company-require-match nil)
 
+(add-hook 'after-init-hook 'global-company-mode)
+
 (general-define-key
  :keymaps 'company-active-map
  "<tab>" 'company-complete
