@@ -176,6 +176,7 @@
 (setq undo-tree-auto-save-history t)
 
 ;; File extension associations
+(add-to-list 'auto-mode-alist '("\\.gitignore\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode))
 
 ;; Copy/cut entire line when no region is active
