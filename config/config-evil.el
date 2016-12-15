@@ -1,11 +1,6 @@
 (setq evil-want-C-u-scroll t)
 (setq evil-toggle-key "<f5>")
 
-(require 'evil)
-(require 'evil-surround)
-(require 'evil-visualstar)
-(require 'evil-matchit)
-
 (evil-mode 1)
 
 (setq evil-disable-insert-state-bindings t)

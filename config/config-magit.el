@@ -1,5 +1,3 @@
-(require 'magit)
-
 (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
 (evil-set-initial-state 'magit-mode 'emacs)
 
