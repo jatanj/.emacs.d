@@ -1,4 +1,5 @@
 (setq evil-want-C-u-scroll t)
+(setq evil-intercept-esc nil)
 (setq evil-toggle-key "<f5>")
 
 (evil-mode 1)
@@ -22,7 +23,7 @@
  :states 'insert
  "<tab>" 'tab-to-tab-stop
  "C-k" ctl-x-map
- "C-g" 'evil-normal-state
+ "C-g" 'evil-force-normal-state
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
  "C-v" 'yank)
@@ -31,8 +32,15 @@
  :states 'visual
  ">" 'evil-shift-right-visual
  "<" 'evil-shift-left-visual
+ "C-[" 'evil-shift-left-visual
+ "C-]" 'evil-shift-right-visual
  "<tab>" 'evil-shift-right-visual
  "C-S-<tab>" 'evil-shift-left-visual)
+
+(general-define-key
+ :states '(normal insert)
+ "C-[" 'evil-shift-left-line
+ "C-]" 'evil-shift-right-line)
 
 (general-define-key
  :states '(normal visual)

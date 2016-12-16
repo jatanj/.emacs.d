@@ -172,8 +172,8 @@
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;; Undo-tree history
-(setq undo-tree-history-directory-alist `((".*" . ,temporary-file-directory)))
-(setq undo-tree-auto-save-history t)
+;; (setq undo-tree-history-directory-alist `((".*" . ,temporary-file-directory)))
+;; (setq undo-tree-auto-save-history t)
 
 ;; File extension associations
 (add-to-list 'auto-mode-alist '("\\.gitignore\\'" . text-mode))
@@ -321,7 +321,7 @@
  "C-S-p" 'helm-M-x
  "C-p" 'helm-buffers-list
  "C-<backspace>" 'backward-kill-word-fixed
- "C-<tab>" 'backspace-whitespace-to-tab-stop
+ "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
  "<prior>" 'evil-scroll-up
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab

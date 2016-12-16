@@ -1,4 +1,4 @@
-(setq fsharp-ac-use-popup t)
+;; (setq fsharp-ac-use-popup t)
 (setq fsharp-indent-offset 2)
 
 (add-hook 'fsharp-mode-hook
