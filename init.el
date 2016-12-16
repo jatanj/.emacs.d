@@ -26,6 +26,7 @@
                      ibuffer-projectile
                      ido-vertical-mode
                      iflipb
+                     json-mode
                      js2-mode
                      magit
                      markdown-mode
