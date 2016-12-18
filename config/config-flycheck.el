@@ -1,7 +1,9 @@
 (defun flycheck-toggle-fix ()
   (interactive)
-  (flycheck-mode -1)
-  (flycheck-mode 1))
+  (flycheck-mode 'toggle)
+  (flycheck-mode 'toggle))
+
+(setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
 
 (add-to-list 'display-buffer-alist
              `(,(rx bos "*Flycheck errors*" eos)

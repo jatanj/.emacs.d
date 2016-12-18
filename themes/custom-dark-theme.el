@@ -68,7 +68,7 @@
       `(mode-line-inactive ((,class (:background ,bg2))))
       `(mode-line-buffer-id ((,class (:bold nil :foreground ,func :background nil))))
       `(powerline-active1 ((,class (:background ,bg2))))
-      `(powerline-active2 ((,class (:background ,bg3))))
+      `(powerline-active2 ((,class (:background ,bg2))))
       `(powerline-inactive1 ((,class (:background ,bg2))))
       `(powerline-inactive2 ((,class (:background ,bg2))))
       `(mode-line-highlight ((,class (:foreground ,keyword :box nil))))

@@ -1,5 +1,4 @@
 (setq evil-want-C-u-scroll t)
-(setq evil-intercept-esc nil)
 (setq evil-toggle-key "<f5>")
 
 (evil-mode 1)
@@ -32,15 +31,8 @@
  :states 'visual
  ">" 'evil-shift-right-visual
  "<" 'evil-shift-left-visual
- "C-[" 'evil-shift-left-visual
- "C-]" 'evil-shift-right-visual
  "<tab>" 'evil-shift-right-visual
  "C-S-<tab>" 'evil-shift-left-visual)
-
-(general-define-key
- :states '(normal insert)
- "C-[" 'evil-shift-left-line
- "C-]" 'evil-shift-right-line)
 
 (general-define-key
  :states '(normal visual)
@@ -59,8 +51,10 @@
 (general-define-key
  :states '(normal insert visual motion)
  "C-q" (lambda () (interactive) (scroll-down 1))
- "S-<up>" (lambda () (interactive) (evil-previous-line 10))
- "S-<down>" (lambda () (interactive) (evil-next-line 10)))
+ "S-<up>" (general-simulate-keys "10k")
+ "S-<down>" (general-simulate-keys "10j")
+ "S-<left>" (general-simulate-keys "20h")
+ "S-<right>" (general-simulate-keys "20l"))
 
 (general-define-key
  :states '(normal visual emacs motion))
