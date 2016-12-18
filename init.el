@@ -104,6 +104,7 @@
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
 (setq-default next-line-add-newlines nil)
+(setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
 (setq uniquify-buffer-name-style 'forward)
 (setq-default save-place t)
@@ -177,8 +178,9 @@
 ;; (setq undo-tree-auto-save-history t)
 
 ;; File extension associations
-(add-to-list 'auto-mode-alist '("\\.gitignore\\'" . text-mode))
-(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode))
+(dolist (assoc '(("\\.gitignore\\'"     . web-mode)
+                 ("\\.log\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist assoc))
 
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html

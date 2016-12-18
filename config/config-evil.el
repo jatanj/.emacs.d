@@ -53,8 +53,8 @@
  "C-q" (lambda () (interactive) (scroll-down 1))
  "S-<up>" (general-simulate-keys "10k")
  "S-<down>" (general-simulate-keys "10j")
- "S-<left>" (general-simulate-keys "20h")
- "S-<right>" (general-simulate-keys "20l"))
+ "S-<left>" (general-simulate-keys "10h")
+ "S-<right>" (general-simulate-keys "10l"))
 
 (general-define-key
  :states '(normal visual emacs motion))
