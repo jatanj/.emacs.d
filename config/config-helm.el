@@ -20,7 +20,15 @@
         (window-height . 0.25)))
 
 (setq helm-boring-buffer-regexp-list
-      '("\\` " "\\*scratch\\*" "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf" "\\*epc"))
+      '("\\` "
+        "\\*helm"
+        "\\*helm-mode"
+        "\\*Echo Area"
+        "\\*tramp"
+        "\\*Minibuf"
+        "\\*Ibuffer\\*"
+        "\\*tide-server\\*"
+        "\\*fsharp-complete\\*"))
 
 (global-set-key (kbd "C-S-p") 'helm-M-x)
 (global-set-key (kbd "C-p") 'helm-buffers-list)

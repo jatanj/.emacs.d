@@ -106,11 +106,16 @@
 (setq-default next-line-add-newlines nil)
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
-(setq uniquify-buffer-name-style 'forward)
 (setq-default save-place t)
 (setq ad-redefinition-action 'accept)
 (show-paren-mode 1)
 (global-superword-mode 1)
+
+;; Uniquify buffer names
+(setq uniquify-buffer-name-style 'forward)
+(setq uniquify-separator "/")
+(setq uniquify-after-kill-buffer-p t)
+(setq uniquify-ignore-buffers-re "^\\*")
 
 ;; Line numbers
 (global-linum-mode 1)

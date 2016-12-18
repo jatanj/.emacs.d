@@ -12,7 +12,6 @@
                (display-buffer-reuse-window
                 display-buffer-below-selected)
                (window-height   . 0.20)))
-
 (evil-set-initial-state 'inferior-fsharp-mode 'emacs)
 
 (general-define-key

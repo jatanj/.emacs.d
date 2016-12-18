@@ -10,7 +10,6 @@
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (setq company-tooltip-align-annotations t)
-
 (setq typescript-indent-level 2)
 (setq tide-format-options
   '(:indentSize 2
