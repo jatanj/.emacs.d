@@ -57,15 +57,17 @@
  "S-<right>" (general-simulate-keys "10l"))
 
 (general-define-key
- :states '(normal visual emacs motion))
-
-(general-define-key
  :states '(normal insert visual emacs motion)
  "C-/" 'comment-line-or-region
  "<home>" 'back-to-indentation
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file)
+
+(general-define-key
+ :keymaps 'evil-motion-state-map
+ "C-]" nil
+ "C-o" nil)
 
 ;; Improve shift to keep selection
 ;; http://superuser.com/questions/684540/#answer-789156

@@ -16,7 +16,9 @@
     :tabSize 2
     :convertTabsToSpaces t))
 
+(add-to-list 'auto-mode-alist '("\\.d\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+
 (add-hook 'web-mode-hook
   (lambda ()
     (when (string-equal "tsx" (file-name-extension buffer-file-name))
@@ -30,8 +32,8 @@
 
 (general-define-key
  :keymaps 'typescript-mode-map
- "<f12>" 'tide-jump-to-definition
- "C-<f12>" 'tide-jump-back
+ "C-]" 'tide-jump-to-definition
+ "C-o" 'tide-jump-back
  "C-c C-e" 'ts-send-last-sexp
  "C-c C-k" 'ts-send-buffer
  "C-c C-l" 'ts-load-file-and-go)

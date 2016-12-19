@@ -15,8 +15,8 @@
 
 (general-define-key
  :keymaps 'ensime-mode-map
- "<f12>" 'ensime-edit-definition
- "C-<f12>" 'ensime-pop-find-definition-stack
+ "C-]" 'ensime-edit-definition
+ "C-o" 'ensime-pop-find-definition-stack
  "C-c C-c C-c" 'ensime-print-errors-at-point)
 
 (provide 'config-scala)

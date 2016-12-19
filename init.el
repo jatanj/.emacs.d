@@ -183,8 +183,10 @@
 ;; (setq undo-tree-auto-save-history t)
 
 ;; File extension associations
-(dolist (assoc '(("\\.gitignore\\'"     . web-mode)
-                 ("\\.log\\'" . web-mode)))
+(dolist (assoc '(("\\.gitignore\\'"     . text-mode)
+                 ("\\.log\\'"           . text-mode)
+                 ("\\.dependencies\\'"  . text-mode)
+                 ("\\.references\\'"    . text-mode)))
   (add-to-list 'auto-mode-alist assoc))
 
 ;; Copy/cut entire line when no region is active
@@ -313,8 +315,8 @@
 
 ;; Unbind some keys
 (dolist
-  (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"))
-  (global-set-key (kbd key) nil))
+  (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/" "C-<lwindow>"))
+  (global-set-key (kbd key) 'ignore))
 
 ;; Keybindings
 (general-define-key
@@ -326,6 +328,8 @@
  "C--" 'shrink-window-horizontally
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
+ "C-o" nil
+ "C-]" nil
  "C-S-p" 'helm-M-x
  "C-p" 'helm-buffers-list
  "C-<backspace>" 'backward-kill-word-fixed
@@ -385,4 +389,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime expand-region window-numbering guide-key evil-surround tide web-mode use-package typescript-mode tabbar spaceline neotree magit js2-mode ido-vertical-mode helm-projectile helm-ag general flycheck flx-ido evil company))))
+    (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime expand-region window-numbering which-key evil-surround tide web-mode use-package typescript-mode tabbar spaceline neotree magit js2-mode ido-vertical-mode helm-projectile helm-ag general flycheck flx-ido evil company))))

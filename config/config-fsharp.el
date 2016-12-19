@@ -1,3 +1,5 @@
+(require 'fsharp-mode)
+
 ;; (setq fsharp-ac-use-popup t)
 (setq fsharp-indent-offset 2)
 
@@ -16,8 +18,8 @@
 
 (general-define-key
  :keymaps 'fsharp-mode-map
- "<f12>" 'fsharp-ac/gotodefn-at-point
- "C-<f12>" 'fsharp-ac/pop-gotodefn-stack
+ "C-]" 'fsharp-ac/gotodefn-at-point
+ "C-o" 'fsharp-ac/pop-gotodefn-stack
  "C-c C-d" 'ignore)
 
 (provide 'config-fsharp)
