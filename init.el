@@ -315,7 +315,8 @@
 
 ;; Unbind some keys
 (dolist
-  (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/" "C-<lwindow>"))
+    (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
+           "M-<lwindow>" "C-<lwindow>"))
   (global-set-key (kbd key) 'ignore))
 
 ;; Keybindings
