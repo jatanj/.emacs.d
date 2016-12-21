@@ -203,7 +203,7 @@
       `(helm-match ((,class (:foreground ,success :underline nil))))
       `(helm-selection ((,class (:background ,bg2 :underline nil))))
       `(helm-selection-line ((,class (:background ,bg2))))
-      `(helm-visible-mark ((,class (:foreground ,fg1 :background ,info2))))
+      `(helm-visible-mark ((,class (:foreground ,fg1 :background ,match))))
       `(helm-candidate-number ((,class (:foreground ,bg1 :background ,fg1))))
       `(helm-separator ((,class (:foreground ,type :background ,bg1))))
       `(helm-time-zone-current ((,class (:foreground ,builtin :background ,bg1))))
