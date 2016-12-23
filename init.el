@@ -97,19 +97,24 @@
 (setq frame-title-format "Emacs - %b")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
-(global-auto-revert-mode 1)
-(blink-cursor-mode 0)
-(setq-default cursor-in-non-selected-windows nil)
 (setq tooltip-use-echo-area t)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
 (setq-default next-line-add-newlines nil)
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
-(setq-default save-place t)
 (setq ad-redefinition-action 'accept)
 (show-paren-mode 1)
 (global-superword-mode 1)
+(global-auto-revert-mode 1)
+
+;; Customize cursor
+(blink-cursor-mode 0)
+(setq-default cursor-in-non-selected-windows nil)
+(setq-default save-place t)
+
+;; Use text-mode as our default major mode
+(setq-default major-mode 'text-mode)
 
 ;; Uniquify buffer names
 (setq uniquify-buffer-name-style 'forward)
