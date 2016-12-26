@@ -117,8 +117,8 @@
 (setq-default major-mode 'text-mode)
 
 ;; Uniquify buffer names
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-separator "/")
+;; (setq uniquify-buffer-name-style 'forward)
+;; (setq uniquify-separator "/")
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-ignore-buffers-re "^\\*")
 
@@ -176,7 +176,8 @@
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16-le 'utf-8))
+(set-selection-coding-system 'utf-8)
+(set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16le-dos 'utf-8))
 
 ;; Backup files
 (setq backup-by-copying t)

@@ -25,7 +25,11 @@
  "C-g" 'evil-force-normal-state
  "C-c" 'kill-ring-save
  "C-x" 'kill-region
- "C-v" 'yank)
+ "C-v" 'yank
+ "S-<up>" (lambda () (interactive) (evil-previous-line 10))
+ "S-<down>" (lambda () (interactive) (evil-next-line 10))
+ "S-<left>" (lambda () (interactive) (evil-backward-char 10))
+ "S-<right>" (lambda () (interactive) (evil-forward-char 10)))
 
 (general-define-key
  :states 'visual
@@ -49,12 +53,15 @@
  "C-b" 'do-nothing)
 
 (general-define-key
- :states '(normal insert visual motion)
- "C-q" (lambda () (interactive) (scroll-down 1))
+ :states '(normal visual motion)
  "S-<up>" (general-simulate-keys "10k")
  "S-<down>" (general-simulate-keys "10j")
  "S-<left>" (general-simulate-keys "10h")
  "S-<right>" (general-simulate-keys "10l"))
+
+(general-define-key
+ :states '(normal insert visual motion)
+ "C-q" (lambda () (interactive) (scroll-down 1)))
 
 (general-define-key
  :states '(normal insert visual emacs motion)

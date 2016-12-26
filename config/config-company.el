@@ -1,12 +1,9 @@
-(require 'company)
-
 (setq company-frontends
-      '(company-pseudo-tooltip-frontend
-        company-echo-metadata-frontend))
+      '(company-pseudo-tooltip-frontend))
+        ;company-echo-metadata-frontend))
 
-(setq company-require-match nil)
-
-(add-hook 'after-init-hook 'global-company-mode)
+;; (setq company-require-match nil)
+;; (add-hook 'after-init-hook 'global-company-mode)
 
 ;; Disable completion when some key is pressed
 (defun company-abort-and-insert-char (char)
@@ -22,11 +19,11 @@
  "<return>" (lookup-key (current-global-map) (kbd "RET"))
  "." (lambda () (interactive) (company-abort-and-insert-char ".")))
 
-(defun my-lookup-key (key)
-  "Search for KEY in all known keymaps."
-  (mapatoms (lambda (ob) (when (and (boundp ob) (keymapp (symbol-value ob)))
-                      (when (functionp (lookup-key (symbol-value ob) key))
-                        (message "%S" ob))))
-            obarray))
+;; (defun my-lookup-key (key)
+;;   "Search for KEY in all known keymaps."
+;;   (mapatoms (lambda (ob) (when (and (boundp ob) (keymapp (symbol-value ob)))
+;;                       (when (functionp (lookup-key (symbol-value ob) key))
+;;                         (message "%S" ob))))
+;;             obarray))
 
 (provide 'config-company)
