@@ -100,6 +100,7 @@
 (setq tooltip-use-echo-area t)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
+(setq even-window-heights nil)
 (setq-default next-line-add-newlines nil)
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
@@ -345,14 +346,16 @@
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab
  "C-<next>" 'tabbar-forward-tab
- "C-S-<prior>" 'iflipb-previous-buffer
- "C-S-<next>" 'iflipb-next-buffer
+ "C-S-<prior>" 'iflipb-next-buffer
+ "C-S-<next>" 'iflipb-previous-buffer
  "M-<left>" 'windmove-left
  "M-<right>" 'windmove-right
  "M-<up>" 'windmove-up
  "M-<down>" 'windmove-down
  "S-<up>" (lambda () (interactive) (previous-line 10))
- "S-<down>" (lambda () (interactive) (next-line 10)))
+ "S-<down>" (lambda () (interactive) (next-line 10))
+ "S-<left>" (lambda () (interactive) (backward-char 10))
+ "S-<right>" (lambda () (interactive) (forward-char 10)))
 
 (general-define-key
  :keymaps 'ctl-x-map
