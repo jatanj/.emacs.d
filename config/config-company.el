@@ -2,6 +2,7 @@
       '(company-pseudo-tooltip-frontend))
         ;company-echo-metadata-frontend))
 
+(setq company-idle-delay 0.1)
 ;; (setq company-require-match nil)
 ;; (add-hook 'after-init-hook 'global-company-mode)
 
@@ -15,7 +16,7 @@
 (general-define-key
  :keymaps 'company-active-map
  "<f1>" nil
- "<tab>" 'company-complete
+ "<tab>" 'company-complete-selection
  "<return>" (lookup-key (current-global-map) (kbd "RET"))
  "." (lambda () (interactive) (company-abort-and-insert-char ".")))
 
