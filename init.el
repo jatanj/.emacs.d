@@ -110,18 +110,18 @@
 (global-auto-revert-mode 1)
 
 ;; Customize cursor
-(blink-cursor-mode 0)
+(blink-cursor-mode -1)
+(save-place-mode 1)
 (setq-default cursor-in-non-selected-windows nil)
-(setq-default save-place t)
 
-;; Use text-mode as our default major mode
+;; Set default major mode
 (setq-default major-mode 'text-mode)
 
 ;; Uniquify buffer names
-;; (setq uniquify-buffer-name-style 'forward)
-;; (setq uniquify-separator "/")
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-ignore-buffers-re "^\\*")
+;; (setq uniquify-buffer-name-style 'forward)
+;; (setq uniquify-separator "/")
 
 ;; Line numbers
 (global-linum-mode 1)
