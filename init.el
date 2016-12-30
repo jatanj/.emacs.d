@@ -266,43 +266,44 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
+(setq config-packages '(general
+                        evil
+                        helm
+                        projectile
+                        magit
+                        window-numbering
+                        anzu
+                        company
+                        flycheck
+                        tabbar
+                        neotree
+                        smartparens
+                        smooth-scroll
+                        expand-region
+                        spaceline
+                        popwin
+                        which-key
+                        iflipb
+                        ido
+                        ibuffer
+                        term
+                        org
+                        ;; yasnippets
+                        web-mode
+                        emacs-lisp
+                        markdown
+                        c-cpp
+                        java
+                        d
+                        typescript
+                        javascript
+                        scala
+                        fsharp
+                        clojure))
+
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
-
-(require 'config-general)
-(require 'config-evil)
-(require 'config-helm)
-(require 'config-projectile)
-(require 'config-magit)
-(require 'config-window-numbering)
-(require 'config-anzu)
-(require 'config-company)
-(require 'config-flycheck)
-(require 'config-tabbar)
-(require 'config-neotree)
-(require 'config-smartparens)
-(require 'config-smooth-scroll)
-(require 'config-expand-region)
-(require 'config-spaceline)
-(require 'config-popwin)
-(require 'config-which-key)
-(require 'config-iflipb)
-(require 'config-ido)
-(require 'config-ibuffer)
-(require 'config-term)
-(require 'config-org)
-;; (require 'config-yasnippets)
-
-(require 'config-emacs-lisp)
-(require 'config-markdown)
-(require 'config-c-cpp)
-(require 'config-java)
-(require 'config-d)
-(require 'config-web)
-(require 'config-typescript)
-(require 'config-javascript)
-(require 'config-scala)
-(require 'config-fsharp)
-(require 'config-clojure)
+(dolist (name config-packages)
+  (require (intern (concat "config-" (symbol-name name)))))
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")

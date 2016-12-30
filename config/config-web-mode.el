@@ -16,4 +16,4 @@
 (setq web-mode-code-indent-offset 2)
 (setq css-indent-offset 2)
 
-(provide 'config-web)
+(provide 'config-web-mode)
