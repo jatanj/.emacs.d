@@ -77,12 +77,12 @@
   (progn
     (desktop-save-mode 1)
     (setq default-frame-alist desktop-window-attributes)))
-(add-hook 'desktop-after-read-hook (lambda ()
-  (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
-	 (toggle-frame-maximized))
-	((string= (frame-parameter nil 'fullscreen) 'fullboth)
-	 (toggle-frame-fullscreen)
-	 (toggle-frame-maximized)))))
+(add-hook 'desktop-after-read-hook
+          (lambda ()
+            (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
+            (toggle-frame-maximized))
+            ((string= (frame-parameter nil 'fullscreen) 'fullboth)
+            (toggle-frame-fullscreen) (toggle-frame-maximized)))))
 
 ;; Fix toggle-frame-fullscreen to preserve our window position
 (defun force-maximized-with-fullscreen (orig-fun &rest args)
