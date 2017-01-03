@@ -57,7 +57,8 @@
     (package-install package)))
 
 ;; Load machine-specific settings
-(load "~/.emacs.d/local.el")
+(let ((local-settings "~/.emacs.d/local.el"))
+  (when (file-exists-p local-settings) (load local-settings)))
 (dolist (local-setting '((default-dir               . "~/")
                          (custom-font-face          . "Inconsolata-12")
                          (desktop-window-attributes . nil)
