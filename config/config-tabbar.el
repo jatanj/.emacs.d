@@ -6,14 +6,14 @@
 
 (add-to-list 'configure-frame-functions
   (lambda ()
-    (set-face-attribute 'tabbar-default nil :background "#202328" :foreground "#202328" :box '(:line-width 1 :color "#202328" :style nil) :font custom-font-face)
-    (set-face-attribute 'tabbar-unselected nil :background "#202328" :foreground "#606060" :box '(:line-width 5 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-selected nil :background "#272b33" :foreground "white" :box '(:line-width 5 :color "#272b33" :style nil))
-    (set-face-attribute 'tabbar-modified nil :background "#202328" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-selected-modified nil :background "#272b33" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#272b33" :style nil))
+    (set-face-attribute 'tabbar-default nil :background "#21242d" :foreground "#21242d" :box '(:line-width 1 :color "#21242d" :style nil) :font custom-font-face)
+    (set-face-attribute 'tabbar-unselected nil :background "#21242d" :foreground "#606060" :box '(:line-width 5 :color "#21242d" :style nil))
+    (set-face-attribute 'tabbar-selected nil :background "#2c303c" :foreground "white" :box '(:line-width 5 :color "#2c303c" :style nil))
+    (set-face-attribute 'tabbar-modified nil :background "#21242d" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#21242d" :style nil))
+    (set-face-attribute 'tabbar-selected-modified nil :background "#2c303c" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#2c303c" :style nil))
     (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
-    (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#202328" :style nil))
-    (set-face-attribute 'tabbar-separator nil :background "#202328" :height 0.6)
+    (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#21242d" :style nil))
+    (set-face-attribute 'tabbar-separator nil :background "#21242d" :height 0.6)
     (tabbar-forward-tab) ; Force redraw to fix colors
     (tabbar-backward-tab)))
 
