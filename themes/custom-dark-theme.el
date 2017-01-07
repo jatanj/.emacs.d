@@ -24,7 +24,7 @@
       (tag       "#4fc1e9")
       (header    "#202328")
       (fringe    "#2c303c")
-      (border    "#222222")
+      (border    "#272b36")
       (match     "#484b5a")
       (highlight "#3d4148")
       (tooltip   "#1d2026")
