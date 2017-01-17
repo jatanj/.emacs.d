@@ -19,12 +19,12 @@
                   (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
 (defhydra hydra-org-move (org-mode-map "C-c")
-  ("C-<up>" org-metaup)
-  ("C-<down>" org-metadown))
+  ("<up>" org-metaup)
+  ("<down>" org-metadown))
 
 (defhydra hydra-org-rank (org-mode-map "C-c")
-  ("C-<left>" org-metaleft)
-  ("C-<right>" org-metaright))
+  ("<left>" org-metaleft)
+  ("<right>" org-metaright))
 
 (general-define-key
  :keymaps 'org-mode-map
