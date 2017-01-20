@@ -15,7 +15,6 @@
 
 (general-define-key
  :states 'normal
- "=" 'er/expand-region
  "q" 'ignore)
 
 (general-define-key
@@ -23,9 +22,6 @@
  "<tab>" 'tab-to-tab-stop
  "C-k" ctl-x-map
  "C-g" 'evil-force-normal-state
- "C-c" 'kill-ring-save
- "C-x" 'kill-region
- "C-v" 'yank
  "S-<up>" (lambda () (interactive) (evil-previous-line 10))
  "S-<down>" (lambda () (interactive) (evil-next-line 10))
  "S-<left>" (lambda () (interactive) (evil-backward-char 10))
@@ -40,11 +36,12 @@
 
 (general-define-key
  :states '(normal visual)
+ "=" 'er/expand-region
+ "-" 'er/contract-region
  "SPC" (general-simulate-keys "C-k"))
 
 (general-define-key
  :states '(normal insert visual)
- "C-z" 'undo-tree-undo
  "C-s" 'save-buffer
  "C-f" 'isearch-forward-regexp
  "C-S-f" 'isearch-backward-regexp

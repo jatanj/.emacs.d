@@ -1,8 +1,11 @@
+(require 'company)
+
 (setq company-frontends
       '(company-pseudo-tooltip-frontend))
-        ;company-echo-metadata-frontend))
+        ;; company-echo-metadata-frontend))
 
 (setq company-idle-delay 0.1)
+(add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
 ;; (setq company-require-match nil)
 ;; (add-hook 'after-init-hook 'global-company-mode)
 
@@ -19,12 +22,5 @@
  "<tab>" 'company-complete-selection
  "<return>" (lookup-key (current-global-map) (kbd "RET"))
  "." (lambda () (interactive) (company-abort-and-insert-char ".")))
-
-;; (defun my-lookup-key (key)
-;;   "Search for KEY in all known keymaps."
-;;   (mapatoms (lambda (ob) (when (and (boundp ob) (keymapp (symbol-value ob)))
-;;                       (when (functionp (lookup-key (symbol-value ob) key))
-;;                         (message "%S" ob))))
-;;             obarray))
 
 (provide 'config-company)

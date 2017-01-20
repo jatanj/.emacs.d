@@ -6,8 +6,7 @@
 (add-hook 'fsharp-mode-hook
   (lambda ()
     (setq indent-line-function 'indent-relative-maybe)
-    (set-local-tab-width 2)
-    (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)))
+    (set-local-tab-width 2)))
 
 (add-to-list 'display-buffer-alist
              `(,(rx bos "*inferior-fsharp*" eos)
