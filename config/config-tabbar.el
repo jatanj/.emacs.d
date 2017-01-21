@@ -2,7 +2,7 @@
 
 (require 'cl)
 (require 'tabbar)
-(tabbar-mode 1)
+(unless (daemonp) (tabbar-mode 1))
 
 (add-to-list 'configure-frame-functions
   (lambda ()
@@ -14,8 +14,10 @@
     (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
     (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#21242d" :style nil))
     (set-face-attribute 'tabbar-separator nil :background "#21242d" :height 0.6)
-    (tabbar-forward-tab) ; Force redraw to fix colors
-    (tabbar-backward-tab)))
+    ; Force redraw to fix colors
+    (when (bound-and-true-p tabbar-mode)
+      (tabbar-forward-tab)
+      (tabbar-backward-tab))))
 
 (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
@@ -59,7 +61,7 @@
 
 ;; Visual tweaks
 ;; https://gist.github.com/3demax/1264635
-(setq tabbar-separator (quote (0.5)))
+;; (setq tabbar-separator (quote (0.5)))
 (defun tabbar-buffer-tab-label (tab)
   "Return a label for TAB. That is, a string used to represent it on the tab bar."
   (let ((label  (if tabbar--buffer-show-groups
