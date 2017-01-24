@@ -17,8 +17,10 @@
                      expand-region
                      flx
                      flx-ido
+                     flycheck-haskell
                      fsharp-mode
                      general
+                     haskell-mode
                      helm
                      helm-ag
                      helm-projectile
@@ -148,6 +150,10 @@
     (if (bound-and-true-p auto-hscroll-mode)
         (dolist (var config-vars) (set var nil))
       (dolist (var config-vars) (set var t)))))
+
+;; Ispell
+(setq ispell-program-name "hunspell")
+(setq ispell-dictionary "en_US")
 
 ;; Indentation
 (setq-default indent-tabs-mode nil)
@@ -299,7 +305,8 @@
                         javascript
                         scala
                         fsharp
-                        clojure))
+                        clojure
+                        haskell))
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 (dolist (name config-packages)

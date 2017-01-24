@@ -18,7 +18,6 @@
 (general-define-key
  :keymaps 'fsharp-mode-map
  "C-]" 'fsharp-ac/gotodefn-at-point
- "C-o" 'fsharp-ac/pop-gotodefn-stack
- "C-c C-d" 'ignore)
+ "C-o" 'fsharp-ac/pop-gotodefn-stack)
 
 (provide 'config-fsharp)
