@@ -112,6 +112,12 @@
 (global-superword-mode 1)
 (global-auto-revert-mode 1)
 
+; Add site-list directories to load-path
+(dolist
+    (project (directory-files (concat user-emacs-directory "site-lisp") t "\\w+"))
+  (when (file-directory-p project)
+    (add-to-list 'load-path project)))
+
 ;; Customize cursor
 (blink-cursor-mode -1)
 (save-place-mode 1)
