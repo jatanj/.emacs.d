@@ -33,6 +33,7 @@
                      magit
                      markdown-mode
                      neotree
+                     omnisharp
                      org-bullets
                      popwin
                      projectile
@@ -307,6 +308,7 @@
                         c-cpp
                         java
                         d
+                        csharp
                         typescript
                         javascript
                         scala
