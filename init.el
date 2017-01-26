@@ -20,6 +20,8 @@
                      flycheck-haskell
                      fsharp-mode
                      general
+                     gitconfig-mode
+                     gitignore-mode
                      haskell-mode
                      helm
                      helm-ag
@@ -203,11 +205,13 @@
 ;; (setq undo-tree-auto-save-history t)
 
 ;; File extension associations
-(dolist (assoc '(("\\.gitignore\\'"     . text-mode)
-                 ("\\.log\\'"           . text-mode)
+(dolist (assoc '(("\\.log\\'"           . text-mode)
                  ("\\.dependencies\\'"  . text-mode)
                  ("\\.references\\'"    . text-mode)))
   (add-to-list 'auto-mode-alist assoc))
+
+;; Always follow symlinks for Git-controlled files
+(setq vc-follow-symlinks t)
 
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
