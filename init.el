@@ -76,7 +76,7 @@
 (setq inhibit-startup-message t)
 (defun display-startup-echo-area-message () (message ""))
 
-;; Window position
+;; Set the window position on startup
 (setq configure-frame-functions '())
 (if (daemonp)
   (setq default-frame-alist client-window-attributes)
@@ -159,10 +159,6 @@
     (if (bound-and-true-p auto-hscroll-mode)
         (dolist (var config-vars) (set var nil))
       (dolist (var config-vars) (set var t)))))
-
-;; Ispell
-(setq ispell-program-name "hunspell")
-(setq ispell-dictionary "en_US")
 
 ;; Indentation
 (setq-default indent-tabs-mode nil)
@@ -283,6 +279,7 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
+;; Configure packages by loading its corresponding file
 (setq config-packages '(general
                         evil
                         helm
@@ -298,6 +295,7 @@
                         smooth-scroll
                         expand-region
                         spaceline
+                        ispell
                         popwin
                         which-key
                         iflipb
@@ -319,7 +317,6 @@
                         fsharp
                         clojure
                         haskell))
-
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 (dolist (name config-packages)
   (require (intern (concat "config-" (symbol-name name)))))
@@ -328,7 +325,7 @@
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
 
-;; Fix fonts and other stuff in clients
+;; Set fonts and other stuff when using emacsclient
 (defun configure-frame ()
   (dolist (func configure-frame-functions)
     (funcall func))
