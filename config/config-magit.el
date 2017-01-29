@@ -4,6 +4,9 @@
 (add-hook 'git-commit-mode-hook 'flyspell-mode)
 (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
 
+;; Always follow symlinks for Git-controlled files
+(setq vc-follow-symlinks t)
+
 ;; https://github.com/magit/magit/issues/2541
 (setq magit-display-buffer-function
       (lambda (buffer)
@@ -17,7 +20,5 @@
                                  magit-status-mode)))
                     nil
                   '(display-buffer-same-window)))))
-
-
 
 (provide 'config-magit)

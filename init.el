@@ -30,8 +30,8 @@
                      ibuffer-projectile
                      ido-vertical-mode
                      iflipb
-                     json-mode
                      js2-mode
+                     json-mode
                      magit
                      markdown-mode
                      neotree
@@ -71,10 +71,33 @@
   (when (not (boundp (car local-setting)))
     (set (car local-setting) (cdr local-setting))))
 
+; Add site-list directories to load-path
+(dolist
+    (project (directory-files (concat user-emacs-directory "site-lisp") t "\\w+"))
+  (when (file-directory-p project)
+    (add-to-list 'load-path project)))
+
 ;; Startup options
+(setq frame-title-format "Emacs - %b")
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
 (defun display-startup-echo-area-message () (message ""))
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+;; General config
+(setq-default major-mode 'text-mode)
+(setq tooltip-use-echo-area t)
+(setq isearch-allow-scroll t)
+(setq load-prefer-newer t)
+(setq even-window-heights nil)
+(setq-default next-line-add-newlines nil)
+(setq save-interprogram-paste-before-kill t)
+(setq w32-pipe-read-delay 0)
+(setq ad-redefinition-action 'accept)
+(show-paren-mode 1)
+(global-superword-mode 1)
+(global-auto-revert-mode 1)
 
 ;; Set the window position on startup
 (setq configure-frame-functions '())
@@ -99,35 +122,14 @@
   (apply orig-fun args))
 (advice-add 'toggle-frame-fullscreen :around #'force-maximized-with-fullscreen)
 
-;; General config
-(setq frame-title-format "Emacs - %b")
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(setq tooltip-use-echo-area t)
-(setq isearch-allow-scroll t)
-(setq load-prefer-newer t)
-(setq even-window-heights nil)
-(setq-default next-line-add-newlines nil)
-(setq save-interprogram-paste-before-kill t)
-(setq w32-pipe-read-delay 0)
-(setq ad-redefinition-action 'accept)
-(show-paren-mode 1)
-(global-superword-mode 1)
-(global-auto-revert-mode 1)
-
-; Add site-list directories to load-path
-(dolist
-    (project (directory-files (concat user-emacs-directory "site-lisp") t "\\w+"))
-  (when (file-directory-p project)
-    (add-to-list 'load-path project)))
+;; Set font
+(add-to-list 'default-frame-alist `(font . ,custom-font-face))
+(set-face-attribute 'default nil :font custom-font-face)
 
 ;; Customize cursor
 (blink-cursor-mode -1)
 (save-place-mode 1)
 (setq-default cursor-in-non-selected-windows nil)
-
-;; Set default major mode
-(setq-default major-mode 'text-mode)
 
 ;; Uniquify buffer names
 (setq uniquify-after-kill-buffer-p t)
@@ -171,17 +173,6 @@
   (setq evil-shift-width n)
   (set (make-local-variable 'tab-stop-list) (number-sequence n 200 n)))
 
-;; Custom comment function
-(defun comment-line-or-region ()
-  (interactive)
-  (if (use-region-p)
-      (comment-or-uncomment-region (region-beginning) (region-end))
-      (comment-line 1)))
-
-;; Face attributes
-(add-to-list 'default-frame-alist `(font . ,custom-font-face))
-(set-face-attribute 'default nil :font custom-font-face)
-
 ;; Use UTF-8 everywhere
 (set-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8)
@@ -196,18 +187,11 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-;; Undo-tree history
-;; (setq undo-tree-history-directory-alist `((".*" . ,temporary-file-directory)))
-;; (setq undo-tree-auto-save-history t)
-
 ;; File extension associations
 (dolist (assoc '(("\\.log\\'"           . text-mode)
                  ("\\.dependencies\\'"  . text-mode)
                  ("\\.references\\'"    . text-mode)))
   (add-to-list 'auto-mode-alist assoc))
-
-;; Always follow symlinks for Git-controlled files
-(setq vc-follow-symlinks t)
 
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html

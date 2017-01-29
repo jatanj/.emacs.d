@@ -13,6 +13,12 @@
 (global-evil-visualstar-mode 1)
 (global-evil-matchit-mode 1)
 
+(defun comment-line-or-region ()
+  (interactive)
+  (if (use-region-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+      (comment-line 1)))
+
 (general-define-key
  :states 'normal
  "q" 'ignore)
