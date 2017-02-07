@@ -337,8 +337,8 @@
  "C--" 'shrink-window-horizontally
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
- "C-o" nil
- "C-]" nil
+ ;; "C-o" nil
+ ;; "C-]" nil
  "C-S-p" 'helm-M-x
  "C-p" 'helm-buffers-list
  "C-<backspace>" 'backward-kill-word-fixed

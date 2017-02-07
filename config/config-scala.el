@@ -1,11 +1,12 @@
 (setq scala-indent:use-javadoc-style t)
-(sp-local-pair 'scala-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+(setq scala-enable-eldoc t)
 
 (setq ensime-startup-notification nil)
 (setq ensime-startup-snapshot-notification nil)
-
 (setq ensime-implicit-gutter-icons nil)
 (setq ensime-left-margin-gutter nil)
+
+(sp-local-pair 'scala-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
 
 (add-to-list 'display-buffer-alist
              `(,(rx bos "*ENSIME-Compilation-Result*" eos)
@@ -15,8 +16,7 @@
 
 (general-define-key
  :keymaps 'ensime-mode-map
- "C-]" 'ensime-edit-definition
- "C-o" 'ensime-pop-find-definition-stack
- "C-c C-c C-c" 'ensime-print-errors-at-point)
+ "C-c C-e" 'ensime-edit-definition
+ "C-c C-s" 'ensime-print-errors-at-point)
 
 (provide 'config-scala)

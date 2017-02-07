@@ -74,11 +74,6 @@
  "C-S-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file)
 
-(general-define-key
- :keymaps 'evil-motion-state-map
- "C-]" nil
- "C-o" nil)
-
 ;; Improve shift to keep selection
 ;; http://superuser.com/questions/684540/#answer-789156
 (defun evil-shift-left-visual ()

@@ -32,8 +32,7 @@
 
 (general-define-key
  :keymaps 'typescript-mode-map
- "C-]" 'tide-jump-to-definition
- "C-o" 'tide-jump-back
+ "C-c C-d" 'tide-jump-to-definition
  "C-c C-e" 'ts-send-last-sexp
  "C-c C-k" 'ts-send-buffer
  "C-c C-l" 'ts-load-file-and-go)

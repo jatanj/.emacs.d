@@ -18,6 +18,6 @@
 (general-define-key
  :keymaps 'haskell-mode-map
  "C-c C-j" 'haskell-interactive-bring
- "C-]" 'haskell-mode-jump-to-def-or-tag)
+ "C-c C-d" 'haskell-mode-jump-to-def-or-tag)
 
 (provide 'config-haskell)
