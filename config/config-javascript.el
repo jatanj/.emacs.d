@@ -1,6 +1,6 @@
-(dolist (assoc '(("\\.js\\'"        . js2-mode)
-                 ("\\.jsx?\\'"      . web-mode)
-                 ("\\.json\\'"      . json-mode)))
+(dolist (assoc '(("\\.js\\'"   . js2-mode)
+                 ("\\.jsx\\'"  . web-mode)
+                 ("\\.json\\'" . json-mode)))
   (add-to-list 'auto-mode-alist assoc))
 
 (setq js-indent-level 2)
