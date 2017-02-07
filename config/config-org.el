@@ -28,6 +28,8 @@
 
 (general-define-key
  :keymaps 'org-mode-map
+ "<tab>" 'org-cycle
+ "<return>" 'org-return
  "C-k" nil
  "S-<return>" 'org-insert-heading
  "M-<up>" nil

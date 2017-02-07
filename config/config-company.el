@@ -9,7 +9,7 @@
 ;; (setq company-require-match nil)
 ;; (add-hook 'after-init-hook 'global-company-mode)
 
-;; Disable completion when some key is pressed
+;; Abort completion when some key is pressed
 (defun company-abort-and-insert-char (char)
   (interactive)
   (company-abort)
