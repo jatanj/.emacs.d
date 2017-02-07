@@ -1,5 +1,5 @@
  (add-hook 'd-mode-hook
-          (lambda ()
+           (lambda ()
             (c-set-offset 'substatement-open 0)
             (c-set-offset 'case-label '+)
             (set-local-tab-width 2)

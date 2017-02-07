@@ -20,6 +20,7 @@
                      flycheck-haskell
                      fsharp-mode
                      general
+                     ggtags
                      gitconfig-mode
                      gitignore-mode
                      haskell-mode
