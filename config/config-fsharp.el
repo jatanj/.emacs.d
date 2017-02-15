@@ -20,6 +20,7 @@
 
 (general-define-key
  :keymaps 'fsharp-mode-map
- "C-c C-k" 'fsharp-load-buffer-file)
+ "C-c C-k" 'fsharp-load-buffer-file
+ "C-c C-r" 'fsharp-send-references)
 
 (provide 'config-fsharp)

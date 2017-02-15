@@ -20,11 +20,15 @@
 
 (defhydra hydra-org-move (org-mode-map "C-c")
   ("<up>" org-metaup)
-  ("<down>" org-metadown))
+  ("C-<up>" org-metup)
+  ("<down>" org-metadown)
+  ("C-<down>" org-metadown))
 
 (defhydra hydra-org-rank (org-mode-map "C-c")
   ("<left>" org-metaleft)
-  ("<right>" org-metaright))
+  ("C-<left>" org-metaleft)
+  ("<right>" org-metaright)
+  ("C-<right>" org-metaright))
 
 (general-define-key
  :keymaps 'org-mode-map
