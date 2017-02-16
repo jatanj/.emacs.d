@@ -68,7 +68,7 @@
 
 (general-define-key
  :states '(normal insert visual motion)
- "C-q" (lambda () (interactive) (scroll-down 1)))
+ "C-q" nil)
 
 (general-define-key
  :states '(normal insert visual emacs motion)

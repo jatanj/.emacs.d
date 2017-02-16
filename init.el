@@ -71,7 +71,7 @@
                          (custom-font-face          . "Inconsolata-12")
                          (desktop-window-attributes . nil)
                          (client-window-attributes  . nil)))
-  (when (not (boundp (car local-setting)))
+  (unless (boundp (car local-setting))
     (set (car local-setting) (cdr local-setting))))
 
 ; Add site-list directories to load-path
@@ -341,16 +341,17 @@
  "C--" 'shrink-window-horizontally
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
- ;; "C-o" nil
- ;; "C-]" nil
  "C-S-p" 'helm-M-x
  "C-p" 'helm-buffers-list
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
+ "C-\\" 'indent-region
  "<prior>" 'evil-scroll-up
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab
  "C-<next>" 'tabbar-forward-tab
+ "C-q" 'tabbar-backward-tab
+ "C-a" 'tabbar-forward-tab
  "C-S-<prior>" 'iflipb-next-buffer
  "C-S-<next>" 'iflipb-previous-buffer
  "M-<left>" 'windmove-left
