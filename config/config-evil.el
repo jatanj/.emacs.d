@@ -3,6 +3,7 @@
 
 (evil-mode 1)
 
+(fset 'evil-visual-update-x-selection 'ignore)
 (setq evil-disable-insert-state-bindings t)
 (setq-default evil-shift-width 2)
 
