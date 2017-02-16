@@ -1,5 +1,8 @@
+;; These must be specified before (require 'evil)
 (setq evil-want-C-u-scroll t)
 (setq evil-toggle-key "<f5>")
+
+(require 'evil)
 
 (evil-mode 1)
 
@@ -22,7 +25,7 @@
 
 (general-define-key
  :states 'normal
- "q" 'ignore)
+ "q" nil)
 
 (general-define-key
  :states 'insert

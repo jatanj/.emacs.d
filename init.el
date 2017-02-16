@@ -11,9 +11,11 @@
                      ensime
                      esup
                      evil
+                     evil-magit
                      evil-matchit
                      evil-surround
                      evil-visualstar
+                     exec-path-from-shell
                      expand-region
                      flx
                      flx-ido
@@ -282,6 +284,7 @@
                         spaceline
                         ispell
                         popwin
+                        exec-path-from-shell
                         which-key
                         iflipb
                         ido
