@@ -11,8 +11,7 @@
 (setq vc-follow-symlinks t)
 
 ;; Disable tabbar-mode in magit popups
-(add-hook
- 'magit-popup-mode-hook
+(add-hook 'magit-popup-mode-hook
  (lambda ()
    (when (bound-and-true-p tabbar-mode)
      (tabbar-local-mode))))
