@@ -1,5 +1,6 @@
 (require 'magit)
 (require 'evil-magit)
+(require 'dash)
 
 (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
 (evil-set-initial-state 'magit-mode 'emacs)
@@ -15,6 +16,25 @@
  (lambda ()
    (when (bound-and-true-p tabbar-mode)
      (tabbar-local-mode))))
+
+(defun magit-mode-daemon-bury-or-quit ()
+  "When quitting magit-mode, delete the frame if we're connecting from an
+emacsclient, there are no other file buffers, and we're in the main magit
+buffer. Otherwise, just bury the buffer."
+  (interactive)
+  (let ((buffers (-remove
+                  (lambda (b) (string-match "\\*.+" (buffer-name b)))
+                  (buffer-list))))
+    (if (and
+         (daemonp)
+         (= (length buffers) 0)
+         (string-prefix-p "*magit:" (buffer-name (current-buffer))))
+        (delete-frame)
+      (magit-mode-bury-buffer))))
+
+(general-define-key
+ :keymaps 'magit-mode-map
+ "q" 'magit-mode-daemon-bury-or-quit)
 
 (general-define-key
  :states '(magit normal visual)

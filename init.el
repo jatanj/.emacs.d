@@ -7,6 +7,7 @@
                      clojure-mode
                      clojure-mode-extra-font-locking
                      company
+                     dash
                      d-mode
                      ensime
                      esup

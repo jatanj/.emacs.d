@@ -24,8 +24,8 @@
       (comment-line 1)))
 
 (general-define-key
- :states 'normal
- "q" nil)
+ :keymaps 'evil-normal-state-map
+ "q" 'ignore)
 
 (general-define-key
  :states 'insert
@@ -70,7 +70,7 @@
 
 (general-define-key
  :states '(normal insert visual motion)
- "C-q" nil)
+ "C-q" 'evil-scroll-line-up)
 
 (general-define-key
  :states '(normal insert visual emacs motion)
