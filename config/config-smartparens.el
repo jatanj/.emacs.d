@@ -11,8 +11,8 @@
 
 (setq sp-autoinsert-quote-if-followed-by-closing-pair nil)
 
-(sp-pair "(" nil :unless '(sp-point-before-word-p))
-(sp-pair "[" nil :unless '(sp-point-before-word-p))
-(sp-pair "{" nil :unless '(sp-point-before-word-p))
+(sp-pair "(" nil :unless '(sp-point-before-same-p sp-point-before-word-p))
+(sp-pair "[" nil :unless '(sp-point-before-same-p sp-point-before-word-p))
+(sp-pair "{" nil :unless '(sp-point-before-same-p sp-point-before-word-p))
 
 (provide 'config-smartparens)
