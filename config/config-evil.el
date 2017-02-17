@@ -61,6 +61,8 @@
 
 (general-define-key
  :states '(normal visual motion)
+ "J" 'tabbar-backward-tab
+ "K" 'tabbar-forward-tab
  "S-<up>" (general-simulate-keys "10k")
  "S-<down>" (general-simulate-keys "10j")
  "S-<left>" (general-simulate-keys "10h")

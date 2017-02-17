@@ -348,8 +348,6 @@
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab
  "C-<next>" 'tabbar-forward-tab
- "C-q" 'tabbar-backward-tab
- "C-a" 'tabbar-forward-tab
  "C-S-<prior>" 'iflipb-next-buffer
  "C-S-<next>" 'iflipb-previous-buffer
  "M-<left>" 'windmove-left
