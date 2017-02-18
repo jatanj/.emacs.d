@@ -1,26 +1,22 @@
 (require 'company)
+(require 'company-quickhelp)
 
 (setq company-frontends
       '(company-pseudo-tooltip-frontend))
-        ;; company-echo-metadata-frontend))
+
+(add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
 
 (setq company-idle-delay 0.1)
-(add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
-;; (setq company-require-match nil)
-;; (add-hook 'after-init-hook 'global-company-mode)
+(setq company-require-match nil)
+(setq company-auto-complete nil)
 
-;; Abort completion when some key is pressed
-(defun company-abort-and-insert-char (char)
-  (interactive)
-  (company-abort)
-  (insert char)
-  (let ((inhibit-message t)) (company-complete)))
+(company-quickhelp-mode 1)
+(setq company-quickhelp-color-background "#434052")
+(setq company-quickhelp-color-foreground "#f8f8f8")
 
 (general-define-key
  :keymaps 'company-active-map
  "<f1>" nil
- "<tab>" 'company-complete-selection
- "<return>" (lookup-key (current-global-map) (kbd "RET"))
- "." (lambda () (interactive) (company-abort-and-insert-char ".")))
+ "<return>" (lookup-key (current-global-map) (kbd "RET")))
 
 (provide 'config-company)

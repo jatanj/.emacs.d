@@ -8,6 +8,7 @@
                      clojure-mode
                      clojure-mode-extra-font-locking
                      company
+                     company-quickhelp
                      dash
                      d-mode
                      ensime

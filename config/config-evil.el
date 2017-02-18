@@ -1,4 +1,4 @@
-;; These must be specified before (require 'evil)
+;; These must be specified before loading evil-mode
 (setq evil-want-C-u-scroll t)
 (setq evil-toggle-key "<f5>")
 
@@ -23,15 +23,22 @@
       (comment-or-uncomment-region (region-beginning) (region-end))
       (comment-line 1)))
 
+(defun company-complete-selection-or-indent ()
+  (interactive)
+  (require 'company)
+  (if (company-tooltip-visible-p)
+      (company-complete-selection)
+    (tab-to-tab-stop)))
+
 (general-define-key
  :keymaps 'evil-normal-state-map
  "q" 'ignore)
 
 (general-define-key
  :states 'insert
- "<tab>" 'tab-to-tab-stop
  "C-k" ctl-x-map
  "C-g" 'evil-force-normal-state
+ "<tab>" 'company-complete-selection-or-indent
  "S-<up>" (lambda () (interactive) (evil-previous-line 10))
  "S-<down>" (lambda () (interactive) (evil-next-line 10))
  "S-<left>" (lambda () (interactive) (evil-backward-char 10))

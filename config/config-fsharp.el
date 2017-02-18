@@ -7,7 +7,8 @@
 (add-hook 'fsharp-mode-hook
   (lambda ()
     (setq indent-line-function 'indent-relative-maybe)
-    (set-local-tab-width 2)))
+    (set-local-tab-width 2)
+    (setq company-auto-complete nil)))
 
 (sp-local-pair #'fsharp-mode "'" nil :actions nil)
 
