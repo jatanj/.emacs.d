@@ -1,6 +1,6 @@
 ;;; custom-dark-theme.el
 ;;; Created with ThemeCreator, https://github.com/mswift42/themecreator.
-;;; Inspired by Base2Tone Drawbridge Dark
+;;; Inspired by Base2Tone Evening Dark
 
 (deftheme custom-dark)
 (let ((class '((class color) (min-colors 89)))
@@ -25,9 +25,10 @@
       (tag       "#4fc1e9")
       (header    "#202328")
       (border    "#1b1f32")
+      (match     "#434052")
       (tooltip   "#1d2026")
       (cursor    "#ffffff")
-      (success   "#489abb")
+      (success   "#499fbc") ; #489abb
       (success2  "#336633")
       (info      "#639743")
       (info2     "#387c98")
@@ -53,10 +54,10 @@
       `(error ((,class (:foreground ,error))))
       `(warning ((,class (:foreground ,warning))))
       `(success ((,class (:foreground ,info))))
-      `(match ((,class (:foreground ,fg1 :background ,bg3))))
+      `(match ((,class (:foreground ,fg1 :background ,match))))
       `(region ((,class (:foreground ,fg1 :background ,bg3))))
       `(highlight ((,class (:foreground ,fg1 :background ,bg5))))
-      `(hl-line ((,class (:foreground ,fg1 :background ,bg3))))
+      `(hl-line ((,class (:foreground ,fg1 :background ,match))))
       `(linum ((,class (:foreground ,bg4 :background ,bg1))))
       `(fringe ((,class (:foreground ,bg1 :background ,bg1))))
       `(header-line ((,class (:background ,header))))
