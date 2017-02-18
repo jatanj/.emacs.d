@@ -2,7 +2,7 @@
 
 (setq powerline-default-separator nil)
 (setq spaceline-workspace-numbers-unicode t)
-;; (setq spaceline-window-numbers-unicode t)
+(setq spaceline-window-numbers-unicode nil)
 
 (spaceline-toggle-minor-modes-off)
 (spaceline-toggle-hud-off)

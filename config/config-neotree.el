@@ -1,7 +1,8 @@
 (require 'neotree)
 
-(setq neo-theme 'ascii)
+(setq neo-theme (if (display-graphic-p) 'icons 'ascii))
 (evil-set-initial-state 'neotree-mode 'emacs)
+(setq neo-window-fixed-size nil)
 
 (defun neotree-projectile ()
   "Open neotree with projectile as root and open node for current file.

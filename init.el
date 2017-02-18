@@ -2,7 +2,8 @@
 
 ;; Packages
 (require 'package)
-(setq package-list '(anzu
+(setq package-list '(all-the-icons
+                     anzu
                      cider
                      clojure-mode
                      clojure-mode-extra-font-locking
@@ -190,12 +191,6 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-;; File extension associations
-(dolist (assoc '(("\\.log\\'"           . text-mode)
-                 ("\\.dependencies\\'"  . text-mode)
-                 ("\\.references\\'"    . text-mode)))
-  (add-to-list 'auto-mode-alist assoc))
-
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
 (defun slick-cut (beg end)
@@ -266,7 +261,7 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
-;; Configure packages by loading its corresponding file
+;; Configure packages
 (setq config-packages '(general
                         evil
                         helm

@@ -18,9 +18,6 @@
      (tabbar-local-mode))))
 
 (defun magit-mode-daemon-bury-or-quit ()
-  "When quitting magit-mode, delete the frame if we're connecting from an
-emacsclient, there are no other file buffers, and we're in the main magit
-buffer. Otherwise, just bury the buffer."
   (interactive)
   (let ((buffers (-remove
                   (lambda (b) (string-match "\\*.+" (buffer-name b)))
