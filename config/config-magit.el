@@ -11,11 +11,9 @@
 (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
 (setq vc-follow-symlinks t)
 
-;; Disable tabbar-mode in magit popups
-(add-hook 'magit-popup-mode-hook
- (lambda ()
-   (when (bound-and-true-p tabbar-mode)
-     (tabbar-local-mode))))
+;; Disable tabbar-mode in magit buffers
+(add-hook 'magit-mode-hook #'tabbar-disable)
+(add-hook 'magit-popup-mode-hook #'tabbar-disable)
 
 (defun magit-mode-daemon-bury-or-quit ()
   (interactive)

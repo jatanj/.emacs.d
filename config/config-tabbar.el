@@ -2,6 +2,7 @@
 
 (require 'cl)
 (require 'tabbar)
+
 (unless (daemonp) (tabbar-mode 1))
 
 (add-to-list 'configure-frame-functions
@@ -35,17 +36,22 @@
   "C-<home>" nil
   "C-<f10>" nil)
 
-(defun select-tab-by-number (n)
+(defun tabbar-select-tab-by-number (n)
+  "Switch to the nth tab in the current tabset."
   (interactive)
   (let* ((tabset (tabbar-current-tabset))
          (tabs (tabbar-tabs tabset)))
     (when (<= n (length tabs))
       (tabbar-click-on-tab (nth (- n 1) tabs)))))
 
-;; (dolist (n (number-sequence 1 9))
-;;   (global-set-key (kbd (format "C-%s" n)) `(lambda () (interactive) (select-tab-by-number ,n))))
+(defun tabbar-disable ()
+  "Disable tabbar-mode if it's currently enabled."
+  (interactive)
+  (when (bound-and-true-p tabbar-mode)
+    (tabbar-local-mode)))
 
 ;; Sort tabs by name
+;; https://emacswiki.org/emacs/TabBarMode#toc7
 (defun tabbar-add-tab (tabset object &optional append_ignored)
  "Add to TABSET a tab with value OBJECT if there isn't one there yet.
  If the tab is added, it is added at the beginning of the tab list,
