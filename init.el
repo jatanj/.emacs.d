@@ -278,7 +278,7 @@
                         smooth-scroll
                         expand-region
                         spaceline
-                        ispell
+                        flyspell
                         popwin
                         which-key
                         iflipb
