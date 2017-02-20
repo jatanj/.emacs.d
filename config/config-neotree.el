@@ -1,11 +1,14 @@
-(require 'neotree)
+(use-package all-the-icons)
 
-(setq neo-theme (if (display-graphic-p) 'icons 'ascii))
-(evil-set-initial-state 'neotree-mode 'emacs)
-(setq neo-window-fixed-size nil)
+(use-package neotree
+  :after evil all-the-icons
+  :config
+  (setq neo-theme (if (display-graphic-p) 'icons 'ascii))
+  (setq neo-window-fixed-size nil)
+  (evil-set-initial-state 'neotree-mode 'emacs)
 
-(defun neotree-projectile ()
-  "Open neotree with projectile as root and open node for current file.
+  (defun neotree-projectile ()
+    "Open neotree with projectile as root and open node for current file.
   If projectile unavailable or not in a project, open node at file path.
   If file path is not available, open $HOME."
     (interactive)
@@ -26,9 +29,9 @@
             (when file-name
               (neo-buffer--select-file-node file-name)))))))
 
-(general-define-key
- :keymaps 'neotree-mode-map
- "C-<prior>" 'ignore
- "C-<next>" 'ignore)
+  (general-define-key
+   :keymaps 'neotree-mode-map
+   "C-<prior>" 'ignore
+   "C-<next>" 'ignore))
 
 (provide 'config-neotree)

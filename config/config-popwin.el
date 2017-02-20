@@ -1,5 +1,5 @@
-(require 'popwin)
-
-(setq display-buffer-function 'popwin:display-buffer)
+(use-package popwin
+  :config
+  (setq display-buffer-function 'popwin:display-buffer))
 
 (provide 'config-popwin)

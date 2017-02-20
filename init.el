@@ -1,60 +1,12 @@
 ;; init.el -- Emacs configuration
 
-;; Packages
+;; Bootstrap use-package and a few other packages
 (require 'package)
-(setq packages '(all-the-icons
-                     anzu
-                     cider
-                     clojure-mode
-                     clojure-mode-extra-font-locking
-                     company
-                     company-quickhelp
-                     dash
-                     d-mode
-                     ensime
+(setq package-list '(dash
                      esup
-                     evil
-                     evil-magit
-                     evil-matchit
-                     evil-surround
-                     evil-visualstar
-                     expand-region
-                     flx
-                     flx-ido
-                     flycheck-haskell
-                     fsharp-mode
                      general
-                     ggtags
-                     gitconfig-mode
-                     gitignore-mode
-                     haskell-mode
-                     helm
-                     helm-ag
-                     helm-projectile
                      hydra
-                     ibuffer-projectile
-                     ido-vertical-mode
-                     iflipb
-                     js2-mode
-                     json-mode
-                     magit
-                     markdown-mode
-                     neotree
-                     omnisharp
-                     org-bullets
-                     popwin
-                     projectile
-                     smartparens
-                     smooth-scroll
-                     spaceline
-                     tabbar
-                     tide
-                     ts-comint
-                     use-package
-                     web-mode
-                     which-key
-                     window-numbering))
-
+                     use-package))
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
@@ -62,7 +14,7 @@
 ;; http://stackoverflow.com/questions/10092322#answer-10093312
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
-(dolist (package packages)
+(dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
 
@@ -262,44 +214,59 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
-;; Configure packages
-(setq config-packages '(general
-                        evil
-                        helm
-                        projectile
-                        magit
-                        window-numbering
-                        anzu
+(defun comment-line-or-region ()
+  "Comment the current region if it is active or the current line."
+  (interactive)
+  (if (use-region-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    (comment-line 1)))
+
+(eval-when-compile (require 'use-package))
+(require 'general)
+(require 'hydra)
+(require 'dash)
+
+(setq use-package-always-ensure t)
+(setq leader-key "C-l")
+(global-set-key (kbd leader-key) nil)
+
+(setq config-packages '(anzu
+                        c-cpp
+                        clojure
                         company
+                        d
+                        emacs-lisp
+                        evil
+                        expand-region
                         flycheck
-                        tabbar
+                        flyspell
+                        fsharp
+                        haskell
+                        helm
+                        ibuffer
+                        ido
+                        iflipb
+                        java
+                        javascript
+                        json
+                        magit
+                        markdown
                         neotree
+                        org
+                        popwin
+                        projectile
+                        scala
                         smartparens
                         smooth-scroll
-                        expand-region
                         spaceline
-                        flyspell
-                        popwin
-                        which-key
-                        iflipb
-                        ido
-                        ibuffer
+                        tabbar
                         term
-                        org
-                        ;; yasnippets
-                        web-mode
-                        emacs-lisp
-                        markdown
-                        c-cpp
-                        java
-                        d
-                        csharp
                         typescript
-                        javascript
-                        scala
-                        fsharp
-                        clojure
-                        haskell))
+                        web-mode
+                        which-key
+                        window-numbering))
+
+;; Load package configs
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
 (dolist (name config-packages)
   (require (intern (concat "config-" (symbol-name name)))))
@@ -384,13 +351,6 @@
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
  "C-h" 'isearch-query-replace-regexp)
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -398,4 +358,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (smartparens cider clojure-mode-extra-font-locking clojure-mode esup smooth-scroll anzu ensime expand-region window-numbering which-key evil-surround tide web-mode use-package typescript-mode tabbar spaceline neotree magit js2-mode ido-vertical-mode helm-projectile helm-ag general flycheck flx-ido evil company))))
+    (flycheck-haskell haskell-mode cider clojure-mode-extra-font-locking clojure-mode fsharp-mode ensime js2-mode ts-comint tide web-mode d-mode json-mode markdown-mode org-bullets ido-vertical-mode flx-ido iflipb which-key popwin spaceline smooth-scroll smartparens neotree all-the-icons tabbar company-quickhelp company window-numbering use-package ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general expand-region evil-visualstar evil-surround evil-matchit evil-magit esup anzu))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

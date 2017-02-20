@@ -1,36 +1,42 @@
-(require 'helm-config)
+(use-package helm
+  :config
+  (require 'helm-config)
 
-(helm-projectile-on)
+  (helm-autoresize-mode 1)
+  (setq helm-autoresize-max-height 25)
 
-(helm-autoresize-mode 1)
-(setq helm-autoresize-max-height 25)
+  (setq helm-M-x-fuzzy-match t)
+  (setq helm-buffers-fuzzy-matching t)
+  (setq helm-recentf-fuzzy-match t)
+  (setq helm-semantic-fuzzy-match t)
+  (setq helm-split-window-in-side-p t)
 
-(setq helm-M-x-fuzzy-match t)
-(setq helm-buffers-fuzzy-matching t)
-(setq helm-recentf-fuzzy-match t)
-(setq helm-semantic-fuzzy-match t)
-(setq helm-ag-fuzzy-match t)
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*helm" (* not-newline) "*" eos)
+                 (display-buffer-in-side-window)
+                 (inhibit-same-window . t)
+                 (window-height . 0.25)))
 
-(setq helm-split-window-in-side-p t)
+  (setq helm-boring-buffer-regexp-list
+        '("\\` "
+          "\\*helm"
+          "\\*helm-mode"
+          "\\*Echo Area"
+          "\\*tramp"
+          "\\*Minibuf"
+          "\\*Ibuffer\\*"
+          "\\*tide-server\\*"
+          "\\*fsharp-complete\\*"))
 
-(add-to-list 'display-buffer-alist
-  `(,(rx bos "*helm" (* not-newline) "*" eos)
-        (display-buffer-in-side-window)
-        (inhibit-same-window . t)
-        (window-height . 0.25)))
+  (global-set-key (kbd "C-S-p") 'helm-M-x)
+  (global-set-key (kbd "C-p") 'helm-buffers-list))
 
-(setq helm-boring-buffer-regexp-list
-      '("\\` "
-        "\\*helm"
-        "\\*helm-mode"
-        "\\*Echo Area"
-        "\\*tramp"
-        "\\*Minibuf"
-        "\\*Ibuffer\\*"
-        "\\*tide-server\\*"
-        "\\*fsharp-complete\\*"))
+(use-package helm-projectile
+  :config
+  (helm-projectile-on))
 
-(global-set-key (kbd "C-S-p") 'helm-M-x)
-(global-set-key (kbd "C-p") 'helm-buffers-list)
+(use-package helm-ag
+  :config
+  (setq helm-ag-fuzzy-match t))
 
 (provide 'config-helm)
