@@ -2,7 +2,7 @@
 
 ;; Packages
 (require 'package)
-(setq package-list '(all-the-icons
+(setq packages '(all-the-icons
                      anzu
                      cider
                      clojure-mode
@@ -62,7 +62,7 @@
 ;; http://stackoverflow.com/questions/10092322#answer-10093312
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
-(dolist (package package-list)
+(dolist (package packages)
   (unless (package-installed-p package)
     (package-install package)))
 

@@ -1,6 +1,6 @@
 (require 'fsharp-mode)
 
-;; (setq fsharp-ac-use-popup t)
+(setq fsharp-ac-use-popup t)
 (setq fsharp-indent-offset 2)
 (setq inferior-fsharp-program "fsharpi --readline- --shadowcopyreferences+")
 
@@ -22,6 +22,6 @@
 (general-define-key
  :keymaps 'fsharp-mode-map
  "C-c C-k" 'fsharp-load-buffer-file
- "C-c C-r" 'fsharp-send-references)
+ "C-c C-n" 'fsharp-send-references)
 
 (provide 'config-fsharp)

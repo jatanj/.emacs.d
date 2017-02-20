@@ -25,7 +25,7 @@
       (var       "#f8f8f8")
       (tag       "#4fc1e9")
       (header    "#202328")
-      (border    "#1b1f32")
+      (border    "#262330")
       (match     "#434052")
       (cursor    "#ffffff")
       (success   "#499fbc")
