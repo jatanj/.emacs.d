@@ -1,23 +1,5 @@
 ;; init.el -- Emacs configuration
 
-;; Bootstrap use-package and a few other packages
-(require 'package)
-(setq package-list '(dash
-                     esup
-                     general
-                     hydra
-                     use-package))
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-
-;; Install missing packages
-;; http://stackoverflow.com/questions/10092322#answer-10093312
-(package-initialize)
-(unless package-archive-contents (package-refresh-contents))
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
   (when (file-exists-p local-settings) (load local-settings)))
@@ -214,6 +196,25 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
+;; Bootstrap use-package and a few other packages
+(setq package-list '(dash
+                     esup
+                     general
+                     hydra
+                     use-package))
+
+;; Install missing packages
+;; http://stackoverflow.com/questions/10092322#answer-10093312
+(require 'package)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
 (defun comment-line-or-region ()
   "Comment the current region if it is active or the current line."
   (interactive)
@@ -230,7 +231,7 @@
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
 
-(setq config-packages '(anzu
+(setq package-configs '(anzu
                         c-cpp
                         clojure
                         company
@@ -268,7 +269,7 @@
 
 ;; Load package configs
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
-(dolist (name config-packages)
+(dolist (name package-configs)
   (require (intern (concat "config-" (symbol-name name)))))
 
 ;; Load theme
@@ -351,6 +352,14 @@
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
  "C-h" 'isearch-query-replace-regexp)
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -358,10 +367,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-haskell haskell-mode cider clojure-mode-extra-font-locking clojure-mode fsharp-mode ensime js2-mode ts-comint tide web-mode d-mode json-mode markdown-mode org-bullets ido-vertical-mode flx-ido iflipb which-key popwin spaceline smooth-scroll smartparens neotree all-the-icons tabbar company-quickhelp company window-numbering use-package ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general expand-region evil-visualstar evil-surround evil-matchit evil-magit esup anzu))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+    (window-numbering which-key web-mode use-package ts-comint tide tabbar spaceline smooth-scroll smartparens popwin org-bullets neotree markdown-mode json-mode js2-mode iflipb ido-vertical-mode ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general fsharp-mode flycheck-haskell flx-ido expand-region evil-visualstar evil-surround evil-matchit evil-magit esup ensime d-mode clojure-mode-extra-font-locking cider anzu all-the-icons))))

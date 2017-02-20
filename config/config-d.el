@@ -1,5 +1,5 @@
 (use-package d-mode
-  :after smartparens
+  :after smartparens-config
   :config
   (add-hook 'd-mode-hook
             (lambda ()

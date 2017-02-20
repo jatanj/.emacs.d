@@ -1,5 +1,5 @@
 (use-package fsharp-mode
-  :after smartparens
+  :after smartparens-config
   :config
   (setq fsharp-ac-use-popup t)
   (setq fsharp-indent-offset 2)

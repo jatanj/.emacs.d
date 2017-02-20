@@ -1,5 +1,5 @@
 (use-package js2-mode
-  :after tide smartparens
+  :after tide smartparens-config
   :config
   (dolist (assoc '(("\\.js\\'"   . js2-mode)
                    ("\\.jsx\\'"  . web-mode)

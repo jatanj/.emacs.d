@@ -1,5 +1,5 @@
 (use-package ensime
-  :after smartparens
+  :after smartparens-config
   :config
   (setq scala-indent:use-javadoc-style t)
   (setq scala-enable-eldoc t)

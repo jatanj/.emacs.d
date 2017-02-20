@@ -1,5 +1,5 @@
 (use-package tide
-  :after smartparens
+  :after smartparens-config
   :config
   (defun setup-tide-mode ()
     (interactive)
@@ -24,13 +24,13 @@
               (when (string-equal "tsx" (file-name-extension buffer-file-name))
                 (setup-tide-mode))))
 
+  (sp-local-pair 'typescript-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
+
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Typescript*" eos)
                  (display-buffer-reuse-window
                   display-buffer-below-selected)
-                 (window-height   . 0.20)))
-
-  (sp-local-pair 'typescript-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET"))))
+                 (window-height   . 0.20))))
 
 (use-package ts-comint
   :after tide

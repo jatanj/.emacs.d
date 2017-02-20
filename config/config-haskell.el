@@ -21,8 +21,8 @@
    "C-c C-d" 'haskell-mode-jump-to-def-or-tag))
 
 (use-package flycheck-haskell
+  :after flycheck
   :config
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
+  (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
 
 (provide 'config-haskell)
