@@ -1,14 +1,15 @@
-(setq c-basic-offset 4)
-(setq c-indent-level 4)
-(setq-default c-default-style "k&r")
+(use-package cc-mode
+  :config
+  (setq c-basic-offset 4)
+  (setq c-indent-level 4)
+  (setq-default c-default-style "k&r")
+  (add-hook 'c-mode-common-hook 'customize-cc-mode))
 
 (defun customize-cc-mode ()
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'case-label '+)
   (c-set-offset 'arglist-intro '+)
   (set-local-tab-width 4))
-
-(add-hook 'c-mode-common-hook 'customize-cc-mode)
 
 (defun newline-and-enter-sexp (&rest _ignored)
   (newline)

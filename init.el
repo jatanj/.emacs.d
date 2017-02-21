@@ -29,14 +29,19 @@
 (setq tooltip-use-echo-area t)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
-(setq even-window-heights nil)
 (setq-default next-line-add-newlines nil)
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
 (setq ad-redefinition-action 'accept)
+
+;; Useful minor modes
 (show-paren-mode 1)
 (global-superword-mode 1)
 (global-auto-revert-mode 1)
+
+;; Window sizes
+(setq resize-mini-windows t)
+(setq even-window-heights nil)
 
 ;; Set the window position on startup
 (setq configure-frame-functions '())
@@ -70,16 +75,9 @@
 (save-place-mode 1)
 (setq-default cursor-in-non-selected-windows nil)
 
-;; Uniquify buffer names
-(setq uniquify-after-kill-buffer-p t)
-(setq uniquify-ignore-buffers-re "^\\*")
-;; (setq uniquify-buffer-name-style 'forward)
-;; (setq uniquify-separator "/")
-
 ;; Line numbers
 (global-linum-mode 1)
 (setq linum-format "%4d ")
-(setq resize-mini-windows t)
 
 ;; Vertical scrolling
 (setq scroll-step 1)
@@ -196,25 +194,6 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
-;; Bootstrap use-package and a few other packages
-(setq package-list '(dash
-                     esup
-                     general
-                     hydra
-                     use-package))
-
-;; Install missing packages
-;; http://stackoverflow.com/questions/10092322#answer-10093312
-(require 'package)
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
 (defun comment-line-or-region ()
   "Comment the current region if it is active or the current line."
   (interactive)
@@ -222,16 +201,36 @@
       (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-line 1)))
 
-(eval-when-compile (require 'use-package))
-(require 'general)
-(require 'hydra)
-(require 'dash)
+;; Bootstrap use-package
+;; http://stackoverflow.com/questions/10092322#answer-10093312
+(require 'package)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+(package-initialize)
+(unless package-archive-contents (package-refresh-contents))
+(dolist (package '(use-package))
+  (unless (package-installed-p package)
+    (package-install package)))
 
-(setq use-package-always-ensure t)
+(eval-when-compile (require 'use-package))
+
+(use-package general
+  :ensure t
+  :demand)
+(use-package hydra
+  :ensure t
+  :demand)
+(use-package dash
+  :ensure t
+  :demand)
+
+;; Decide on our leader key here to make setting keybindings for the packages
+;; below a bit easier.
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
 
-(setq package-configs '(anzu
+(setq package-configs '(all-the-icons
+                        anzu
                         c-cpp
                         clojure
                         company
@@ -263,6 +262,7 @@
                         tabbar
                         term
                         typescript
+                        uniquify
                         web-mode
                         which-key
                         window-numbering))

@@ -1,23 +1,15 @@
 (use-package magit
-  :after evil
+  :ensure t
   :config
-  (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
-  (evil-set-initial-state 'magit-mode 'emacs)
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
-
-  (global-git-commit-mode)
-  (add-hook 'git-commit-mode-hook 'flyspell-mode)
-  (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
-  (setq vc-follow-symlinks t)
-
   ;; Disable tabbar-mode in magit buffers
   (add-hook 'magit-mode-hook #'tabbar-disable)
   (add-hook 'magit-popup-mode-hook #'tabbar-disable)
-
+  (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
+  (evil-set-initial-state 'magit-mode 'emacs)
   (general-define-key
    :keymaps 'magit-mode-map
    "q" 'magit-mode-daemon-bury-or-quit)
-
   (general-define-key
    :states '(magit normal visual)
    :keymaps 'magit-mode-map
@@ -28,12 +20,6 @@
    "S-<down>" (lambda () (interactive) (evil-next-line 10))
    "S-<left>" (lambda () (interactive) (evil-backward-char 10))
    "S-<right>" (lambda () (interactive) (evil-forward-char 10))))
-
-(use-package evil-magit
-  :after magit)
-
-(use-package gitconfig-mode)
-(use-package gitignore-mode)
 
 (defun magit-mode-daemon-bury-or-quit ()
   (interactive)
@@ -46,5 +32,30 @@
          (string-prefix-p "*magit:" (buffer-name (current-buffer))))
         (delete-frame)
       (magit-mode-bury-buffer))))
+
+(use-package evil-magit
+  :ensure t
+  :defer t
+  :after magit)
+
+(use-package git-commit
+  :config
+  (add-hook 'git-commit-mode-hook 'flyspell-mode)
+  (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
+  (global-git-commit-mode))
+
+(use-package vc-hooks
+  :init
+  (setq vc-follow-symlinks t))
+
+(use-package gitconfig-mode
+  :ensure t
+  :defer t
+  :mode ("\\.gitconfig\\'" . gitconfig-mode))
+
+(use-package gitignore-mode
+  :ensure t
+  :defer t
+  :mode ("\\.gitignore\\'" . gitignore-mode))
 
 (provide 'config-magit)

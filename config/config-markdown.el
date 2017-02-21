@@ -1,4 +1,5 @@
 (use-package markdown-mode
+  :ensure t
   :config
   (dolist (assoc '(("README\\.md\\'" . gfm-mode)
                    ("\\.md\\'"       . markdown-mode)

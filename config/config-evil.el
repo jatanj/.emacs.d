@@ -1,30 +1,19 @@
 (use-package evil
+  :ensure t
   :init
   (setq evil-want-C-u-scroll t)
   (setq evil-toggle-key "<f5>")
-
   :config
   (evil-mode 1)
-
   (fset 'evil-visual-update-x-selection 'ignore)
   (setq evil-disable-insert-state-bindings t)
   (setq-default evil-shift-width 2)
-
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'Buffer-menu-mode 'emacs)
-
-  ;; Improve shift to keep selection
-  ;; http://superuser.com/questions/684540/#answer-789156
-  (defun evil-shift-visual (shift)
-    (funcall shift (region-beginning) (region-end))
-    (evil-normal-state)
-    (evil-visual-restore))
-  (defun evil-shift-left-visual ()
-    (interactive)
-    (evil-shift-visual 'evil-shift-left))
-  (defun evil-shift-right-visual ()
-    (interactive)
-    (evil-shift-visual 'evil-shift-right))
+  (dolist (mode '(dired-mode
+                  Buffer-menu-mode
+                  neotree-mode
+                  flycheck-error-list-mode
+                  cider-repl-mode))
+    (evil-set-initial-state mode 'emacs))
 
   (general-define-key
    :keymaps 'evil-normal-state-map
@@ -81,15 +70,27 @@
    "C-S-p" 'helm-M-x
    "C-p" 'helm-projectile-find-file))
 
+;; Improve shift to keep selection
+;; http://superuser.com/questions/684540/#answer-789156
+(defun evil-shift-visual (shift)
+  (funcall shift (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+(defun evil-shift-left-visual () (interactive) (evil-shift-visual 'evil-shift-left))
+(defun evil-shift-right-visual () (interactive) (evil-shift-visual 'evil-shift-right))
+
 (use-package evil-surround
+  :ensure t
   :config
   (global-evil-surround-mode 1))
 
 (use-package evil-visualstar
+  :ensure t
   :config
   (global-evil-visualstar-mode 1))
 
 (use-package evil-matchit
+  :ensure t
   :config
   (global-evil-matchit-mode 1))
 

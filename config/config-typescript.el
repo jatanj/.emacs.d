@@ -1,38 +1,30 @@
 (use-package tide
-  :after smartparens-config
+  :ensure t
+  :defer t
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.d\\.ts\\'" . typescript-mode))
   :config
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode 1)
-    (eldoc-mode 1)
-    (tide-hl-identifier-mode 1))
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-
-  (setq company-tooltip-align-annotations t)
   (setq typescript-indent-level 2)
-  (setq tide-format-options
-        '(:indentSize 2
-                      :tabSize 2
-                      :convertTabsToSpaces t))
-
-  (add-to-list 'auto-mode-alist '("\\.d\\.ts\\'" . typescript-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                (setup-tide-mode))))
-
-  (sp-local-pair 'typescript-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-
+  (setq tide-format-options '(:indentSize 2
+                              :tabSize 2
+                              :convertTabsToSpaces t))
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Typescript*" eos)
                  (display-buffer-reuse-window
                   display-buffer-below-selected)
                  (window-height   . 0.20))))
 
+(defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (company-mode 1)
+    (flycheck-mode 1)
+    (eldoc-mode 1)
+    (tide-hl-identifier-mode 1))
+
 (use-package ts-comint
+  :ensure t
   :after tide
   :config
   (general-define-key

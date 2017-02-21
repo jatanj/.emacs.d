@@ -1,4 +1,5 @@
 (use-package ibuffer-projectile
+  :ensure t
   :after projectile
   :config
   (add-hook 'ibuffer-hook

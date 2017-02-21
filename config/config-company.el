@@ -1,27 +1,27 @@
 (use-package company
+  :ensure t
   :config
+  (setq company-idle-delay 0.1)
   (setq company-frontends
         '(company-pseudo-tooltip-frontend))
-
-  (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
-
-  (setq company-idle-delay 0.1)
   (setq company-require-match nil)
   (setq company-auto-complete nil)
-
-  (defun company-complete-selection-or-indent ()
-    (interactive)
-    (if (company-tooltip-visible-p)
-        (company-complete-selection)
-      (tab-to-tab-stop)))
-
+  (setq company-tooltip-align-annotations t)
+  (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
   (general-define-key
    :keymaps 'company-active-map
    "<f1>" nil
    "<tab>" nil
    "<return>" (lookup-key (current-global-map) (kbd "RET"))))
 
+(defun company-complete-selection-or-indent ()
+  (interactive)
+  (if (company-tooltip-visible-p)
+      (company-complete-selection)
+    (tab-to-tab-stop)))
+
 (use-package company-quickhelp
+  :ensure t
   :after company
   :config
   (company-quickhelp-mode 1)

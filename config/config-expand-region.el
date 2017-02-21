@@ -1,4 +1,5 @@
 (use-package expand-region
+  :ensure t
   :config
   (general-define-key
    :states '(normal visual)

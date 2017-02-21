@@ -1,4 +1,5 @@
 (use-package iflipb
+  :ensure t
   :config
   (setq iflipb-wrap-around t)
   (global-set-key (kbd "C-<tab>") 'iflipb-next-buffer)

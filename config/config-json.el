@@ -1,2 +1,3 @@
-(use-package json-mode)
+(use-package json-mode
+  :ensure t)
 (provide 'config-json)
