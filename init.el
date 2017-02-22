@@ -255,6 +255,7 @@
                         org
                         popwin
                         projectile
+                        rainbow-mode
                         scala
                         smartparens
                         smooth-scroll
