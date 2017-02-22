@@ -208,21 +208,14 @@
                          ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
-(dolist (package '(use-package))
-  (unless (package-installed-p package)
-    (package-install package)))
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 
 (eval-when-compile (require 'use-package))
 
-(use-package general
-  :ensure t
-  :demand)
-(use-package hydra
-  :ensure t
-  :demand)
-(use-package dash
-  :ensure t
-  :demand)
+(use-package general :ensure t :demand)
+(use-package hydra :ensure t :demand)
+(use-package dash :ensure t :demand)
 
 ;; Decide on our leader key here to make setting keybindings for the packages
 ;; below a bit easier.
