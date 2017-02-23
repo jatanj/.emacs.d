@@ -50,11 +50,13 @@
   (progn
     (desktop-save-mode 1)
     (setq default-frame-alist desktop-window-attributes)))
+
+;; Minimize frame if it was saved as maximized
 (add-hook 'desktop-after-read-hook
-          (lambda ()
-            (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
+  (lambda ()
+    (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
             (toggle-frame-maximized))
-            ((string= (frame-parameter nil 'fullscreen) 'fullboth)
+          ((string= (frame-parameter nil 'fullscreen) 'fullboth)
             (toggle-frame-fullscreen) (toggle-frame-maximized)))))
 
 ;; Fix toggle-frame-fullscreen to preserve our window position
@@ -201,6 +203,9 @@
       (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-line 1)))
 
+(dolist (assoc '(("PKGBUILD" . shell-script-mode)))
+  (add-to-list 'auto-mode-alist assoc))
+
 ;; Bootstrap use-package
 ;; http://stackoverflow.com/questions/10092322#answer-10093312
 (require 'package)
@@ -217,8 +222,6 @@
 (use-package hydra :ensure t :demand)
 (use-package dash :ensure t :demand)
 
-;; Decide on our leader key here to make setting keybindings for the packages
-;; below a bit easier.
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
 
