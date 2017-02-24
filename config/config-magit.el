@@ -2,8 +2,10 @@
   :ensure t
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
-  ;; Disable tabbar-mode in magit buffers
-  (add-hook 'magit-mode-hook #'tabbar-disable)
+  (add-hook 'magit-mode-hook
+    (lambda ()
+      (tabbar-disable)
+      (hscroll-mode -1)))
   (add-hook 'magit-popup-mode-hook #'tabbar-disable)
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)

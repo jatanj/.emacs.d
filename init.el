@@ -46,24 +46,24 @@
 ;; Set the window position on startup
 (setq configure-frame-functions '())
 (if (daemonp)
-  (setq default-frame-alist client-window-attributes)
+    (setq default-frame-alist client-window-attributes)
   (progn
     (desktop-save-mode 1)
     (setq default-frame-alist desktop-window-attributes)))
 
 ;; Minimize frame if it was saved as maximized
 (add-hook 'desktop-after-read-hook
-  (lambda ()
-    (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
-            (toggle-frame-maximized))
-          ((string= (frame-parameter nil 'fullscreen) 'fullboth)
-            (toggle-frame-fullscreen) (toggle-frame-maximized)))))
+          (lambda ()
+            (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
+                   (toggle-frame-maximized))
+                  ((string= (frame-parameter nil 'fullscreen) 'fullboth)
+                   (toggle-frame-fullscreen) (toggle-frame-maximized)))))
 
 ;; Fix toggle-frame-fullscreen to preserve our window position
 (defun force-maximized-with-fullscreen (orig-fun &rest args)
   (let ((fullscreen-parameter (frame-parameter nil 'fullscreen)))
     (unless (or (string= fullscreen-parameter 'fullboth)
-		(string= fullscreen-parameter 'maximized))
+                (string= fullscreen-parameter 'maximized))
       (toggle-frame-maximized)))
   (apply orig-fun args))
 (advice-add 'toggle-frame-fullscreen :around #'force-maximized-with-fullscreen)
@@ -86,20 +86,33 @@
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
 (add-to-list 'configure-frame-functions
-  (lambda ()
-    (scroll-bar-mode -1)
-    (horizontal-scroll-bar-mode -1)))
+             (lambda ()
+               (scroll-bar-mode -1)
+               (horizontal-scroll-bar-mode -1)))
 
 ;; Horizontal scrolling
 (setq hscroll-step 1)
 (setq hscroll-margin 1)
-(setq-default truncate-lines t)
-(defun toggle-horizontal-scrolling ()
+(defun toggle-hscroll-mode (&optional arg global)
+  (let ((vars '(auto-hscroll-mode
+                truncate-lines))
+        (set-default-maybe
+         (lambda (var value &optional default)
+           (let ((result (pcase value
+                           ((pred (booleanp)) (if value value (not (symbol-value var))))
+                           ((pred (numberp)) (> value 0))
+                           (_ nil))))
+             (if default
+                 (set-default var result)
+               (set var result))))))
+    (dolist (v vars) (funcall set-default-maybe v arg global))))
+(defun global-hscroll-mode (&optional arg)
   (interactive)
-  (let ((config-vars '(auto-hscroll-mode truncate-lines)))
-    (if (bound-and-true-p auto-hscroll-mode)
-        (dolist (var config-vars) (set var nil))
-      (dolist (var config-vars) (set var t)))))
+  (toggle-hscroll-mode arg t))
+(defun hscroll-mode (&optional arg)
+  (interactive)
+  (toggle-hscroll-mode arg))
+(global-hscroll-mode 1)
 
 ;; Indentation
 (setq-default indent-tabs-mode nil)
@@ -130,50 +143,50 @@
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
 (defun slick-cut (beg end)
   (interactive
-    (if mark-active
-        (list (region-beginning) (region-end))
-        (list (line-beginning-position) (line-beginning-position 2)))))
+   (if mark-active
+       (list (region-beginning) (region-end))
+     (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-region :before #'slick-cut)
 (defun slick-copy (beg end)
   (interactive
-    (if mark-active
-        (list (region-beginning) (region-end))
-        (message "Copied line")
-        (list (line-beginning-position) (line-beginning-position 2)))))
+   (if mark-active
+       (list (region-beginning) (region-end))
+     (message "Copied line")
+     (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
 ;; Fix Ctrl+Backspace
 ;; http://stackoverflow.com/questions/28221079#answer-39438119
 (defun backward-kill-word-fixed ()
-(interactive)
-(let* ((cp (point))
-        (backword)
-        (end)
-        (space-pos)
-        (backword-char (if (bobp)
-                          ""
-                        (buffer-substring cp (- cp 1)))))
-  (if (equal (length backword-char) (string-width backword-char))
-      (progn
-        (save-excursion
-          (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
-        (setq ab/debug backword)
-        (save-excursion
-          (when (and backword
-                      (s-contains? " " backword))
-            (setq space-pos (ignore-errors (search-backward " ")))))
-        (save-excursion
-          (let* ((pos (ignore-errors (search-backward-regexp "\n")))
-                  (substr (when pos (buffer-substring pos cp))))
-            (when (or (and substr (s-blank? (s-trim substr)))
-                      (s-contains? "\n" backword))
-              (setq end pos))))
-        (if end
-            (kill-region cp end)
-          (if space-pos
-              (kill-region cp space-pos)
-            (backward-kill-word 1))))
-    (kill-region cp (- cp 1)))))
+  (interactive)
+  (let* ((cp (point))
+         (backword)
+         (end)
+         (space-pos)
+         (backword-char (if (bobp)
+                            ""
+                          (buffer-substring cp (- cp 1)))))
+    (if (equal (length backword-char) (string-width backword-char))
+        (progn
+          (save-excursion
+            (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
+          (setq ab/debug backword)
+          (save-excursion
+            (when (and backword
+                       (s-contains? " " backword))
+              (setq space-pos (ignore-errors (search-backward " ")))))
+          (save-excursion
+            (let* ((pos (ignore-errors (search-backward-regexp "\n")))
+                   (substr (when pos (buffer-substring pos cp))))
+              (when (or (and substr (s-blank? (s-trim substr)))
+                        (s-contains? "\n" backword))
+                (setq end pos))))
+          (if end
+              (kill-region cp end)
+            (if space-pos
+                (kill-region cp space-pos)
+              (backward-kill-word 1))))
+      (kill-region cp (- cp 1)))))
 
 ;; Backspace previous tab stop
 ;; https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop
@@ -279,10 +292,10 @@
     (funcall func))
   (redraw-frame))
 (if (daemonp)
-  (add-hook 'after-make-frame-functions
-    (lambda (frame)
-      (select-frame frame)
-      (configure-frame)))
+    (add-hook 'after-make-frame-functions
+      (lambda (frame)
+        (select-frame frame)
+        (configure-frame)))
   (configure-frame))
 
 ;; Unbind some keys
@@ -332,7 +345,7 @@
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" 'neotree-projectile
- "C-h" 'toggle-horizontal-scrolling)
+ "C-h" 'hscroll-mode)
 
 (general-define-key
  :prefix leader-key
