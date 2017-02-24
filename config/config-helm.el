@@ -25,16 +25,24 @@
           "\\*tide-server\\*"
           "\\*fsharp-complete\\*"))
   (global-set-key (kbd "C-S-p") 'helm-M-x)
-  (global-set-key (kbd "C-p") 'helm-buffers-list))
+  (global-set-key (kbd "C-p") 'helm-buffers-list)
+  (general-define-key
+   :prefix leader-key
+   "f" 'helm-find))
 
 (use-package helm-projectile
   :ensure t
+  :after projectile
   :config
   (helm-projectile-on))
 
 (use-package helm-ag
   :ensure t
   :config
-  (setq helm-ag-fuzzy-match t))
+  (setq helm-ag-fuzzy-match t)
+  (general-define-key
+   :keymaps 'projectile-command-map
+   "s f" 'helm-do-ag-this-file
+   "s b" 'helm-do-ag-buffers))
 
 (provide 'config-helm)
