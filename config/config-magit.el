@@ -11,17 +11,7 @@
   (evil-set-initial-state 'magit-mode 'emacs)
   (general-define-key
    :keymaps 'magit-mode-map
-   "q" 'magit-mode-daemon-bury-or-quit)
-  (general-define-key
-   :states '(magit normal visual)
-   :keymaps 'magit-mode-map
-   "C-k" nil
-   "C-<tab>" (general-simulate-keys "^ <tab>")
-   "C-S-<tab>" 'magit-section-cycle-diffs
-   "S-<up>" (lambda () (interactive) (evil-previous-line 10))
-   "S-<down>" (lambda () (interactive) (evil-next-line 10))
-   "S-<left>" (lambda () (interactive) (evil-backward-char 10))
-   "S-<right>" (lambda () (interactive) (evil-forward-char 10))))
+   "q" 'magit-mode-daemon-bury-or-quit))
 
 (defun magit-mode-daemon-bury-or-quit ()
   (interactive)
@@ -38,16 +28,24 @@
 (use-package evil-magit
   :ensure t
   :defer t
-  :after magit)
+  :after magit
+  :config
+  (evil-define-key evil-magit-state magit-mode-map (kbd "C-k") nil)
+  (general-define-key
+   :states '(magit normal visual)
+   :keymaps 'magit-mode-map
+   "C-<tab>" (general-simulate-keys "^ <tab>")
+   "C-S-<tab>" 'magit-section-cycle-diffs
+   "S-<up>" (lambda () (interactive) (evil-previous-line 10))
+   "S-<down>" (lambda () (interactive) (evil-next-line 10))
+   "S-<left>" (lambda () (interactive) (evil-backward-char 10))
+   "S-<right>" (lambda () (interactive) (evil-forward-char 10))))
 
 (use-package git-commit
   :config
   (add-hook 'git-commit-mode-hook 'flyspell-mode)
   (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
-  (global-git-commit-mode))
-
-(use-package vc-hooks
-  :init
+  (global-git-commit-mode)
   (setq vc-follow-symlinks t))
 
 (use-package gitconfig-mode
