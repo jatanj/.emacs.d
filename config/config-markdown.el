@@ -1,14 +1,13 @@
 (use-package markdown-mode
   :ensure t
+  :defer t
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'"       . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
   :config
-  (dolist (assoc '(("README\\.md\\'" . gfm-mode)
-                   ("\\.md\\'"       . markdown-mode)
-                   ("\\.markdown\\'" . markdown-mode)))
-    (add-to-list 'auto-mode-alist assoc))
-
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
   (ignore-errors (require 'livedown))
-
+  (setq markdown-gfm-use-electric-backquote nil)
   (general-define-key
    :keymaps '(markdown-mode-map gfm-mode-map)
    "C-c C-k" 'livedown-preview
