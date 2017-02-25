@@ -1,6 +1,6 @@
 ;;; custom-dark-theme.el
 ;;; Created with ThemeCreator, https://github.com/mswift42/themecreator.
-;;; Inspired by Base2Tone Evening Dark
+;;; Inspired by Base2Tone Evening Dark, http://base2t.one.
 
 (deftheme custom-dark)
 (let ((class '((class color) (min-colors 89)))
@@ -160,6 +160,14 @@
       `(neo-root-dir-face ((,class (:foreground ,tag))))
       `(neo-dir-link-face ((,class (:foreground ,builtin))))
       `(neo-expand-btn-face ((,class (:foreground ,fg5 :bold t))))
+      `(tabbar-default ((,class (:background ,bg6 :foreground ,bg6 :box (:line-width 1 :color ,bg6 :style nil)))))
+      `(tabbar-unselected ((,class (:background ,bg6 :foreground "#606060" :box (:line-width 5 :color ,bg6 :style nil)))))
+      `(tabbar-selected ((,class (:background "#2a2734" :foreground ,fg5 :box (:line-width 5 :color "#2a2734" :style nil)))))
+      `(tabbar-modified ((,class (:background ,bg6 :foreground "#606060" :underline "#505050" :box (:line-width 5 :color ,bg6 :style nil)))))
+      `(tabbar-selected-modified ((,class (:background "#2a2734" :foreground ,fg5 :underline "#909090" :box (:line-width 5 :color "#2a2734" :style nil)))))
+      `(tabbar-highlight ((,class (:background ,fg5 :foreground ,fg6 :underline nil :box (:line-width 5 :color ,fg5 :style nil)))))
+      `(tabbar-button ((,class (:foreground ,bg6 :background ,bg6 :box (:line-width 1 :color ,bg6 :style nil)))))
+      `(tabbar-separator ((,class (:background ,bg6 :height 0.6))))
       `(rainbow-delimiters-depth-1-face ((,class :foreground ,fg1)))
       `(rainbow-delimiters-depth-2-face ((,class :foreground ,type)))
       `(rainbow-delimiters-depth-3-face ((,class :foreground ,var)))
@@ -225,9 +233,11 @@
       `(helm-ff-directory ((,class (:foreground ,builtin :background ,bg1 :weight bold))))
       `(helm-ff-file ((,class (:foreground ,fg1 :background ,bg1 :weight normal))))
       `(helm-ff-executable ((,class (:foreground ,info :background ,bg1 :weight normal))))
+      `(helm-ff-dotted-directory ((,class (:foreground ,fg1 :background ,bg1 :weight normal))))
+      `(helm-ff-dotted-symlink-directory ((,class (:foreground ,fg1 :background ,bg1 :weight normal))))
       `(helm-ff-invalid-symlink ((,class (:foreground ,warning :background ,bg1 :weight bold))))
-      `(helm-ff-symlink ((,class (:foreground ,keyword :background ,bg1 :weight bold))))
-      `(helm-ff-prefix ((,class (:foreground ,bg1 :background ,keyword :weight normal))))
+      `(helm-ff-symlink ((,class (:foreground ,tag :background ,bg1 :weight bold))))
+      `(helm-ff-prefix ((,class (:foreground ,builtin :background ,bg1 :weight normal))))
       `(helm-grep-cmd-line ((,class (:foreground ,fg1 :background ,bg1))))
       `(helm-grep-file ((,class (:foreground ,fg1 :background ,bg1))))
       `(helm-grep-finish ((,class (:foreground ,fg2 :background ,bg1))))

@@ -6,14 +6,6 @@
   (unless (daemonp) (tabbar-mode 1))
   (add-to-list 'configure-frame-functions
     (lambda ()
-      (set-face-attribute 'tabbar-default nil :background "#1e1c25" :foreground "#1e1c25" :box '(:line-width 1 :color "#1e1c25" :style nil) :font custom-font-face)
-      (set-face-attribute 'tabbar-unselected nil :background "#1e1c25" :foreground "#606060" :box '(:line-width 5 :color "#1e1c25" :style nil))
-      (set-face-attribute 'tabbar-selected nil :background "#2a2734" :foreground "white" :box '(:line-width 5 :color "#2a2734" :style nil))
-      (set-face-attribute 'tabbar-modified nil :background "#1e1c25" :foreground "#606060" :underline "#505050" :box '(:line-width 5 :color "#1e1c25" :style nil))
-      (set-face-attribute 'tabbar-selected-modified nil :background "#2a2734" :foreground "white" :underline "#909090" :box '(:line-width 5 :color "#2a2734" :style nil))
-      (set-face-attribute 'tabbar-highlight nil :background "white" :foreground "black" :underline nil :box '(:line-width 5 :color "white" :style nil))
-      (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "#1e1c25" :style nil))
-      (set-face-attribute 'tabbar-separator nil :background "#1e1c25" :height 0.6)
       ; Force redraw to fix colors
       (when (bound-and-true-p tabbar-mode)
         (tabbar-forward-tab)
