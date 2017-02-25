@@ -42,10 +42,17 @@
    "S-<right>" (lambda () (interactive) (evil-forward-char 10))))
 
 (use-package git-commit
+  :ensure t
   :config
-  (add-hook 'git-commit-mode-hook 'flyspell-mode)
-  (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
   (global-git-commit-mode)
+  (add-hook 'git-commit-mode-hook
+    (lambda ()
+      (tabbar-disable)
+      (toggle-save-place 0)
+      (git-commit-turn-on-flyspell)
+      (setq fill-column 72)
+      (git-commit-turn-on-auto-fill)
+      (fci-mode)))
   (setq vc-follow-symlinks t))
 
 (use-package gitconfig-mode

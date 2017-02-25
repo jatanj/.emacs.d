@@ -247,6 +247,7 @@
                         emacs-lisp
                         evil
                         expand-region
+                        fill-column-indicator
                         flycheck
                         flyspell
                         fsharp
