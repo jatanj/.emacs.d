@@ -1,5 +1,16 @@
 ;; init.el -- Emacs configuration
 
+;; Bootstrap use-package
+;; http://stackoverflow.com/questions/10092322#answer-10093312
+(require 'package)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+(package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(eval-when-compile (require 'use-package))
+
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
   (when (file-exists-p local-settings) (load local-settings)))
@@ -33,31 +44,28 @@
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
 (setq ad-redefinition-action 'accept)
+(setq configure-frame-functions '())
 
 ;; Useful minor modes
 (show-paren-mode 1)
 (global-superword-mode 1)
 (global-auto-revert-mode 1)
 
-;; Window sizes
+;; Window size and position
+(setq default-frame-alist
+      (if (daemonp)
+          client-window-attributes
+        desktop-window-attributes))
 (setq resize-mini-windows t)
 (setq even-window-heights nil)
 
-;; Set the window position on startup
-(setq configure-frame-functions '())
-(if (daemonp)
-    (setq default-frame-alist client-window-attributes)
-  (progn
-    (desktop-save-mode 1)
-    (setq default-frame-alist desktop-window-attributes)))
-
 ;; Minimize frame if it was saved as maximized
 (add-hook 'desktop-after-read-hook
-          (lambda ()
-            (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
-                   (toggle-frame-maximized))
-                  ((string= (frame-parameter nil 'fullscreen) 'fullboth)
-                   (toggle-frame-fullscreen) (toggle-frame-maximized)))))
+  (lambda ()
+    (cond ((string= (frame-parameter nil 'fullscreen) 'maximized)
+           (toggle-frame-maximized))
+          ((string= (frame-parameter nil 'fullscreen) 'fullboth)
+           (toggle-frame-fullscreen) (toggle-frame-maximized)))))
 
 ;; Fix toggle-frame-fullscreen to preserve our window position
 (defun force-maximized-with-fullscreen (orig-fun &rest args)
@@ -68,11 +76,21 @@
   (apply orig-fun args))
 (advice-add 'toggle-frame-fullscreen :around #'force-maximized-with-fullscreen)
 
+;; Save desktop
+(unless (daemonp)
+  (desktop-save-mode)
+  (setq desktop-restore-eager t)
+  (add-to-list 'desktop-globals-to-save 'auto-mode-alist)
+  (dolist (mode '(magit-mode
+                  magit-log-mode))
+    (add-to-list 'desktop-modes-not-to-save mode))
+  (add-to-list 'desktop-files-not-to-save (rx bos "COMMIT_EDITMSG")))
+
 ;; Set font
 (add-to-list 'default-frame-alist `(font . ,custom-font-face))
 (set-face-attribute 'default nil :font custom-font-face)
 
-;; Customize cursor
+;; Cursor
 (blink-cursor-mode -1)
 (save-place-mode 1)
 (setq-default cursor-in-non-selected-windows nil)
@@ -218,18 +236,6 @@
 
 (dolist (assoc '(("PKGBUILD" . shell-script-mode)))
   (add-to-list 'auto-mode-alist assoc))
-
-;; Bootstrap use-package
-;; http://stackoverflow.com/questions/10092322#answer-10093312
-(require 'package)
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-(package-initialize)
-(unless package-archive-contents (package-refresh-contents))
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(eval-when-compile (require 'use-package))
 
 (use-package general :ensure t :demand)
 (use-package hydra :ensure t :demand)
