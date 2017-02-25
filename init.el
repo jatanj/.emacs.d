@@ -234,6 +234,9 @@
       (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-line 1)))
 
+;; Dired
+(put 'dired-find-alternate-file 'disabled nil)
+
 (dolist (assoc '(("PKGBUILD" . shell-script-mode)))
   (add-to-list 'auto-mode-alist assoc))
 

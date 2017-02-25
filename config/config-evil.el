@@ -8,8 +8,7 @@
   (fset 'evil-visual-update-x-selection 'ignore)
   (setq evil-disable-insert-state-bindings t)
   (setq-default evil-shift-width 2)
-  (dolist (mode '(dired-mode
-                  Buffer-menu-mode
+  (dolist (mode '(Buffer-menu-mode
                   neotree-mode
                   flycheck-error-list-mode
                   cider-repl-mode))

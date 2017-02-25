@@ -60,10 +60,10 @@
       (set (make-local-variable 'tabbar-projectile-tabbar-buffer-group-calc)
            (cond
             ((or (get-buffer-process (current-buffer)) (memq major-mode '(comint-mode compilation-mode))) '("Term"))
+            ((memq major-mode '(dired-mode)) '("Dir"))
             ((string-equal "*" (substring (buffer-name) 0 1)) '("Emacs"))
             ((condition-case err (projectile-project-root) (error nil)) (list (projectile-project-name)))
             ((memq major-mode '(org-mode calendar-mode diary-mode)) '("Org"))
-            ((memq major-mode '(dired-mode)) '("Dir"))
             (t '("User"))))
       (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
   (setq tabbar-buffer-groups-function 'tabbar-projectile-tabbar-buffer-groups)
