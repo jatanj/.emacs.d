@@ -1,8 +1,7 @@
 (use-package fsharp-mode
   :ensure t
   :defer t
-  :mode (("\\.fs\\'" . fsharp-mode)
-         ("\\.fsx\\'" . fsharp-mode))
+  :mode ("\\.fs[ix]?\\'" . fsharp-mode)
   :config
   (setq fsharp-ac-use-popup t)
   (setq fsharp-indent-offset 2)

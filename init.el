@@ -11,10 +11,6 @@
   (package-install 'use-package))
 (eval-when-compile (require 'use-package))
 
-(use-package general :ensure t :demand)
-(use-package hydra :ensure t :demand)
-(use-package dash :ensure t :demand)
-
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
   (when (file-exists-p local-settings) (load local-settings)))
@@ -85,7 +81,6 @@
 (unless (daemonp)
   (desktop-save-mode)
   (setq desktop-restore-eager t)
-  (add-to-list 'desktop-globals-to-save 'auto-mode-alist)
   (dolist (mode '(magit-mode
                   magit-log-mode))
     (add-to-list 'desktop-modes-not-to-save mode))
@@ -116,7 +111,7 @@
 ;; Horizontal scrolling
 (setq hscroll-step 1)
 (setq hscroll-margin 1)
-(defun toggle-hscroll-mode (&optional arg global)
+(defun toggle-hscroll-mode (&optional arg default)
   (let ((vars '(auto-hscroll-mode
                 truncate-lines))
         (set-default-maybe
@@ -128,7 +123,7 @@
              (if default
                  (set-default var result)
                (set var result))))))
-    (dolist (v vars) (funcall set-default-maybe v arg global))))
+    (dolist (v vars) (funcall set-default-maybe v arg default))))
 (defun global-hscroll-mode (&optional arg)
   (interactive)
   (toggle-hscroll-mode arg t))
@@ -249,13 +244,15 @@
   "Opens a terminal window in the current buffer's directory."
   (interactive)
   (when default-terminal
-    (let ((buffer-directory (-> (buffer-file-name)
-                                (file-truename)
-                                (file-name-directory))))
+    (let ((buffer-directory (file-name-directory (file-truename (buffer-file-name)))))
       (call-process (executable-find default-terminal) nil 0 nil))))
 
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
+
+(use-package general :ensure t :demand)
+(use-package hydra :ensure t :demand)
+(use-package dash :ensure t :demand)
 
 (setq package-configs '(all-the-icons
                         anzu

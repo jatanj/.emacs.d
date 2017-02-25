@@ -1,8 +1,7 @@
 (use-package tide
   :ensure t
   :defer t
-  :mode (("\\.ts\\'" . typescript-mode)
-         ("\\.d\\.ts\\'" . typescript-mode))
+  :mode ("\\(\\.d\\)?\\.ts\\'" . typescript-mode)
   :config
   (setq typescript-indent-level 2)
   (setq tide-format-options '(:indentSize 2

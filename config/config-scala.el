@@ -1,8 +1,8 @@
 (use-package ensime
   :ensure t
   :defer t
-  :mode (("\\.scala\\'" . python-mode)
-          ("\\.sbt\\'" . scala-mode))
+  :mode (("\\.scala\\'" . scala-mode)
+         ("\\.sbt\\'"  . scala-mode))
   :config
   (setq scala-indent:use-javadoc-style t)
   (setq scala-enable-eldoc t)

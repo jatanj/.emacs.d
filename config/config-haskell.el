@@ -1,8 +1,7 @@
 (use-package haskell-mode
   :ensure t
   :defer t
-  :mode (("\\.hs\\'" . haskell-mode)
-         ("\\.lhs\\'" . haskell-mode))
+  :mode ("\\.l?hs\\'" . haskell-mode)
   :config
   (require 'haskell-interactive-mode)
   (require 'haskell-process)

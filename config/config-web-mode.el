@@ -8,10 +8,8 @@
          ("\\.as[cp]x\\'"   . web-mode)
          ("\\.erb\\'"       . web-mode)
          ("\\.mustache\\'"  . web-mode)
-         ("\\.djhtml\\'"    . web-mode)
          ("\\.html?\\'"     . web-mode)
-         ("\\.jsx\\'"       . web-mode)
-         ("\\.tsx\\'"       . web-mode))
+         ("\\.[jt]sx\\'"    . web-mode))
   :config
   (setq sgml-basic-offset 2)
   (setq web-mode-markup-indent-offset 4)
