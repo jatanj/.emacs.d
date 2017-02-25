@@ -11,10 +11,15 @@
   (package-install 'use-package))
 (eval-when-compile (require 'use-package))
 
+(use-package general :ensure t :demand)
+(use-package hydra :ensure t :demand)
+(use-package dash :ensure t :demand)
+
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
   (when (file-exists-p local-settings) (load local-settings)))
-(dolist (local-setting '((default-dir               . "~/")
+(dolist (local-setting '((default-directory         . "~/")
+                         (default-terminal          . nil)
                          (custom-font-face          . "Inconsolata-12")
                          (desktop-window-attributes . nil)
                          (client-window-attributes  . nil)))
@@ -152,10 +157,16 @@
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16le-dos 'utf-8))
 
+;; Dired
+(put 'dired-find-alternate-file 'disabled nil)
+
 ;; Backup files
 (setq backup-by-copying t)
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+(dolist (assoc '(("PKGBUILD" . shell-script-mode)))
+  (add-to-list 'auto-mode-alist assoc))
 
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
@@ -234,15 +245,14 @@
       (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-line 1)))
 
-;; Dired
-(put 'dired-find-alternate-file 'disabled nil)
-
-(dolist (assoc '(("PKGBUILD" . shell-script-mode)))
-  (add-to-list 'auto-mode-alist assoc))
-
-(use-package general :ensure t :demand)
-(use-package hydra :ensure t :demand)
-(use-package dash :ensure t :demand)
+(defun open-terminal-here ()
+  "Opens a terminal window in the current buffer's directory."
+  (interactive)
+  (when default-terminal
+    (let ((buffer-directory (-> (buffer-file-name)
+                                (file-truename)
+                                (file-name-directory))))
+      (call-process (executable-find default-terminal) nil 0 nil))))
 
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
@@ -346,6 +356,7 @@
 
 (general-define-key
  :keymaps 'ctl-x-map
+ "`" 'open-terminal-here
  "w" 'kill-this-buffer
  "p" 'helm-projectile-find-file-in-known-projects
  "k" 'ido-kill-buffer
