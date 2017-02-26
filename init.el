@@ -14,11 +14,11 @@
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
   (when (file-exists-p local-settings) (load local-settings)))
-(dolist (local-setting '((default-directory         . "~/")
-                         (default-terminal          . nil)
-                         (custom-font-face          . "Inconsolata-12")
-                         (desktop-window-attributes . nil)
-                         (client-window-attributes  . nil)))
+(dolist (local-setting '((local-directory             . "~/")
+                         (local-terminal              . nil)
+                         (local-font-face             . "Inconsolata-12")
+                         (local-desktop-window-params . nil)
+                         (local-client-window-params  . nil)))
   (unless (boundp (car local-setting))
     (set (car local-setting) (cdr local-setting))))
 
@@ -55,8 +55,8 @@
 ;; Window size and position
 (setq default-frame-alist
       (if (daemonp)
-          client-window-attributes
-        desktop-window-attributes))
+          local-client-window-params
+        local-desktop-window-params))
 (setq resize-mini-windows t)
 (setq even-window-heights nil)
 
@@ -87,8 +87,8 @@
   (add-to-list 'desktop-files-not-to-save (rx bos "COMMIT_EDITMSG")))
 
 ;; Set font
-(add-to-list 'default-frame-alist `(font . ,custom-font-face))
-(set-face-attribute 'default nil :font custom-font-face)
+(add-to-list 'default-frame-alist `(font . ,local-font-face))
+(set-face-attribute 'default nil :font local-font-face)
 
 ;; Cursor
 (blink-cursor-mode -1)
@@ -243,9 +243,12 @@
 (defun open-terminal-here ()
   "Opens a terminal window in the current buffer's directory."
   (interactive)
-  (when default-terminal
-    (let ((buffer-directory (file-name-directory (file-truename (buffer-file-name)))))
-      (call-process (executable-find default-terminal) nil 0 nil))))
+  (when local-terminal
+    (let* ((buffer-directory (file-name-directory (file-truename (buffer-file-name))))
+           (args (pcase local-terminal
+                   ("xfce4-terminal" `("--default-working-directory" ,buffer-directory))
+                   (_ nil))))
+      (apply 'call-process (executable-find local-terminal) nil 0 nil args))))
 
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)

@@ -22,7 +22,7 @@
                  (cond
                   ((equal buffer-name "*cider-repl server*") nil)
                   (t t))))
-          (neotree-dir default-directory)
+          (neotree-dir local-directory)
         (let ((dir-name (if (and (fboundp 'projectile-project-p)
                                  (projectile-project-p))
                             (projectile-project-root)

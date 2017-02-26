@@ -1,9 +1,3 @@
-(use-package org-bullets
-  :ensure t
-  :init
-  (setq org-ellipsis " …")
-  (setq org-bullets-bullet-list '("⚫")))
-
 (use-package org
   :after org-mouse
   :config
@@ -37,5 +31,12 @@
    "M-<down>" nil
    "M-<left>" nil
    "M-<right>" nil))
+
+(use-package org-bullets
+  :ensure t
+  :after org
+  :init
+  (setq org-ellipsis " …")
+  (setq org-bullets-bullet-list '("⚫")))
 
 (provide 'config-org)
