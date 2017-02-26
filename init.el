@@ -39,6 +39,7 @@
 ;; General config
 (setq-default major-mode 'text-mode)
 (setq tooltip-use-echo-area t)
+(setq x-gtk-use-system-tooltips nil)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
 (setq-default next-line-add-newlines nil)

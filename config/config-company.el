@@ -24,8 +24,6 @@
   :ensure t
   :after company
   :config
-  (company-quickhelp-mode 1)
-  (setq company-quickhelp-color-background "#1e1c25") ;434052
-  (setq company-quickhelp-color-foreground "#f8f8f8"))
+  (company-quickhelp-mode 1))
 
 (provide 'config-company)

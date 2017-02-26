@@ -2,6 +2,10 @@
   :ensure t
   :config
   (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+  (defun flycheck-toggle-fix ()
+    (interactive)
+    (flycheck-mode 'toggle)
+    (flycheck-mode 'toggle))
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Flycheck errors*" eos)
                  (display-buffer-reuse-window
@@ -22,9 +26,26 @@
    "C-c <C-up>" 'flycheck-previous-error
    "C-c <C-down>" 'flycheck-next-error))
 
-(defun flycheck-toggle-fix ()
-  (interactive)
-  (flycheck-mode 'toggle)
-  (flycheck-mode 'toggle))
+(use-package flycheck-pos-tip
+  :ensure t
+  :config
+  (setq flycheck-pos-tip-timeout most-positive-fixnum)
+  (defun flycheck-pos-tip-toggle ()
+    (interactive)
+    (if (bound-and-true-p flycheck-pos-tip-mode)
+        (progn
+          (flycheck-pos-tip-mode -1)
+          (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
+      (progn
+        (flycheck-pos-tip-mode 1)
+        (setq flycheck-display-errors-function
+          (lambda (errors)
+            (interactive)
+            (unless (company-tooltip-visible-p)
+              (flycheck-pos-tip-error-messages errors))
+            (flycheck-display-error-messages-unless-error-list errors))))))
+  (general-define-key
+   :keymaps 'flycheck-mode-map
+   "C-c ! t" 'flycheck-pos-tip-toggle))
 
 (provide 'config-flycheck)
