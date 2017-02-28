@@ -255,6 +255,11 @@
 (use-package hydra :ensure t :demand)
 (use-package dash :ensure t :demand)
 
+(use-package litable
+  :ensure t
+  :defer
+  :commands (litable-mode))
+
 (setq package-configs '(all-the-icons
                         anzu
                         c-cpp
