@@ -13,4 +13,10 @@
   (setq js2-idle-timer-delay 0.2)
   (add-hook 'js2-mode-hook #'setup-tide-mode))
 
+(use-package js2-refactor
+  :ensure t
+  :config
+  (js2r-add-keybindings-with-prefix "C-c C-r")
+  (add-hook 'js2-mode-hook #'js2-refactor-mode))
+
 (provide 'config-javascript)
