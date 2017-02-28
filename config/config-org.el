@@ -1,6 +1,6 @@
 (use-package org
-  :after org-mouse
   :config
+  (require 'org-mouse)
   (setq org-hide-emphasis-markers t)
   (setq-default org-startup-folded 'showall)
   (add-hook 'org-mode-hook

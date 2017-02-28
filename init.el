@@ -343,6 +343,7 @@
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
  "C-\\" 'indent-region
+ "C-|" 'sort-lines
  "<prior>" 'evil-scroll-up
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab

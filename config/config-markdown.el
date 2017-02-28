@@ -8,6 +8,8 @@
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
   (ignore-errors (require 'livedown))
   (setq markdown-gfm-use-electric-backquote nil)
+  (dolist (mode '(gfm-mode markdown-mode))
+    (add-hook (intern (format "%s-hook" mode)) #'flyspell-mode))
   (general-define-key
    :keymaps '(markdown-mode-map gfm-mode-map)
    "C-c C-k" 'livedown-preview

@@ -9,7 +9,7 @@
          ("\\.erb\\'"       . web-mode)
          ("\\.mustache\\'"  . web-mode)
          ("\\.html?\\'"     . web-mode)
-         ("\\.[jt]sx\\'"    . web-mode))
+         ("\\.tsx\\'"       . web-mode))
   :config
   (setq sgml-basic-offset 2)
   (setq web-mode-markup-indent-offset 4)
@@ -18,9 +18,7 @@
   (setq css-indent-offset 2)
   (add-hook 'web-mode-hook
     (lambda ()
-      (let ((ext (file-name-extension (buffer-file-name))))
-        (when (or (string= ext "jsx")
-                  (string= ext "tsx"))
-          (setup-tide-mode))))))
+      (when (string= (file-name-extension (buffer-file-name)) "tsx")
+        (setup-tide-mode)))))
 
 (provide 'config-web-mode)

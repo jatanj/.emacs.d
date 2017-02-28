@@ -8,6 +8,10 @@
   (setq company-auto-complete nil)
   (setq company-tooltip-align-annotations t)
   (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
+  (general-define-key "C-j" nil)
+  (general-define-key
+   :keymaps 'company-mode-map
+   "C-j" 'company-complete)
   (general-define-key
    :keymaps 'company-active-map
    "<f1>" nil

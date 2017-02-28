@@ -2,7 +2,8 @@
   :ensure t
   :defer t
   :after tide
-  :mode ("\\.js\\'" . js2-mode)
+  :mode (("\\.js\\'"  . js2-mode)
+         ("\\.jsx\\'" . js2-jsx-mode))
   :init
   (setq js-indent-level 2)
   (setq javascript-indent-level 2)
