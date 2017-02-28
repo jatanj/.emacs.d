@@ -161,9 +161,6 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-(dolist (assoc '(("PKGBUILD" . shell-script-mode)))
-  (add-to-list 'auto-mode-alist assoc))
-
 ;; Copy/cut entire line when no region is active
 ;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
 (defun slick-cut (beg end)
@@ -287,6 +284,7 @@
                         projectile
                         rainbow-mode
                         scala
+                        shell
                         smartparens
                         smooth-scroll
                         spaceline
