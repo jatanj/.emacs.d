@@ -11,7 +11,7 @@
   (general-define-key "C-j" nil)
   (general-define-key
    :keymaps 'company-mode-map
-   "C-j" 'company-complete)
+   "C-SPC" 'company-complete)
   (general-define-key
    :keymaps 'company-active-map
    "<f1>" nil

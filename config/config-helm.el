@@ -24,6 +24,14 @@
           "\\*Ibuffer\\*"
           "\\*tide-server\\*"
           "\\*fsharp-complete\\*"))
+  (defun filter-buffers (buffer-list)
+    (delq nil (mapcar
+               (lambda (buffer)
+                 (cond
+                  ((eq (with-current-buffer buffer major-mode) 'dired-mode) nil)
+                  (t buffer)))
+               buffer-list)))
+  (advice-add 'helm-skip-boring-buffers :filter-return 'filter-buffers)
   (global-set-key (kbd "C-S-p") 'helm-M-x)
   (global-set-key (kbd "C-p") 'helm-buffers-list)
   (general-define-key
