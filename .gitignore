@@ -11,6 +11,7 @@ places
 session.*
 cider-history
 .litable-lists.el
+/url
 /server/
 /emacs-livedown/
 *~
