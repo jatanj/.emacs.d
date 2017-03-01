@@ -2,7 +2,7 @@
   :ensure t
   :defer t
   :mode ("\\.d\\'" . d-mode)
-  :config
+  :init
   (add-hook 'd-mode-hook
             (lambda ()
               (c-set-offset 'substatement-open 0)

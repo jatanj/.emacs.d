@@ -3,12 +3,13 @@
   :defer t
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.cljs\\'" . clojurescript-mode))
-  :config
-  (setq clojure-indent-style :always-align)
+  :init
   (add-hook 'clojure-mode-hook
             (lambda ()
               (company-mode 1)
               (set-local-tab-width 2)))
+  :config
+  (setq clojure-indent-style :always-align)
   (define-clojure-indent
     (match 1)
     (are 2)
@@ -33,6 +34,10 @@
 (use-package cider
   :ensure t
   :after clojure-mode
+  :init
+  (add-hook 'cider-repl-mode-hook #'company-mode)
+  (add-hook 'cider-mode-hook #'eldoc-mode)
+  (add-hook 'cider-mode-hook #'company-mode)
   :config
   (setq nrepl-hide-special-buffers t)
   (setq cider-use-fringe-indicators nil)
@@ -47,9 +52,6 @@
   (setq cider-repl-history-size 3000)
   (setq cider-cljs-lein-repl
         "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
-  (add-hook 'cider-repl-mode-hook #'company-mode)
-  (add-hook 'cider-mode-hook #'eldoc-mode)
-  (add-hook 'cider-mode-hook #'company-mode)
   (general-define-key
    :keymaps 'cider-mode-map
    "C-c C-n" 'cider-repl-set-ns

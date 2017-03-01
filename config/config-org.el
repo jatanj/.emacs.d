@@ -1,12 +1,13 @@
 (use-package org
-  :config
-  (require 'org-mouse)
-  (setq org-hide-emphasis-markers t)
-  (setq-default org-startup-folded 'showall)
+  :init
   (add-hook 'org-mode-hook
             (lambda ()
               (org-indent-mode 1)
               (org-bullets-mode 1)))
+  :config
+  (require 'org-mouse)
+  (setq org-hide-emphasis-markers t)
+  (setq-default org-startup-folded 'showall)
   (font-lock-add-keywords 'org-mode
                           '(("^ +\\([-*]\\) "
                              (0 (prog1 ()

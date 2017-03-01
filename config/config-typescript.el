@@ -2,12 +2,13 @@
   :ensure t
   :defer t
   :mode ("\\(\\.d\\)?\\.ts\\'" . typescript-mode)
+  :init
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
   :config
   (setq typescript-indent-level 2)
   (setq tide-format-options '(:indentSize 2
                               :tabSize 2
                               :convertTabsToSpaces t))
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Typescript*" eos)
                  (display-buffer-reuse-window

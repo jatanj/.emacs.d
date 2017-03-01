@@ -1,12 +1,13 @@
 (use-package magit
   :ensure t
-  :config
-  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  :init
   (add-hook 'magit-mode-hook
     (lambda ()
       (tabbar-disable)
       (hscroll-mode -1)))
   (add-hook 'magit-popup-mode-hook #'tabbar-disable)
+  :config
+  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)
   (general-define-key
@@ -16,8 +17,9 @@
 (defun magit-mode-daemon-bury-or-quit ()
   (interactive)
   (let ((buffers (-remove
-                  (lambda (b) (string-match "\\*.+" (buffer-name b)))
-                  (buffer-list))))
+                  (lambda (buffer) (or (eq (with-current-buffer buffer major-mode) 'dired-mode)
+                                       (string-match "\\*.+" (buffer-name buffer))))
+                    (buffer-list))))
     (if (and
          (daemonp)
          (= (length buffers) 0)
@@ -43,8 +45,7 @@
 
 (use-package git-commit
   :ensure t
-  :config
-  (global-git-commit-mode)
+  :init
   (add-hook 'git-commit-mode-hook
     (lambda ()
       (tabbar-disable)
@@ -53,16 +54,28 @@
       (setq fill-column 72)
       (git-commit-turn-on-auto-fill)
       (fci-mode)))
+  :config
+  (global-git-commit-mode)
   (setq vc-follow-symlinks t))
 
 (use-package gitconfig-mode
   :ensure t
   :defer t
-  :mode ("\\.gitconfig\\'" . gitconfig-mode))
+  :mode ("\\.gitconfig\\'" . gitconfig-mode)
+  :init
+  (add-hook 'gitconfig-mode-hook
+    (lambda ()
+      (when (bound-and-true-p electric-indent-mode)
+        (electric-indent-local-mode)))))
 
 (use-package gitignore-mode
   :ensure t
   :defer t
-  :mode ("\\.gitignore\\'" . gitignore-mode))
+  :mode ("\\.gitignore\\'" . gitignore-mode)
+  :init
+  (add-hook 'gitconfig-mode-hook
+    (lambda ()
+      (when (bound-and-true-p electric-indent-mode)
+        (electric-indent-local-mode)))))
 
 (provide 'config-magit)

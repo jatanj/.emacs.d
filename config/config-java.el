@@ -1,4 +1,4 @@
 (use-package cc-mode
-  :config
+  :init
   (add-hook 'java-mode-hook 'customize-cc-mode))
 (provide 'config-java)
