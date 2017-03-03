@@ -7,7 +7,7 @@
   :init
   (add-hook 'markdown-mode-hook #'turn-on-orgtbl)
   (dolist (mode '(gfm-mode markdown-mode))
-    (add-hook (intern (format "%s-hook" mode)) #'flyspell-mode))
+    (add-hook (intern (format "%s-hook" mode)) #'turn-on-flyspell-mode))
   :config
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
   (ignore-errors (require 'livedown))

@@ -1,5 +1,6 @@
 (use-package flyspell
   :after ispell
+  :commands (flyspell-mode git-commit-turn-on-flyspell)
   :config
   (when (executable-find "hunspell")
     (setq ispell-program-name "hunspell")
@@ -16,5 +17,11 @@
    "C-c $" nil
    "C-c $ c" 'flyspell-correct-word-before-point
    "C-c $ s" 'flyspell-save-word-to-dictionary))
+
+(defun turn-on-flyspell-mode ()
+  (interactive)
+  (require 'ispell)
+  (when (executable-find ispell-program-name)
+    (flyspell-mode 1)))
 
 (provide 'config-flyspell)
