@@ -3,7 +3,7 @@
   :config
   (require 'helm-config)
   (helm-autoresize-mode 1)
-  (setq helm-autoresize-max-height 25)
+  (setq helm-autoresize-max-height 35)
   (setq helm-M-x-fuzzy-match t)
   (setq helm-buffers-fuzzy-matching t)
   (setq helm-recentf-fuzzy-match t)
@@ -13,7 +13,7 @@
                `(,(rx bos "*helm" (* not-newline) "*" eos)
                  (display-buffer-in-side-window)
                  (inhibit-same-window . t)
-                 (window-height . 0.25)))
+                 (window-height . 0.35)))
   (setq helm-boring-buffer-regexp-list
         '("\\` "
           "\\*helm"

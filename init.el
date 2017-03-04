@@ -112,19 +112,19 @@
 ;; Horizontal scrolling
 (setq hscroll-step 1)
 (setq hscroll-margin 1)
-(defun toggle-hscroll-mode (&optional arg default)
-  (let ((vars '(auto-hscroll-mode
-                truncate-lines))
-        (set-default-maybe
-         (lambda (var value &optional default)
-           (let ((result (pcase value
-                           ((pred (booleanp)) (if value value (not (symbol-value var))))
-                           ((pred (numberp)) (> value 0))
-                           (_ nil))))
-             (if default
-                 (set-default var result)
-               (set var result))))))
-    (dolist (v vars) (funcall set-default-maybe v arg default))))
+(defun toggle-hscroll-mode (&optional arg global)
+  (let ((scroll-vars '(auto-hscroll-mode truncate-lines))
+        (set-value (lambda (scroll-var value &optional global)
+                     (let ((result (pcase value
+                                     ((pred (booleanp)) (if value value (not (symbol-value scroll-var))))
+                                     ((pred (numberp)) (> value 0))
+                                     (_ nil))))
+                       (if global
+                           (set-default scroll-var result)
+                         (set scroll-var result))))))
+    (unless global (make-local-variable 'auto-hscroll-mode))
+    (dolist (val scroll-vars)
+      (funcall set-value val arg global))))
 (defun global-hscroll-mode (&optional arg)
   (interactive)
   (toggle-hscroll-mode arg t))
@@ -155,6 +155,7 @@
 
 ;; Dired
 (put 'dired-find-alternate-file 'disabled nil)
+(add-hook 'dired-mode-hook #'hl-line-mode)
 
 ;; Backup files
 (setq backup-by-copying t)
@@ -370,7 +371,8 @@
  "m" (general-simulate-keys "C-c")
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
- "C-b" 'neotree-projectile
+ "C-b" nil
+ "C-n" 'neotree-projectile
  "C-h" 'hscroll-mode)
 
 (general-define-key
