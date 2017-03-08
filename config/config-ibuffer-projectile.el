@@ -13,4 +13,4 @@
    "C-d" (general-simulate-keys "<next>")
    "C-u" (general-simulate-keys "<prior>")))
 
-(provide 'config-ibuffer)
+(provide 'config-ibuffer-projectile)

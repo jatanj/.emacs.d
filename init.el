@@ -46,6 +46,7 @@
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
 (setq ad-redefinition-action 'accept)
+
 (setq configure-frame-functions '())
 
 ;; Useful minor modes
@@ -256,11 +257,6 @@
 (use-package hydra :ensure t :demand)
 (use-package dash :ensure t :demand)
 
-(use-package litable
-  :ensure t
-  :defer
-  :commands (litable-mode))
-
 (setq package-configs '(all-the-icons
                         anzu
                         c-cpp
@@ -276,12 +272,13 @@
                         fsharp
                         haskell
                         helm
-                        ibuffer
+                        ibuffer-projectile
                         ido
                         iflipb
                         java
                         javascript
                         json
+                        litable
                         magit
                         markdown
                         neotree
@@ -311,7 +308,8 @@
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
 
-;; Set fonts and other stuff when using emacsclient
+;; If we're using emacslient, we need to delay all configure-frame-functions
+;; until after the frame is created; otherwise, we just them call them immediately.
 (defun configure-frame ()
   (dolist (func configure-frame-functions)
     (funcall func))
@@ -324,9 +322,8 @@
   (configure-frame))
 
 ;; Unbind some keys
-(dolist
-    (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
-           "M-<lwindow>" "C-<lwindow>"))
+(dolist (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
+               "M-<lwindow>" "C-<lwindow>"))
   (global-set-key (kbd key) 'ignore))
 
 ;; Keybindings
@@ -369,6 +366,8 @@
  "f" 'ido-find-file
  "b" 'helm-buffers-list
  "m" (general-simulate-keys "C-c")
+ "C-u" nil ; upcase-region
+ "C-l" nil ; downcase-region
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" nil
