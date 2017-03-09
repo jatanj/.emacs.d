@@ -18,7 +18,7 @@
    "C-c $ c" 'flyspell-correct-word-before-point
    "C-c $ s" 'flyspell-save-word-to-dictionary))
 
-(defun turn-on-flyspell-mode ()
+(defun turn-on-flyspell-if-ispell-exists ()
   (interactive)
   (require 'ispell)
   (when (executable-find ispell-program-name)

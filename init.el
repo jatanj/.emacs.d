@@ -154,10 +154,6 @@
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16le-dos 'utf-8))
 
-;; Dired
-(put 'dired-find-alternate-file 'disabled nil)
-(add-hook 'dired-mode-hook #'hl-line-mode)
-
 ;; Backup files
 (setq backup-by-copying t)
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
@@ -249,6 +245,13 @@
                    ("xfce4-terminal" `("--default-working-directory" ,buffer-directory))
                    (_ nil))))
       (apply 'call-process (executable-find local-terminal) nil 0 nil args))))
+
+;; Dired
+(put 'dired-find-alternate-file 'disabled nil)
+(add-hook 'dired-mode-hook #'hl-line-mode)
+
+;; DocView
+(add-hook 'doc-view-mode-hook (lambda () (linum-mode -1)))
 
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
