@@ -260,8 +260,10 @@
 (use-package hydra :ensure t :demand)
 (use-package dash :ensure t :demand)
 
-(setq package-configs '(all-the-icons
-                        anzu
+(use-package all-the-icons
+  :ensure t)
+
+(setq package-configs '(anzu
                         c-cpp
                         clojure
                         company
