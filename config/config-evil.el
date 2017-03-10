@@ -78,6 +78,9 @@
 (defun evil-shift-left-visual () (interactive) (evil-shift-visual 'evil-shift-left))
 (defun evil-shift-right-visual () (interactive) (evil-shift-visual 'evil-shift-right))
 
+(use-package evil-anzu
+  :ensure t)
+
 (use-package evil-surround
   :ensure t
   :config
@@ -92,5 +95,17 @@
   :ensure t
   :config
   (global-evil-matchit-mode 1))
+
+(use-package evil-args
+  :ensure t
+  :config
+  ;; Bind evil-args text objects
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
+
+(use-package evil-exchange
+  :ensure t
+  :config
+  (evil-exchange-install))
 
 (provide 'config-evil)
