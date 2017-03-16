@@ -101,7 +101,8 @@
   :config
   ;; Bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+  (add-to-list 'evil-args-delimiters " "))
 
 (use-package evil-exchange
   :ensure t
