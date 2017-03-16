@@ -292,6 +292,7 @@
                         projectile
                         rainbow-mode
                         scala
+                        screenshow-mode
                         shell
                         smartparens
                         smooth-scroll

@@ -1,0 +1,3 @@
+[submodule "site-lisp/screenshow-mode"]
+	path = site-lisp/screenshow-mode
+	url = git@github.com:jjpatel/screenshow-mode
