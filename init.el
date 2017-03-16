@@ -383,8 +383,9 @@
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
- "v" 'magit-status
- "b" 'ibuffer)
+ "b" 'ibuffer
+ "v" 'magit-file-popup
+ "C-v" 'magit-status)
 
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)

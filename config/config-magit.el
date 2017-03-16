@@ -3,18 +3,30 @@
   :init
   (add-hook 'magit-mode-hook
     (lambda ()
-      (tabbar-disable)
+      (tabbar-local-disable)
       (hscroll-mode -1)))
-  (add-hook 'magit-popup-mode-hook #'tabbar-disable)
+  (add-hook 'magit-popup-mode-hook #'tabbar-local-disable)
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)
+  (add-hook 'magit-blob-mode-hook #'tabbar-local-disable)
+  (defhydra hydra-magit-blob (magit-blob-mode-map "g t")
+    ("p" magit-blob-previous "Previous")
+    ("n" magit-blob-next "Next")
+    ("q" magit-kill-all-blobs "Quit"))
   (general-define-key
    :keymaps 'magit-mode-map
-   "q" 'magit-mode-daemon-bury-or-quit))
+   "q" 'magit-daemon-bury-or-quit))
 
-(defun magit-mode-daemon-bury-or-quit ()
+(defun magit-kill-all-blobs ()
+  (interactive)
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (when (bound-and-true-p magit-blob-mode)
+        (magit-kill-this-buffer)))))
+
+(defun magit-daemon-bury-or-quit ()
   (interactive)
   (let ((buffers (-remove
                   (lambda (buffer) (or (eq (with-current-buffer buffer major-mode) 'dired-mode)
@@ -48,11 +60,12 @@
   :init
   (add-hook 'git-commit-mode-hook
     (lambda ()
-      (tabbar-disable)
+      (tabbar-local-disable)
       (toggle-save-place 0)
       (require 'ispell)
       (when (executable-find ispell-program-name)
         (git-commit-turn-on-flyspell))
+      (turn-on-proselint)
       (setq fill-column 72)
       (git-commit-turn-on-auto-fill)
       (fci-mode)))

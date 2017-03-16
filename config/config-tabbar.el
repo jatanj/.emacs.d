@@ -54,8 +54,8 @@
             ((or (get-buffer-process (current-buffer)) (memq major-mode '(comint-mode compilation-mode))) '("Term"))
             ((memq major-mode '(dired-mode)) '("Dir"))
             ((string-equal "*" (substring (buffer-name) 0 1)) '("Emacs"))
-            ((condition-case err (projectile-project-root) (error nil)) (list (projectile-project-name)))
             ((memq major-mode '(org-mode calendar-mode diary-mode)) '("Org"))
+            ((condition-case err (projectile-project-root) (error nil)) (list (projectile-project-name)))
             (t '("User"))))
       (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
   (setq tabbar-buffer-groups-function 'tabbar-projectile-tabbar-buffer-groups)
@@ -84,7 +84,7 @@
     (when (<= n (length tabs))
       (tabbar-click-on-tab (nth (- n 1) tabs)))))
 
-(defun tabbar-disable ()
+(defun tabbar-local-disable ()
   "Disable tabbar-mode if it's currently enabled."
   (interactive)
   (when (bound-and-true-p tabbar-mode)

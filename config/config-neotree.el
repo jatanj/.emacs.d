@@ -31,5 +31,4 @@
           (when file-name
             (neo-buffer--select-file-node file-name)))))))
 
-
 (provide 'config-neotree)
