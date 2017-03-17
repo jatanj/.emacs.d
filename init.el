@@ -291,6 +291,7 @@
                         popwin
                         projectile
                         rainbow-mode
+                        ranger
                         scala
                         screenshow-mode
                         shell
