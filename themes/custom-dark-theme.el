@@ -269,6 +269,7 @@
    `(rainbow-delimiters-depth-7-face ((,class :foreground ,type)))
    `(rainbow-delimiters-depth-8-face ((,class :foreground ,var)))
    `(rainbow-delimiters-unmatched-face ((,class :foreground ,error)))
+   `(scala-font-lock:var-face ((,class (:foreground ,var))))
    `(sh-quoted-exec ((,class (:foreground ,builtin))))
    `(slime-repl-inputed-output-face ((,class (:foreground ,type))))
    `(spaceline-evil-emacs ((,class (:foreground ,fg1 :background ,bg2))))

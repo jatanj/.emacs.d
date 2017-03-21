@@ -230,11 +230,18 @@
           (call-interactively 'backward-delete-char))))))
 
 (defun comment-line-or-region ()
-  "Comment the current region if it is active or the current line."
+  "Comment either the current region if it is active or the current line."
   (interactive)
   (if (use-region-p)
       (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-line 1)))
+
+(defun indent-line-or-region ()
+  "Indent either the current region if it is active or the current line."
+  (interactive)
+  (if (use-region-p)
+      (indent-region (region-beginning) (region-end))
+    (funcall indent-line-function)))
 
 (defun open-terminal-here ()
   "Opens a terminal window in the current buffer's directory."
@@ -316,7 +323,7 @@
 (add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
 
 ;; If we're using emacslient, we need to delay all configure-frame-functions
-;; until after the frame is created; otherwise, we just them call them immediately.
+;; until after the frame is created.
 (defun configure-frame ()
   (dolist (func configure-frame-functions)
     (funcall func))
@@ -347,7 +354,7 @@
  "C-p" 'helm-buffers-list
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
- "C-\\" 'indent-region
+ "C-\\" 'indent-line-or-region
  "C-|" 'sort-lines
  "<prior>" 'evil-scroll-up
  "<next>" 'evil-scroll-down

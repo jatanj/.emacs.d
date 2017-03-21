@@ -59,6 +59,7 @@
 
   (general-define-key
    :states '(normal insert visual motion)
+   "C-]" 'xref-find-definitions
    "C-q" 'evil-scroll-line-up)
 
   (general-define-key

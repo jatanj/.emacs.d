@@ -2,14 +2,10 @@
   :ensure t
   :init
   (setq tabbar-use-images nil)
+  (add-hook 'after-save-hook #'tabbar-update-modified)
   :config
   (unless (daemonp) (tabbar-mode 1))
-  (add-to-list 'configure-frame-functions
-    (lambda ()
-      ; Force redraw to fix colors
-      (when (bound-and-true-p tabbar-mode)
-        (tabbar-forward-tab)
-        (tabbar-backward-tab))))
+  (add-to-list 'configure-frame-functions #'tabbar-update-modified)
 
   ;; Sort tabs by name
   ;; https://emacswiki.org/emacs/TabBarMode#toc7
@@ -75,6 +71,13 @@
    "C-<next>" nil
    "C-<home>" nil
    "C-<f10>" nil))
+
+(defun tabbar-update-modified ()
+  "Switching tabs seems to be the only way to force an update to the modified
+state. 'tabbar-display-update' doesn't work."
+  (when (bound-and-true-p tabbar-mode)
+    (tabbar-forward-tab)
+    (tabbar-backward-tab)))
 
 (defun tabbar-select-tab-by-number (n)
   "Switch to the nth tab in the current tabset."

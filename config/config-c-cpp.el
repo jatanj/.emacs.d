@@ -1,9 +1,7 @@
-(use-package cc-mode
-  :config
-  (setq c-basic-offset 4)
-  (setq c-indent-level 4)
-  (setq-default c-default-style "k&r")
-  (add-hook 'c-mode-common-hook 'customize-cc-mode))
+(setq c-basic-offset 4)
+(setq c-indent-level 4)
+(setq-default c-default-style "k&r")
+(add-hook 'c-mode-common-hook 'customize-cc-mode)
 
 (defun customize-cc-mode ()
   (c-set-offset 'substatement-open 0)
