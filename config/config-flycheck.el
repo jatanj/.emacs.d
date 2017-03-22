@@ -3,25 +3,18 @@
   :config
   (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
   ;; https://github.com/amperser/proselint
-  (flycheck-define-checker proselint
-    "A linter for prose."
-    :command ("proselint" source-inplace)
-    :error-patterns
-    ((warning line-start (file-name) ":" line ":" column ": "
-              (id (one-or-more (not (any " "))))
-              (message (one-or-more not-newline)
-                       (zero-or-more "\n" (any " ") (one-or-more not-newline)))
-              line-end))
-    :modes (text-mode markdown-mode gfm-mode))
-  (add-to-list 'flycheck-checkers 'proselint)
-  (defun turn-on-proselint ()
-    (interactive)
-    (flycheck-mode 1)
-    (flycheck-select-checker 'proselint))
-  (defun flycheck-toggle-fix ()
-    (interactive)
-    (flycheck-mode 'toggle)
-    (flycheck-mode 'toggle))
+  (when (executable-find "proselint")
+    (flycheck-define-checker proselint
+      "A linter for prose."
+      :command ("proselint" source-inplace)
+      :error-patterns
+      ((warning line-start (file-name) ":" line ":" column ": "
+                (id (one-or-more (not (any " "))))
+                (message (one-or-more not-newline)
+                         (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+                line-end))
+      :modes (text-mode markdown-mode gfm-mode))
+    (add-to-list 'flycheck-checkers 'proselint))
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Flycheck errors*" eos)
                  (display-buffer-reuse-window
@@ -41,6 +34,17 @@
    "C-c ! f" 'flycheck-toggle-fix
    "C-c <C-up>" 'flycheck-previous-error
    "C-c <C-down>" 'flycheck-next-error))
+
+(defun turn-on-proselint ()
+  (interactive)
+  (when (member 'proselint (flycheck-defined-checkers))
+    (flycheck-mode 1)
+    (flycheck-select-checker 'proselint)))
+
+(defun flycheck-toggle-fix ()
+  (interactive)
+  (flycheck-mode 'toggle)
+  (flycheck-mode 'toggle))
 
 (use-package flycheck-pos-tip
   :ensure t
