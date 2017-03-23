@@ -286,7 +286,6 @@
                         helm
                         ibuffer-projectile
                         ido
-                        iflipb
                         java
                         javascript
                         json
@@ -354,6 +353,8 @@
  "C-p" 'helm-buffers-list
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
+ "C-<tab>" 'previous-buffer
+ "<C-iso-lefttab>" 'next-buffer
  "C-\\" 'indent-line-or-region
  "C-|" 'sort-lines
  "<prior>" 'evil-scroll-up
