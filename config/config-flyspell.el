@@ -5,7 +5,7 @@
   (when (executable-find "hunspell")
     (setq ispell-program-name "hunspell")
     (setq ispell-dictionary "en_US"))
-
+  (setq flyspell-duplicate-distance 0)
   (defun flyspell-save-word-to-dictionary ()
     (interactive)
     (let ((word (flyspell-get-word)))
