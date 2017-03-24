@@ -28,8 +28,8 @@
   (defun tabbar-buffer-tab-label (tab)
     "Return a label for TAB. That is, a string used to represent it on the tab bar."
     (let ((label  (if tabbar--buffer-show-groups
-                      (format "[%s]  " (tabbar-tab-tabset tab))
-                    (format "%s  " (tabbar-tab-value tab)))))
+                      (format " [%s]  " (tabbar-tab-tabset tab))
+                    (format " %s " (tabbar-tab-value tab)))))
       (if tabbar-auto-scroll-flag
           label
         (tabbar-shorten
@@ -37,7 +37,7 @@
                          (length (tabbar-view
                                   (tabbar-current-tabset)))))))))
 
-  ;; Tabbar Ruler projectile groups
+  ;; Projectile groups
   ;; https://github.com/mattfidler/tabbar-ruler.el
   (defvar tabbar-projectile-tabbar-buffer-group-calc nil)
   (defun tabbar-projectile-tabbar-buffer-groups ()
@@ -56,8 +56,21 @@
       (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
   (setq tabbar-buffer-groups-function 'tabbar-projectile-tabbar-buffer-groups)
 
-  (global-set-key (kbd "C-<prior>") 'tabbar-backward-tab)
-  (global-set-key (kbd "C-<next>") 'tabbar-forward-tab)
+  (let ((up   (tabbar--mwheel-key tabbar--mwheel-up-event))
+        (down (tabbar--mwheel-key tabbar--mwheel-down-event)))
+    (general-define-key
+     :keymaps 'tabbar-mwheel-mode-map
+     `[header-line ,down] 'tabbar-mwheel-backward-tab
+     `[header-line ,up] 'tabbar-mwheel-forward-tab
+     `[header-line (control ,down)] 'tabbar-mwheel-backward-group
+     `[header-line (control ,up)] 'tabbar-mwheel-forward-group
+     `[header-line (shift ,down)] 'tabbar-mwheel-backward
+     `[header-line (shift ,up)] 'tabbar-mwheel-forward))
+
+  (general-define-key
+   :keymaps 'tabbar-mode-map
+   "C-<prior>" 'tabbar-backward-tab
+   "C-<next>" 'tabbar-forward-tab)
 
   ;; Disable default tabbar keybindings
   (general-define-key
@@ -72,9 +85,17 @@
    "C-<home>" nil
    "C-<f10>" nil))
 
+(defun tabbar-blend-header-line (&optional text)
+  (when (bound-and-true-p tabbar-mode)
+    (tabbar-local-disable)
+    (setq header-line-format
+          (concat (propertize " " 'display '((space :align-to 0)))
+                  (or (propertize text 'face '(:foreground "#c3a287"
+                                                   :weight bold))
+                      " ")))))
+
 (defun tabbar-update-modified ()
-  "Switching tabs seems to be the only way to force an update to the modified
-state. 'tabbar-display-update' doesn't work."
+  "Switching tabs seems to be the only way to force an update to the modified state."
   (when (bound-and-true-p tabbar-mode)
     (tabbar-forward-tab)
     (tabbar-backward-tab)))

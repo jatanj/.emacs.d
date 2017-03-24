@@ -3,14 +3,14 @@
   :init
   (add-hook 'magit-mode-hook
     (lambda ()
-      (tabbar-local-disable)
+      (tabbar-blend-header-line "Git")
       (hscroll-mode -1)))
   (add-hook 'magit-popup-mode-hook #'tabbar-local-disable)
+  (add-hook 'magit-blob-mode-hook #'tabbar-blend-header-line)
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)
-  (add-hook 'magit-blob-mode-hook #'tabbar-local-disable)
   (defhydra hydra-magit-blob (magit-blob-mode-map "g t")
     ("p" magit-blob-previous "Previous")
     ("n" magit-blob-next "Next")
@@ -60,7 +60,7 @@
   :init
   (add-hook 'git-commit-mode-hook
     (lambda ()
-      (tabbar-local-disable)
+      (tabbar-blend-header-line "Commit")
       (toggle-save-place 0)
       (require 'ispell)
       (when (executable-find ispell-program-name)

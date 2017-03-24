@@ -3,6 +3,10 @@
   :init
   (setq neo-theme (if (display-graphic-p) 'icons 'ascii))
   (setq neo-window-fixed-size nil)
+  (add-hook 'neotree-mode-hook
+    (lambda ()
+      (linum-mode -1)
+      (tabbar-blend-header-line "Folders")))
   :config
   (general-define-key
     :keymaps 'neotree-mode-map

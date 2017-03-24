@@ -4,9 +4,11 @@
   :init
   (add-hook 'ibuffer-hook
     (lambda ()
+      (setq ibuffer-display-summary nil)
       (ibuffer-projectile-set-filter-groups)
       (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic))))
+        (ibuffer-do-sort-by-alphabetic))
+      (tabbar-blend-header-line "Buffers")))
   :config
   (general-define-key
    :keymaps 'ibuffer-mode-map
