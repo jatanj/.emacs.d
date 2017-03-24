@@ -289,14 +289,14 @@
 (use-package hydra :ensure t :demand)
 (use-package dash :ensure t :demand)
 
-(use-package all-the-icons
-  :ensure t)
-
-(setq package-configs '(anzu
+(setq package-configs '(all-the-icons
+                        anzu
+                        beacon
                         c-cpp
                         clojure
                         company
                         d
+                        dumb-jump
                         emacs-lisp
                         evil
                         expand-region
@@ -444,4 +444,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (window-numbering which-key web-mode use-package ts-comint tide tabbar spaceline smooth-scroll smartparens popwin org-bullets neotree markdown-mode json-mode js2-mode iflipb ido-vertical-mode ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general fsharp-mode flycheck-haskell flx-ido expand-region evil-visualstar evil-surround evil-matchit evil-magit esup ensime d-mode clojure-mode-extra-font-locking cider anzu all-the-icons))))
+    (window-numbering which-key web-mode use-package ts-comint tide tabbar spaceline smooth-scroll smartparens popwin org-bullets neotree markdown-mode json-mode js2-mode iflipb ido-vertical-mode ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general flycheck-haskell flx-ido expand-region evil-visualstar evil-surround evil-matchit evil-magit esup ensime d-mode clojure-mode-extra-font-locking cider anzu all-the-icons))))

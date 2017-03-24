@@ -82,8 +82,6 @@
    `(powerline-inactive1 ((,class (:foreground ,fg1 :background ,bg2))))
    `(powerline-inactive2 ((,class (:foreground ,fg1 :background ,bg2))))
    `(ac-completion-face ((,class (:underline t :foreground ,keyword))))
-   `(dired-symlink ((,class (:foreground ,success))))
-   `(dired-directory ((,class (:foreground ,builtin :bold t))))
    `(anzu-replace-to ((,class (:foreground ,warning))))
    `(company-echo-common ((,class (:foreground ,bg1 :background ,fg1))))
    `(company-preview ((,class (:background ,bg1 :foreground ,var))))
@@ -99,9 +97,11 @@
    `(company-tooltip-common-selection ((,class (:foreground ,success))))
    `(company-tooltip-mouse ((,class (:inherit bg5))))
    `(company-tooltip-selection ((,class (:foreground ,fg1 :background ,bg3))))
+   `(dired-directory ((,class (:foreground ,builtin :bold t))))
+   `(dired-symlink ((,class (:foreground ,success))))
    `(ensime-errline-highlight ((,class (:underline (:color ,error :style line)))))
-   `(ensime-warnline-highlight ((,class (:underline (:color ,warning :style line)))))
    `(ensime-implicit-highlight ((,class (:underline nil))))
+   `(ensime-warnline-highlight ((,class (:underline (:color ,warning :style line)))))
    `(evil-ex-info ((,class (:foreground ,warning))))
    `(evil-ex-substitute-replacement ((,class (:foreground ,warning))))
    `(ffap ((,class (:foreground ,fg4))))
@@ -268,6 +268,11 @@
    `(org-verbatim ((,class (:foreground ,fg4))))
    `(org-verse ((,class (:inherit org-block :slant italic))))
    `(org-warning ((,class (:underline t :foreground ,error))))
+   `(popup-face ((,class (:foreground ,fg2 :background ,bg6))))
+   `(popup-menu-selection-face ((,class (:foreground ,fg1 :background ,bg3))))
+   `(popup-scroll-bar-background-face ((,class (:background ,bg6))))
+   `(popup-scroll-bar-foreground-face ((,class (:background ,bg4))))
+   `(popup-summary ((,class (:foreground ,fg2))))
    `(popup-tip-face ((,class (:foreground ,fg1 :background ,bg3))))
    `(rainbow-delimiters-depth-1-face ((,class :foreground ,fg1)))
    `(rainbow-delimiters-depth-2-face ((,class :foreground ,type)))
@@ -331,7 +336,8 @@
   (custom-theme-set-variables
    'custom-dark
    `(company-quickhelp-color-foreground ,fg1)
-   `(company-quickhelp-color-background ,bg6)))
+   `(company-quickhelp-color-background ,bg6)
+   `(beacon-color ,success)))
 
 ;;;###autoload
 (when load-file-name
