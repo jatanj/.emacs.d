@@ -24,8 +24,19 @@
     (sp-local-pair mode "`" nil :actions nil)
     (sp-local-pair mode "'" nil :actions nil)
     (sp-local-pair mode "\"" nil :actions nil))
-  (sp-pair "(" nil :unless '(sp-point-before-same-p sp-point-before-word-p))
-  (sp-pair "[" nil :unless '(sp-point-before-same-p sp-point-before-word-p))
-  (sp-pair "{" nil :unless '(sp-point-before-same-p sp-point-before-word-p)))
+  (sp-pair "(" nil :unless '(sp-in-string-p sp-point-before-same-p sp-point-before-word-p))
+  (sp-pair "[" nil :unless '(sp-in-string-p sp-point-before-same-p sp-point-before-word-p))
+  (sp-pair "{" nil :unless '(sp-in-string-p sp-point-before-same-p sp-point-before-word-p))
+  (general-define-key
+   :keymaps 'smartparens-mode-map
+   :prefix "C-c"
+   "]" 'sp-up-sexp
+   "[" 'sp-down-sexp))
+
+(defun newline-and-enter-sexp (&rest _ignored)
+  (newline)
+  (indent-according-to-mode)
+  (forward-line -1)
+  (indent-according-to-mode))
 
 (provide 'config-smartparens)

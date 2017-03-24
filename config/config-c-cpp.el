@@ -9,12 +9,4 @@
   (c-set-offset 'arglist-intro '+)
   (set-local-tab-width 4))
 
-(defun newline-and-enter-sexp (&rest _ignored)
-  (newline)
-  (indent-according-to-mode)
-  (forward-line -1)
-  (indent-according-to-mode))
-; (sp-local-pair 'c-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-; (sp-local-pair 'c++-mode "{" nil :post-handlers '((newline-and-enter-sexp "RET")))
-
 (provide 'config-c-cpp)
