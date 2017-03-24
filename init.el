@@ -145,6 +145,28 @@
   (setq evil-shift-width n)
   (set (make-local-variable 'tab-stop-list) (number-sequence n 200 n)))
 
+;; Searching
+;; http://emacs.stackexchange.com/questions/10307/#answer-10432
+(defun isearch-center-cursor ()
+  (sit-for 0)
+  (if (and
+       ;; not the scrolling command
+       (not (eq this-command 'isearch-other-control-char))
+       ;; not the empty string
+       (> (length isearch-string) 0)
+       ;; not the first key (to lazy highlight all matches w/o recenter)
+       (> (length isearch-cmds) 2)
+       ;; the point in within the given window boundaries
+       (let ((line (count-screen-lines (point) (window-start))))
+         (or (> line (* (/ (window-height) 4) 3))
+             (< line (* (/ (window-height) 9) 1)))))
+      (let ((recenter-position 0.3))
+        (recenter '(4)))))
+(defadvice isearch-update (before my-isearch-update activate)
+  (isearch-center-cursor))
+(defadvice evil-search (after my-evil-search activate)
+  (isearch-center-cursor))
+
 ;; Use UTF-8 everywhere
 (set-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8)
@@ -404,7 +426,9 @@
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
- "C-h" 'isearch-query-replace-regexp)
+ "C-h" 'isearch-query-replace-regexp
+ "<up>" 'isearch-ring-retreat
+ "<down>" 'isearch-ring-advance)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
