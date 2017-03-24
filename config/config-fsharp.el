@@ -1,5 +1,5 @@
 (use-package fsharp-mode
-  :ensure t
+  :load-path (lambda () (concat user-emacs-directory "site-lisp/fsharp-mode"))
   :defer t
   :mode ("\\.fs[ix]?\\'" . fsharp-mode)
   :init
