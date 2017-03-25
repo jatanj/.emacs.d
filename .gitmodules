@@ -1,9 +1,11 @@
 [submodule "site-lisp/screenshow-mode"]
 	path = site-lisp/screenshow-mode
 	url = git@github.com:jjpatel/screenshow-mode
+	ignore = dirty
 [submodule "site-lisp/emacs-livedown"]
 	path = site-lisp/emacs-livedown
 	url = https://github.com/shime/emacs-livedown
 [submodule "site-lisp/fsharp-mode"]
 	path = site-lisp/fsharp-mode
 	url = git@github.com:jjpatel/emacs-fsharp-mode.git
+	ignore = dirty

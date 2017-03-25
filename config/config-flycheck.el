@@ -19,16 +19,16 @@
                `(,(rx bos "*Flycheck errors*" eos)
                  (display-buffer-reuse-window
                   display-buffer-in-side-window)
-                 (side            . bottom)
-                 (reusable-frames . visible)
-                 (window-height   . 0.125)))
+                 (side . bottom)
+                 (preserve-size . t)
+                 (window-height   . 0.2)))
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Flycheck error messages*" eos)
                  (display-buffer-reuse-window
                   display-buffer-in-side-window)
-                 (side            . bottom)
-                 (reusable-frames . visible)
-                 (window-height   . 0.125)))
+                 (side . bottom)
+                 (preserve-size . t)
+                 (window-height   . 0.2)))
   (general-define-key
    :keymaps 'flycheck-mode-map
    "C-c ! f" 'flycheck-toggle-fix

@@ -4,7 +4,8 @@
 ;; http://stackoverflow.com/questions/10092322#answer-10093312
 (require 'package)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -48,6 +49,7 @@
 (setq ad-redefinition-action 'accept)
 
 (setq configure-frame-functions '())
+(setq configure-display-buffer-alist '())
 
 ;; Useful minor modes
 (show-paren-mode 1)
@@ -275,6 +277,13 @@
                    (_ nil))))
       (apply 'call-process (executable-find local-terminal) nil 0 nil args))))
 
+(setq leader-key "C-l")
+(global-set-key (kbd leader-key) nil)
+
+(use-package general :ensure t :demand)
+(use-package hydra :ensure t :demand)
+(use-package dash :ensure t :demand)
+
 ;; Dired
 (put 'dired-find-alternate-file 'disabled nil)
 (add-hook 'dired-mode-hook #'hl-line-mode)
@@ -282,12 +291,10 @@
 ;; DocView
 (add-hook 'doc-view-mode-hook (lambda () (linum-mode -1)))
 
-(setq leader-key "C-l")
-(global-set-key (kbd leader-key) nil)
-
-(use-package general :ensure t :demand)
-(use-package hydra :ensure t :demand)
-(use-package dash :ensure t :demand)
+;; Help
+;; (setq help-window-select t)
+(add-to-list 'configure-display-buffer-alist
+             '("\\`\\*Help\\*\\'" help-mode))
 
 (setq package-configs '(all-the-icons
                         anzu
@@ -316,7 +323,6 @@
                         markdown
                         neotree
                         org
-                        popwin
                         projectile
                         rainbow-mode
                         ranger
@@ -333,7 +339,8 @@
                         uniquify
                         web-mode
                         which-key
-                        window-numbering))
+                        window-numbering
+                        winner))
 
 ;; Load package configs
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
@@ -355,6 +362,27 @@
       (lambda (frame)
         (configure-frame frame)))
   (configure-frame (selected-frame)))
+
+;; Configure how these buffers are displayed and add some shortcuts to quickly
+;; close them
+(dolist (it configure-display-buffer-alist)
+  (pcase it
+    (`(,regexp ,mode)
+     (general-define-key
+      :keymaps (intern (format "%s-map" mode))
+      "q" 'kill-this-buffer
+      "C-g" 'kill-this-buffer)
+     (add-hook (intern (format "%s-hook" mode))
+               (lambda ()
+                 (switch-to-buffer-other-window (current-buffer))
+                 (redisplay t)))
+     (add-to-list 'display-buffer-alist
+                  `(,regexp
+                    (display-buffer-in-side-window)
+                    (inhibit-same-window . t)
+                    (side . bottom)
+                    (slot . 1)
+                    (window-height . 0.30))))))
 
 ;; Unbind some keys
 (dolist (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
@@ -408,13 +436,13 @@
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" nil
- "C-n" 'neotree-projectile
  "C-h" 'hscroll-mode)
 
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
  "b" 'ibuffer
+ "n" 'neotree-projectile
  "v" 'magit-file-popup
  "C-v" 'magit-status)
 
@@ -444,4 +472,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (window-numbering which-key web-mode use-package ts-comint tide tabbar spaceline smooth-scroll smartparens popwin org-bullets neotree markdown-mode json-mode js2-mode iflipb ido-vertical-mode ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general flycheck-haskell flx-ido expand-region evil-visualstar evil-surround evil-matchit evil-magit esup ensime d-mode clojure-mode-extra-font-locking cider anzu all-the-icons))))
+    (window-numbering which-key web-mode use-package ts-comint tide tabbar spaceline smooth-scroll smartparens org-bullets neotree markdown-mode json-mode js2-mode iflipb ido-vertical-mode ibuffer-projectile hydra helm-projectile helm-ag gitignore-mode gitconfig-mode general flycheck-haskell flx-ido expand-region evil-visualstar evil-surround evil-matchit evil-magit esup ensime d-mode clojure-mode-extra-font-locking cider anzu all-the-icons))))
