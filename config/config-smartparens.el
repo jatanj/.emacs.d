@@ -13,6 +13,7 @@
   (dolist (mode '(c-mode
                   c++-mode
                   java-mode
+                  rust-mode
                   d-mode
                   typescript-mode
                   js2-mode

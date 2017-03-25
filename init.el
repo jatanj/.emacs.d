@@ -320,6 +320,7 @@
                         projectile
                         rainbow-mode
                         ranger
+                        rust
                         scala
                         screenshow-mode
                         shell
