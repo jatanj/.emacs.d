@@ -14,7 +14,6 @@
    "C-SPC" 'company-complete)
   (general-define-key
    :keymaps 'company-active-map
-   "<f1>" nil
    "<tab>" nil
    "<return>" (lookup-key (current-global-map) (kbd "RET"))))
 

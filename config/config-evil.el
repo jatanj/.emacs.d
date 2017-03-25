@@ -16,7 +16,7 @@
 
   (general-define-key
    :keymaps 'evil-normal-state-map
-   "q" 'ignore)
+   "q" nil)
 
   (general-define-key
    :states 'insert
@@ -59,7 +59,7 @@
 
   (general-define-key
    :states '(normal insert visual motion)
-   "C-]" 'dumb-jump-go
+   "C-]" 'evil-jump-to-definition
    "C-q" 'evil-scroll-line-up)
 
   (general-define-key
@@ -78,6 +78,14 @@
   (evil-visual-restore))
 (defun evil-shift-left-visual () (interactive) (evil-shift-visual 'evil-shift-left))
 (defun evil-shift-right-visual () (interactive) (evil-shift-visual 'evil-shift-right))
+
+(setq local-jump-to-definition nil)
+(defun evil-jump-to-definition ()
+  (interactive)
+  (if (and (boundp 'local-jump-to-definition)
+           local-jump-to-definition)
+      (funcall-interactively local-jump-to-definition)
+    (call-interactively 'dumb-jump-go)))
 
 (use-package evil-anzu
   :ensure t)

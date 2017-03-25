@@ -8,7 +8,8 @@
       ;; (setq indent-line-function 'indent-relative-maybe)
       (setq indent-region-function nil)
       (set-local-tab-width 2)
-      (setq company-auto-complete nil)))
+      (setq company-auto-complete nil)
+      (setq-local local-jump-to-definition 'fsharp-ac/gotodefn-at-point)))
   :config
   (setq fsharp-ac-use-popup t)
   (setq fsharp-indent-level 2)
