@@ -105,10 +105,10 @@
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
-(add-to-list 'configure-frame-functions
-             (lambda ()
-               (scroll-bar-mode -1)
-               (horizontal-scroll-bar-mode -1)))
+(add-hook 'configure-frame-functions
+  (lambda (frame)
+    (scroll-bar-mode -1)
+    (horizontal-scroll-bar-mode -1)))
 
 ;; Horizontal scrolling
 (setq hscroll-step 1)
@@ -342,20 +342,19 @@
 
 ;; Load theme
 (setq custom-theme-directory "~/.emacs.d/themes/")
-(add-to-list 'configure-frame-functions (lambda () (load-theme 'custom-dark t)))
+(add-hook 'configure-frame-functions (lambda (frame) (load-theme 'custom-dark t)))
 
 ;; If we're using emacslient, we need to delay all configure-frame-functions
 ;; until after the frame is created.
-(defun configure-frame ()
+(defun configure-frame (frame)
   (dolist (func configure-frame-functions)
-    (funcall func))
+    (funcall func frame))
   (redraw-frame))
 (if (daemonp)
     (add-hook 'after-make-frame-functions
       (lambda (frame)
-        (select-frame frame)
-        (configure-frame)))
-  (configure-frame))
+        (configure-frame frame)))
+  (configure-frame (selected-frame)))
 
 ;; Unbind some keys
 (dolist (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
