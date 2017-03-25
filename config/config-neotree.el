@@ -3,6 +3,7 @@
   :init
   (setq neo-theme (if (display-graphic-p) 'icons 'ascii))
   (setq neo-window-fixed-size nil)
+  (setq neo-show-hidden-files t)
   (add-hook 'neotree-mode-hook
     (lambda ()
       (linum-mode -1)

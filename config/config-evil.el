@@ -118,4 +118,9 @@
   :config
   (evil-exchange-install))
 
+(use-package evil-lion
+  :ensure t
+  :config
+  (evil-lion-mode))
+
 (provide 'config-evil)
