@@ -401,7 +401,7 @@
  "w" 'kill-this-buffer
  "p" 'helm-projectile-find-file-in-known-projects
  "k" 'ido-kill-buffer
- "f" 'ido-find-file
+ "f" 'helm-find
  "b" 'helm-buffers-list
  "m" (general-simulate-keys "C-c")
  "C-u" nil ; upcase-region

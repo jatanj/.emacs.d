@@ -9,10 +9,12 @@
   (setq helm-recentf-fuzzy-match t)
   (setq helm-semantic-fuzzy-match t)
   (setq helm-split-window-in-side-p t)
+  (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s")
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*helm" (* not-newline) "*" eos)
                  (display-buffer-in-side-window)
                  (inhibit-same-window . t)
+                 (side . bottom)
                  (window-height . 0.35)))
   (setq helm-boring-buffer-regexp-list
         '("\\` "
@@ -48,8 +50,10 @@
   :ensure t
   :config
   (setq helm-ag-fuzzy-match t)
+  (setq helm-ag-base-command "rg --smart-case --no-heading")
   (general-define-key
    :keymaps 'projectile-command-map
+   "s s" 'helm-do-ag-project-root
    "s f" 'helm-do-ag-this-file
    "s b" 'helm-do-ag-buffers))
 
