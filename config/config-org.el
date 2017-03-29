@@ -14,14 +14,10 @@
                                   (compose-region (match-beginning 1) (match-end 1) "•"))))))
   (defhydra hydra-org-move (org-mode-map "C-c")
     ("<up>" org-metaup)
-    ("C-<up>" org-metup)
-    ("<down>" org-metadown)
-    ("C-<down>" org-metadown))
+    ("<down>" org-metadown))
   (defhydra hydra-org-rank (org-mode-map "C-c")
     ("<left>" org-metaleft)
-    ("C-<left>" org-metaleft)
-    ("<right>" org-metaright)
-    ("C-<right>" org-metaright))
+    ("<right>" org-metaright))
   (general-define-key
    :keymaps 'org-mode-map
    "<tab>" 'org-cycle
@@ -31,7 +27,11 @@
    "M-<up>" nil
    "M-<down>" nil
    "M-<left>" nil
-   "M-<right>" nil))
+   "M-<right>" nil)
+  (general-define-key
+   :keymaps 'org-mode-map
+   :prefix "C-c"
+   "C-<return>" 'org-table-insert-row))
 
 (use-package org-bullets
   :ensure t

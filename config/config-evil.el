@@ -14,9 +14,21 @@
                   cider-repl-mode))
     (evil-set-initial-state mode 'emacs))
 
-  (general-define-key
-   :keymaps 'evil-normal-state-map
-   "q" nil)
+  ;; Unbind some keys.
+  ;; No idea why this doesn't work with general.
+  (defun evil-unbind-key (pair)
+    (let ((unbind (lambda (state key)
+                    (define-key
+                      (symbol-value (intern (format "evil-%s-state-map" (symbol-name state))))
+                      (kbd key)
+                      nil))))
+      (pcase pair
+        (`(all ,key) (dolist (state '(normal insert visual motion))
+                       (funcall unbind state key)))
+        (`(,state ,key) (funcall unbind state key)))))
+  (mapcar #'evil-unbind-key '((normal "q")
+                              (all "C-p")
+                              (all "C-S-p")))
 
   (general-define-key
    :states 'insert
@@ -34,6 +46,10 @@
    "<" 'evil-shift-left-visual
    "<tab>" 'evil-shift-right-visual
    "C-S-<tab>" 'evil-shift-left-visual)
+
+  (general-define-key
+   :states 'motion
+   "C-i" 'helm-swoop-from-evil-search)
 
   (general-define-key
    :states '(normal visual)
@@ -64,11 +80,7 @@
 
   (general-define-key
    :states '(normal insert visual emacs motion)
-   "C-/" 'comment-line-or-region
-   "<home>" 'back-to-indentation
-   "C-_" 'shrink-window
-   "C-S-p" 'helm-M-x
-   "C-p" 'helm-projectile-find-file))
+   "<home>" 'back-to-indentation))
 
 ;; Improve shift to keep selection
 ;; http://superuser.com/questions/684540/#answer-789156

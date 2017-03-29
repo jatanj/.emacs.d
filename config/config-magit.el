@@ -31,11 +31,10 @@
   (let ((buffers (-remove
                   (lambda (buffer) (or (eq (with-current-buffer buffer major-mode) 'dired-mode)
                                        (string-match "\\*.+" (buffer-name buffer))))
-                    (buffer-list))))
-    (if (and
-         (daemonp)
-         (= (length buffers) 0)
-         (string-prefix-p "*magit:" (buffer-name (current-buffer))))
+                  (buffer-list))))
+    (if (and (daemonp)
+             (= (length buffers) 0)
+             (string-prefix-p "*magit:" (buffer-name)))
         (delete-frame)
       (magit-mode-bury-buffer))))
 

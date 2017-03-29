@@ -1,6 +1,6 @@
 ;; init.el -- Emacs configuration
 
-;; Bootstrap use-package
+;; Bootstrap use-package.
 ;; http://stackoverflow.com/questions/10092322#answer-10093312
 (require 'package)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -25,9 +25,9 @@
 
 ; Add site-list directories to load-path
 (dolist
-    (project (directory-files (concat user-emacs-directory "site-lisp") t "\\w+"))
-  (when (file-directory-p project)
-    (add-to-list 'load-path project)))
+    (package (directory-files (concat user-emacs-directory "site-lisp") t "\\w+"))
+  (when (file-directory-p package)
+    (add-to-list 'load-path package)))
 
 ;; Startup options
 (setq frame-title-format "Emacs - %b")
@@ -296,55 +296,53 @@
 (add-to-list 'configure-display-buffer-alist
              '("\\`\\*Help\\*\\'" help-mode))
 
-(setq package-configs '(all-the-icons
-                        anzu
-                        beacon
-                        c-cpp
-                        clojure
-                        company
-                        d
-                        dumb-jump
-                        emacs-lisp
-                        evil
-                        expand-region
-                        fill-column-indicator
-                        flycheck
-                        flyspell
-                        fsharp
-                        haskell
-                        helm
-                        ibuffer-projectile
-                        ido
-                        java
-                        javascript
-                        json
-                        litable
-                        magit
-                        markdown
-                        neotree
-                        org
-                        projectile
-                        rainbow-mode
-                        ranger
-                        rust
-                        scala
-                        screenshow-mode
-                        shell
-                        smartparens
-                        smooth-scroll
-                        spaceline
-                        tabbar
-                        term
-                        typescript
-                        uniquify
-                        web-mode
-                        which-key
-                        window-numbering
-                        winner))
-
-;; Load package configs
+;; Load config files
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/config"))
-(dolist (name package-configs)
+(dolist (name '(all-the-icons
+                anzu
+                beacon
+                c-cpp
+                clojure
+                company
+                d
+                dumb-jump
+                emacs-lisp
+                evil
+                expand-region
+                fill-column-indicator
+                flycheck
+                flyspell
+                fsharp
+                haskell
+                helm
+                ibuffer-projectile
+                ido
+                java
+                javascript
+                json
+                litable
+                magit
+                markdown
+                neotree
+                org
+                projectile
+                rainbow-mode
+                ranger
+                rust
+                scala
+                screenshow-mode
+                shell
+                smartparens
+                smooth-scroll
+                spaceline
+                tabbar
+                term
+                typescript
+                uniquify
+                web-mode
+                which-key
+                window-numbering
+                winner))
   (require (intern (concat "config-" (symbol-name name)))))
 
 ;; Load theme
@@ -388,6 +386,10 @@
 (dolist (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
                "M-<lwindow>" "C-<lwindow>"))
   (global-set-key (kbd key) 'ignore))
+(general-define-key
+ :keymaps 'undo-tree-map
+ "C-/" nil
+ "C-_" nil)
 
 ;; Keybindings
 (general-define-key
@@ -434,6 +436,7 @@
  "m" (general-simulate-keys "C-c")
  "C-u" nil ; upcase-region
  "C-l" nil ; downcase-region
+ "C-d" 'ido-dired
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" nil
