@@ -14,6 +14,33 @@
     "C-<prior>" 'ignore
     "C-<next>" 'ignore))
 
+(defadvice switch-to-buffer (after save-buffer-now activate)
+  (neotree-switch-to-project-root))
+
+(defun neotree-switch-to-project-root (&optional show)
+  "Switch the neotree buffer root directory to the projectile project root.
+When SHOW is t, the neotree buffer will be shown if it's currently hidden."
+  (interactive)
+  (when (or (neo-global--window-exists-p) show)
+      (let* ((file-name (buffer-file-name))
+             (dir-name (cond
+                        ((active-minibuffer-window) nil)
+                        ((numberp (string-match-p "\\*.*\\*" (buffer-name))) nil)
+                        ((not file-name) (expand-file-name local-directory))
+                        (t (if (and (fboundp 'projectile-project-p)
+                                    (projectile-project-p))
+                               (projectile-project-root)
+                             (file-name-directory file-name))))))
+        (when dir-name
+          (if (neo-global--window-exists-p)
+              (with-selected-window neo-global--window
+                (let ((read-only buffer-read-only))
+                  (setq buffer-read-only nil)
+                  (save-selected-window
+                    (neo-buffer--change-root dir-name))
+                  (setq buffer-read-only read-only)))
+            (neotree-dir dir-name))))))
+
 (defun neotree-projectile ()
   "Open neotree with projectile as root and open node for current file.
   If projectile unavailable or not in a project, open node at file path.
@@ -21,19 +48,6 @@
   (interactive)
   (if (neo-global--window-exists-p)
       (call-interactively 'neotree-hide)
-    (let ((file-name (buffer-file-name)))
-      (if (and (not file-name)
-               (let ((buffer-name (buffer-name)))
-                 (cond
-                  ((equal buffer-name "*cider-repl server*") nil)
-                  (t t))))
-          (neotree-dir local-directory)
-        (let ((dir-name (if (and (fboundp 'projectile-project-p)
-                                 (projectile-project-p))
-                            (projectile-project-root)
-                          (file-name-directory file-name))))
-          (neotree-dir dir-name)
-          (when file-name
-            (neo-buffer--select-file-node file-name)))))))
+    (neotree-switch-to-project-root t)))
 
 (provide 'config-neotree)
