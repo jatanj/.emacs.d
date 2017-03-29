@@ -400,11 +400,12 @@
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
- "C-p" 'helm-buffers-list
+ "C-p" 'helm-projectile-find-file
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
  "C-<tab>" 'previous-buffer
  "<C-iso-lefttab>" 'next-buffer
+ "C-/" 'comment-line-or-region
  "C-\\" 'indent-line-or-region
  "C-|" 'sort-lines
  "<prior>" 'evil-scroll-up
@@ -442,6 +443,7 @@
  :prefix leader-key
  "p" projectile-command-map
  "b" 'ibuffer
+ "s" helm-swoop-command-map
  "n" 'neotree-projectile
  "v" 'magit-file-popup
  "C-v" 'magit-status)
@@ -455,6 +457,7 @@
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
  "C-h" 'isearch-query-replace-regexp
+ "C-i" 'helm-swoop-from-isearch
  "<up>" 'isearch-ring-retreat
  "<down>" 'isearch-ring-advance)
 

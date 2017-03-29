@@ -57,4 +57,21 @@
    "s f" 'helm-do-ag-this-file
    "s b" 'helm-do-ag-buffers))
 
+(use-package helm-swoop
+  :ensure t
+  :after helm
+  :config
+  (setq helm-swoop-split-direction 'split-window-vertically)
+  (setq helm-swoop-use-line-number-face t)
+  (setq helm-swoop-command-map (make-sparse-keymap))
+  (define-key evil-motion-state-map (kbd "C-i") 'helm-swoop-from-evil-search)
+  (general-define-key
+   :keymaps 'helm-swoop-map
+   "C-e" 'helm-swoop-edit)
+  (general-define-key
+   :keymaps 'helm-swoop-command-map
+   "p" 'helm-multi-swoop-projectile
+   "f" 'helm-swoop
+   "b" 'helm-multi-swoop-all))
+
 (provide 'config-helm)
