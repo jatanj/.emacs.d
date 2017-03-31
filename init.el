@@ -15,11 +15,12 @@
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
   (when (file-exists-p local-settings) (load local-settings)))
-(dolist (local-setting '((local-directory             . "~/")
-                         (local-terminal              . nil)
-                         (local-font-face             . "Inconsolata-12")
+(dolist (local-setting '((local-directory . "~/")
+                         (local-terminal . nil)
+                         (local-font-face . "Inconsolata-12")
+                         (local-default-theme . 'evening-dark)
                          (local-desktop-window-params . nil)
-                         (local-client-window-params  . nil)))
+                         (local-client-window-params . nil)))
   (unless (boundp (car local-setting))
     (set (car local-setting) (cdr local-setting))))
 
@@ -83,12 +84,13 @@
 
 ;; Save desktop
 (unless (daemonp)
-  (desktop-save-mode)
   (setq desktop-restore-eager t)
-  (dolist (mode '(magit-mode
-                  magit-log-mode))
-    (add-to-list 'desktop-modes-not-to-save mode))
-  (add-to-list 'desktop-files-not-to-save (rx bos "COMMIT_EDITMSG")))
+  (desktop-save-mode)
+  (dolist (no-save-mode '(magit-mode
+                          magit-log-mode))
+    (add-to-list 'desktop-modes-not-to-save no-save-mode))
+  (dolist (no-save-files '("\\`COMMIT_EDITMSG"))
+    (add-to-list 'desktop-files-not-to-save no-save-files)))
 
 ;; Set font
 (add-to-list 'default-frame-alist `(font . ,local-font-face))
@@ -345,16 +347,37 @@
                 winner))
   (require (intern (concat "config-" (symbol-name name)))))
 
-;; Load theme
+;; Themes
 (setq custom-theme-directory "~/.emacs.d/themes/")
-(add-hook 'configure-frame-functions (lambda (frame) (load-theme 'custom-dark t)))
+(add-to-list 'load-path "~/.emacs.d/themes/")
+(defun switch-theme (&optional name)
+  (interactive)
+  (let* ((available-themes (custom-available-themes))
+         (theme (or name (intern (completing-read "Enter theme name: " available-themes nil t)))))
+    (if (member theme available-themes)
+        (progn (load-theme theme t)
+               (tabbar-force-update)
+               (setq custom-current-theme theme))
+      (message "Could not find theme '%s'" theme))))
+(defun load-initial-theme ()
+  (switch-theme (or (and (boundp 'custom-current-theme)
+                         custom-current-theme)
+                    local-default-theme)))
+(if (bound-and-true-p desktop-save-mode)
+    (progn
+      (add-to-list 'desktop-globals-to-save 'custom-current-theme)
+      (dolist (hook '(desktop-after-read-hook
+                      desktop-not-loaded-hook
+                      desktop-no-desktop-file-hook))
+        (add-hook hook #'load-initial-theme)))
+  (add-hook 'configure-frame-functions (lambda (frame) (load-initial-theme))))
 
 ;; If we're using emacslient, we need to delay all configure-frame-functions
 ;; until after the frame is created.
 (defun configure-frame (frame)
   (dolist (func configure-frame-functions)
     (funcall func frame))
-  (redraw-frame))
+  (redraw-frame frame))
 (if (daemonp)
     (add-hook 'after-make-frame-functions
       (lambda (frame)

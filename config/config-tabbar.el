@@ -5,10 +5,8 @@
   :config
   (unless (daemonp) (tabbar-mode 1))
   (add-hook 'configure-frame-functions
-    (lambda (frame)
-      (when (bound-and-true-p tabbar-mode)
-        (tabbar-forward-tab)
-        (tabbar-backward-tab))))
+            (lambda (frame)
+              (tabbar-force-update)))
 
   ;; Sort tabs by name
   ;; https://emacswiki.org/emacs/TabBarMode#toc7
@@ -96,6 +94,11 @@
                   (or (propertize text 'face '(:foreground "#c3a287"
                                                    :weight bold))
                       " ")))))
+
+(defun tabbar-force-update ()
+  (when (bound-and-true-p tabbar-mode)
+    (tabbar-forward-tab)
+    (tabbar-backward-tab)))
 
 (defun tabbar-select-tab-by-number (n)
   "Switch to the nth tab in the current tabset."
