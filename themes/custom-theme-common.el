@@ -302,6 +302,9 @@
       `(web-mode-warning-face ((,class (:inherit ,font-lock-warning-face))))
       `(which-key-key-face ((,class (:foreground ,fg1))))
       `(which-key-separator-face ((,class (:foreground ,type))))
+      `(git-gutter:modified ((,class (:foreground ,success))))
+      `(git-gutter:added ((,class (:foreground ,info))))
+      `(git-gutter:deleted ((,class (:foreground ,error))))
       `(which-key-special-key-face ((,class (:foreground ,fg1 :underline t)))))
      (custom-theme-set-variables
       ,name

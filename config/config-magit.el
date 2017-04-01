@@ -92,4 +92,9 @@
       (when (bound-and-true-p electric-indent-mode)
         (electric-indent-local-mode)))))
 
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode 1))
+
 (provide 'config-magit)
