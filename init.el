@@ -356,7 +356,6 @@
          (theme (or name (intern (completing-read "Enter theme name: " available-themes nil t)))))
     (if (member theme available-themes)
         (progn (load-theme theme t)
-               (tabbar-force-update)
                (setq custom-current-theme theme))
       (message "Could not find theme '%s'" theme))))
 (defun load-initial-theme ()
