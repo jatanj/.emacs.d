@@ -436,8 +436,6 @@
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab
  "C-<next>" 'tabbar-forward-tab
- "C-S-<prior>" 'iflipb-next-buffer
- "C-S-<next>" 'iflipb-previous-buffer
  "M-<left>" 'windmove-left
  "M-<right>" 'windmove-right
  "M-<up>" 'windmove-up
@@ -482,7 +480,7 @@
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
  "C-h" 'isearch-query-replace-regexp
- "C-i" 'helm-swoop-from-isearch
+ "C-w" 'helm-swoop-from-isearch
  "<up>" 'isearch-ring-retreat
  "<down>" 'isearch-ring-advance)
 

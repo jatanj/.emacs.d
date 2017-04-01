@@ -10,9 +10,10 @@
       (tabbar-blend-header-line "Folders")))
   :config
   (general-define-key
-    :keymaps 'neotree-mode-map
-    "C-<prior>" 'ignore
-    "C-<next>" 'ignore))
+   :keymaps 'neotree-mode-map
+   "C-f" 'isearch-forward-regexp
+   "C-<prior>" 'ignore
+   "C-<next>" 'ignore))
 
 (defadvice switch-to-buffer (after save-buffer-now activate)
   (neotree-switch-to-project-root))

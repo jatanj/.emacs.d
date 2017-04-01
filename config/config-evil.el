@@ -43,13 +43,7 @@
   (general-define-key
    :states 'visual
    ">" 'evil-shift-right-visual
-   "<" 'evil-shift-left-visual
-   "<tab>" 'evil-shift-right-visual
-   "C-S-<tab>" 'evil-shift-left-visual)
-
-  (general-define-key
-   :states 'motion
-   "C-i" 'helm-swoop-from-evil-search)
+   "<" 'evil-shift-left-visual)
 
   (general-define-key
    :states '(normal visual)

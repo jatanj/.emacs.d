@@ -61,10 +61,17 @@
   :ensure t
   :after helm
   :config
-  (setq helm-swoop-split-direction 'split-window-vertically)
+  (setq helm-swoop-split-window-function
+        (lambda ($buf)
+          (display-buffer $buf)))
+  (add-to-list 'display-buffer-alist
+               `("\\`\\*Helm Swoop\\*\\'"
+                 (display-buffer-in-side-window)
+                 (inhibit-same-window . t)
+                 (side . bottom)
+                 (window-height . 0.35)))
   (setq helm-swoop-use-line-number-face t)
   (setq helm-swoop-command-map (make-sparse-keymap))
-  (define-key evil-motion-state-map (kbd "C-i") 'helm-swoop-from-evil-search)
   (general-define-key
    :keymaps 'helm-swoop-map
    "C-e" 'helm-swoop-edit)
