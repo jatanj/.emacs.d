@@ -2,7 +2,7 @@
 ;;; Created with ThemeCreator, https://github.com/mswift42/themecreator.
 
 (defmacro custom-theme-set-common (name colors &rest body)
-  `(let ,colors
+  `(let* ,colors
      ,@body
      (custom-theme-set-faces
       ,name
@@ -35,8 +35,8 @@
       `(success ((,class (:foreground ,info))))
       `(vertical-border ((,class (:foreground ,border))))
       `(warning ((,class (:foreground ,warning))))
-      `(isearch ((,class (:bold nil :foreground ,fg1 :background ,success))))
-      `(show-paren-match-face ((,class (:foreground ,fg1 :background ,success))))
+      `(isearch ((,class (:bold nil :foreground ,fg1 :background ,success2))))
+      `(show-paren-match-face ((,class (:foreground ,fg1 :background ,success2))))
       `(show-paren-mismatch-face ((,class (:foreground ,fg1 :background ,error))))
       `(mode-line ((,class (:foreground ,fg2 :background ,bg2 :box (:line-width 1 :color ,bg2)))))
       `(mode-line-buffer-id ((,class (:foreground ,type :bold t))))
@@ -59,8 +59,8 @@
       `(company-tooltip ((,class (:foreground ,fg2 :background ,bg6 :bold nil))))
       `(company-tooltip-annotation ((,class (:foreground ,type))))
       `(company-tooltip-annotation-selection ((,class (:foreground ,type))))
-      `(company-tooltip-common ((,class (:foreground ,fg3))))
-      `(company-tooltip-common-selection ((,class (:foreground ,success))))
+      `(company-tooltip-common ((,class (:foreground ,success :bold t))))
+      `(company-tooltip-common-selection ((,class (:foreground ,success :bold t))))
       `(company-tooltip-mouse ((,class (:inherit bg5))))
       `(company-tooltip-selection ((,class (:foreground ,fg1 :background ,bg3))))
       `(dired-directory ((,class (:foreground ,builtin :bold t))))
@@ -117,7 +117,7 @@
       `(helm-swoop-line-number-face ((,class (:foreground ,bg4 :background ,bg4))))
       `(helm-swoop-target-line-face ((,class (:foreground ,fg1 :background ,bg3))))
       `(helm-swoop-target-line-block-face ((,class (:foreground ,fg1 :background ,bg3))))
-      `(helm-swoop-target-word-face ((,class (:foreground ,var :background ,success))))
+      `(helm-swoop-target-word-face ((,class (:foreground ,var :background ,success2))))
       `(helm-time-zone-current ((,class (:foreground ,builtin :background ,bg1))))
       `(helm-time-zone-home ((,class (:foreground ,type :background ,bg1))))
       `(helm-visible-mark ((,class (:foreground ,fg1 :background ,bg3))))
@@ -256,11 +256,11 @@
       `(scala-font-lock:var-face ((,class (:foreground ,var))))
       `(sh-quoted-exec ((,class (:foreground ,builtin))))
       `(slime-repl-inputed-output-face ((,class (:foreground ,type))))
-      `(spaceline-evil-emacs ((,class (:foreground ,fg1 :background ,bg2))))
-      `(spaceline-evil-insert ((,class (:foreground ,fg1 :background "#7eaefd"))))
-      `(spaceline-evil-normal ((,class (:foreground ,fg1 :background "#4f3598"))))
-      `(spaceline-evil-replace ((,class (:foreground ,fg1 :background "#005154"))))
-      `(spaceline-evil-visual ((,class (:foreground ,fg1 :background "#e6987a"))))
+      `(spaceline-evil-emacs ((,class (:foreground "#f8f8f8" :background ,bg2))))
+      `(spaceline-evil-insert ((,class (:foreground "#f8f8f8" :background "#7eaefd"))))
+      `(spaceline-evil-normal ((,class (:foreground "#f8f8f8" :background "#4f3598"))))
+      `(spaceline-evil-replace ((,class (:foreground "#f8f8f8" :background "#005154"))))
+      `(spaceline-evil-visual ((,class (:foreground "#f8f8f8" :background "#e6987a"))))
       `(spaceline-flycheck-error ((,class (:foreground ,error))))
       `(spaceline-flycheck-info ((,class (:foreground ,info))))
       `(spaceline-flycheck-warning ((,class (:foreground ,warning))))
