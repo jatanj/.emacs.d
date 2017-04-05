@@ -59,6 +59,31 @@
       (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
   (setq tabbar-buffer-groups-function 'tabbar-projectile-tabbar-buffer-groups)
 
+  (defun tabbar-buffer-help-on-tab (tab)
+    "Return the help string shown when mouse is onto TAB."
+    (if tabbar--buffer-show-groups
+        (let* ((tabset (tabbar-tab-tabset tab))
+               (tab (tabbar-selected-tab tabset)))
+          (format "mouse-1: switch to buffer %S in group [%s]"
+                  (buffer-name (tabbar-tab-value tab)) tabset))
+      (format "mouse-1: switch to buffer %S\n\
+mouse-2: delete other windows, mouse-3: kill buffer"
+              (buffer-name (tabbar-tab-value tab)))))
+
+  (defun tabbar-buffer-select-tab (event tab)
+    "On mouse EVENT, select TAB."
+    (let ((mouse-button (event-basic-type event))
+          (buffer (tabbar-tab-value tab)))
+      (cond
+       ((eq mouse-button 'mouse-2)
+        (delete-other-windows))
+       ((eq mouse-button 'mouse-3)
+        (kill-buffer-if-not-modified buffer))
+       (t
+        (switch-to-buffer buffer)))
+      ;; Don't show groups.
+      (tabbar-buffer-show-groups nil)))
+
   (let ((up   (tabbar--mwheel-key tabbar--mwheel-up-event))
         (down (tabbar--mwheel-key tabbar--mwheel-down-event)))
     (general-define-key
