@@ -92,7 +92,7 @@
       (when (bound-and-true-p electric-indent-mode)
         (electric-indent-local-mode)))))
 
-(use-package git-gutter
+(use-package git-gutter-fringe
   :ensure t
   :config
   (global-git-gutter-mode 1))
