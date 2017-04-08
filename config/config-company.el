@@ -1,7 +1,8 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0.1)
+  (setq company-dabbrev-downcase 0)
+  (setq company-idle-delay 0)
   (setq company-frontends
         '(company-pseudo-tooltip-frontend))
   (setq company-require-match nil)
