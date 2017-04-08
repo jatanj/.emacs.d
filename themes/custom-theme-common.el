@@ -224,7 +224,7 @@
       `(org-hide ((,class (:foreground ,fg4))))
       `(org-level-1 ((,class (:foreground ,keyword :bold t))))
       `(org-level-2 ((,class (:foreground ,success))))
-      `(org-level-3 ((,class (:foreground ,type))))
+      `(org-level-3 ((,class (:foreground ,fg1))))
       `(org-level-4 ((,class (:foreground ,fg1))))
       `(org-level-5 ((,class (:foreground ,fg1))))
       `(org-level-6 ((,class (:foreground ,fg1))))

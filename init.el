@@ -469,6 +469,7 @@
  "b" 'ibuffer
  "s" helm-swoop-command-map
  "n" 'neotree-projectile
+ "C-n" 'neotree-switch-to-project-root
  "v" 'magit-file-popup
  "C-v" 'magit-status)
 

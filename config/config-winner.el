@@ -3,8 +3,11 @@
   (winner-mode)
   (general-define-key
    :keymaps 'winner-mode-map
-   "C-<left>" nil
-   "C-<right>" nil)
+   "C-c <left>" nil
+   "C-c <right>" nil
+   "C-c C-<left>" nil
+   "C-c C-<right>" nil)
+
   (general-define-key
    :keymaps 'ctl-x-map
    "1" 'delete-other-windows-winner
