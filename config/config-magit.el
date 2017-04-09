@@ -3,7 +3,7 @@
   :init
   (add-hook 'magit-mode-hook
     (lambda ()
-      (tabbar-blend-header-line "Git")
+      (tabbar-blend-header-line "Magit")
       (hscroll-mode -1)))
   (add-hook 'magit-popup-mode-hook #'tabbar-local-disable)
   (add-hook 'magit-blob-mode-hook #'tabbar-blend-header-line)
@@ -87,10 +87,9 @@
   :defer t
   :mode ("\\.gitignore\\'" . gitignore-mode)
   :init
-  (add-hook 'gitconfig-mode-hook
+  (add-hook 'gitignore-mode-hook
     (lambda ()
-      (when (bound-and-true-p electric-indent-mode)
-        (electric-indent-local-mode)))))
+      (setq indent-line-function 'indent-relative-maybe))))
 
 (use-package git-gutter-fringe
   :ensure t

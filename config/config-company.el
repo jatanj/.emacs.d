@@ -24,6 +24,11 @@
       (company-complete-selection)
     (tab-to-tab-stop)))
 
+(use-package company-statistics
+  :ensure t
+  :init
+  (company-statistics-mode 1))
+
 (use-package company-quickhelp
   :ensure t
   :after company

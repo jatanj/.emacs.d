@@ -63,6 +63,8 @@
       `(company-tooltip-common-selection ((,class (:foreground ,success :bold t))))
       `(company-tooltip-mouse ((,class (:inherit bg5))))
       `(company-tooltip-selection ((,class (:foreground ,fg1 :background ,bg3))))
+      `(company-tooltip-search ((,class (:foreground ,success))))
+      `(company-tooltip-search-selection ((,class (:foreground ,success))))
       `(dired-directory ((,class (:foreground ,builtin :bold t))))
       `(dired-symlink ((,class (:foreground ,success))))
       `(ensime-errline-highlight ((,class (:underline (:color ,error :style line)))))

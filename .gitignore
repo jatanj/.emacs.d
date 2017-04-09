@@ -10,6 +10,7 @@ projectile-bookmarks.eld
 places
 session.*
 cider-history
+company-statistics-cache.el
 .litable-lists.el
 /url
 /server/
