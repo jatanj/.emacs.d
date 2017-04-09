@@ -24,4 +24,11 @@
  "C-k" 'eval-buffer
  "C-a" 'eval-and-replace)
 
+(use-package flylisp
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook
+    (lambda ()
+      (flylisp-mode 1))))
+
 (provide 'config-emacs-lisp)
