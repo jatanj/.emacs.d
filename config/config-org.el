@@ -3,7 +3,8 @@
   (add-hook 'org-mode-hook
             (lambda ()
               (org-indent-mode 1)
-              (org-bullets-mode 1)))
+              (org-bullets-mode 1)
+              (org-toggle-pretty-entities)))
   :config
   (require 'org-mouse)
   (setq org-hide-emphasis-markers t)
@@ -19,7 +20,7 @@
     ("<left>" org-metaleft)
     ("<right>" org-metaright))
   (defhydra hydra-org-insert-row (org-mode-map "C-c")
-    ("<return>" org-table-insert-row))
+    ("<return>" org-table-insert-row "Insert row"))
   (general-define-key
    :keymaps 'org-mode-map
    "<tab>" 'org-cycle

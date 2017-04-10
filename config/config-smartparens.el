@@ -29,8 +29,8 @@
   (sp-pair "[" nil :unless '(sp-in-string-p sp-point-before-same-p sp-point-before-word-p))
   (sp-pair "{" nil :unless '(sp-in-string-p sp-point-before-same-p sp-point-before-word-p))
   (defhydra hydra-smartparens-sexp (smartparens-mode-map "C-c")
-    ("]" sp-up-sexp)
-    ("[" sp-down-sexp)))
+    ("]" sp-up-sexp "Up sexp")
+    ("[" sp-down-sexp "Down sexp")))
 
 (defun newline-and-enter-sexp (&rest _ignored)
   (newline)
