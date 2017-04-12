@@ -15,8 +15,10 @@
    "C-<prior>" 'ignore
    "C-<next>" 'ignore))
 
-(defadvice switch-to-buffer (after save-buffer-now activate)
-  (neotree-switch-to-project-root))
+(dolist (func '(switch-to-buffer
+                previous-buffer))
+  (advice-add func :after (lambda (&rest _)
+                            (neotree-switch-to-project-root))))
 
 (defun neotree-switch-to-project-root (&optional show)
   "Switch the neotree buffer root directory to the projectile project root.

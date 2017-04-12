@@ -151,7 +151,7 @@
 
 ;; Searching
 ;; http://emacs.stackexchange.com/questions/10307/#answer-10432
-(defun isearch-center-cursor ()
+(defun isearch-center-cursor (&rest _)
   (sit-for 0)
   (if (and
        ;; not the scrolling command
@@ -166,10 +166,8 @@
              (< line (* (/ (window-height) 9) 1)))))
       (let ((recenter-position 0.3))
         (recenter '(4)))))
-(defadvice isearch-update (before my-isearch-update activate)
-  (isearch-center-cursor))
-(defadvice evil-search (after my-evil-search activate)
-  (isearch-center-cursor))
+(advice-add 'isearch-update :before #'isearch-center-cursor)
+(advice-add 'evil-search :after #'isearch-center-cursor)
 
 ;; Use UTF-8 everywhere
 (set-language-environment "UTF-8")
