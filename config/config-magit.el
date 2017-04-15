@@ -9,6 +9,8 @@
   (add-hook 'magit-blob-mode-hook #'tabbar-blend-header-line)
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (magit-define-popup-action 'magit-file-popup ?d "Diff..." 'magit-diff-buffer-file-popup)
+  (magit-define-popup-action 'magit-file-popup ?D "Diff" 'magit-diff-buffer-file)
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)
   (defhydra hydra-magit-blob (magit-blob-mode-map "g t")
