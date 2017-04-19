@@ -9,8 +9,10 @@
   (add-hook 'magit-blob-mode-hook #'tabbar-blend-header-line)
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
-  (magit-define-popup-action 'magit-file-popup ?d "Diff..." 'magit-diff-buffer-file-popup)
-  (magit-define-popup-action 'magit-file-popup ?D "Diff" 'magit-diff-buffer-file)
+  (dolist (action '((?d "Diff..." magit-diff-buffer-file-popup)
+                    (?D "Diff"    magit-diff-buffer-file)
+                    (?g "Gutter"  toggle-global-git-gutter-mode)))
+    (apply 'magit-define-popup-action 'magit-file-popup action))
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)
   (defhydra hydra-magit-blob (magit-blob-mode-map "g t")
@@ -94,8 +96,12 @@
       (setq indent-line-function 'indent-relative-maybe))))
 
 (use-package git-gutter-fringe
-  :ensure t
-  :config
-  (global-git-gutter-mode 1))
+  :ensure t)
+
+(defun toggle-global-git-gutter-mode ()
+  (interactive)
+  (if (bound-and-true-p git-gutter-mode)
+      (global-git-gutter-mode -1)
+    (global-git-gutter-mode)))
 
 (provide 'config-magit)
