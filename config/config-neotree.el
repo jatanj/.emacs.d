@@ -16,7 +16,8 @@
    "C-<next>" 'ignore))
 
 (dolist (func '(switch-to-buffer
-                previous-buffer))
+                previous-buffer
+                kill-this-buffer))
   (advice-add func :after (lambda (&rest _)
                             (neotree-switch-to-project-root))))
 

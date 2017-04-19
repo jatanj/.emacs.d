@@ -9,10 +9,6 @@
   (require 'org-mouse)
   (setq org-hide-emphasis-markers t)
   (setq-default org-startup-folded 'showall)
-  (font-lock-add-keywords 'org-mode
-                          '(("^ +\\([-*]\\) "
-                             (0 (prog1 ()
-                                  (compose-region (match-beginning 1) (match-end 1) "•"))))))
   (defhydra hydra-org-move (org-mode-map "C-c")
     ("<up>" org-metaup)
     ("<down>" org-metadown))

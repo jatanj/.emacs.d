@@ -11,6 +11,7 @@
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook
             (lambda ()
+              (company-mode 1)
               (eldoc-mode 1)
               (setq-local company-quickhelp-delay nil)
               (setq-local local-jump-to-definition 'racer-find-definition)))
