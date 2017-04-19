@@ -13,11 +13,12 @@
   (dolist (mode '(c-mode
                   c++-mode
                   java-mode
-                  rust-mode
+                  groovy-mode
+                  scala-mode
                   d-mode
                   typescript-mode
                   js2-mode
-                  scala-mode))
+                  rust-mode))
     (sp-local-pair mode "{" nil :post-handlers '((newline-and-enter-sexp "RET"))))
   (sp-local-pair #'fsharp-mode "'" nil :actions nil)
   (dolist (mode '(gfm-mode
