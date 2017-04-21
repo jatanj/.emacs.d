@@ -16,9 +16,10 @@
                   groovy-mode
                   scala-mode
                   d-mode
+                  rust-mode
                   typescript-mode
                   js2-mode
-                  rust-mode))
+                  css-mode))
     (sp-local-pair mode "{" nil :post-handlers '((newline-and-enter-sexp "RET"))))
   (sp-local-pair #'fsharp-mode "'" nil :actions nil)
   (dolist (mode '(gfm-mode
