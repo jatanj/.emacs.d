@@ -5,6 +5,7 @@
               (org-indent-mode 1)
               (org-bullets-mode 1)
               (org-toggle-pretty-entities)))
+  (add-hook 'text-mode-hook #'turn-on-orgtbl)
   :config
   (require 'org-mouse)
   (setq org-hide-emphasis-markers t)

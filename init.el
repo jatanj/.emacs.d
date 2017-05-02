@@ -104,6 +104,7 @@
 ;; Line numbers
 (global-linum-mode 1)
 (setq linum-format "%4d ")
+(setq-default left-fringe-width 10)
 
 ;; Vertical scrolling
 (setq scroll-step 1)

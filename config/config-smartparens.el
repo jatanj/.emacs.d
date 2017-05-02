@@ -19,7 +19,8 @@
                   rust-mode
                   typescript-mode
                   js2-mode
-                  css-mode))
+                  css-mode
+                  scss-mode))
     (sp-local-pair mode "{" nil :post-handlers '((newline-and-enter-sexp "RET"))))
   (sp-local-pair #'fsharp-mode "'" nil :actions nil)
   (dolist (mode '(gfm-mode

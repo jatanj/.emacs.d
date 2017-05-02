@@ -12,9 +12,13 @@
          ("\\.tsx\\'"       . web-mode))
   :init
   (add-hook 'web-mode-hook
-    (lambda ()
-      (when (string= (file-name-extension (buffer-file-name)) "tsx")
-        (setup-tide-mode))))
+            (lambda ()
+              (when (string= (file-name-extension (buffer-file-name)) "tsx")
+                (setup-tide-mode))))
+  (add-hook 'nxml-mode-hook
+            (lambda ()
+              (setq nxml-child-indent 2)
+              (set-local-tab-width 2)))
   :config
   (setq sgml-basic-offset 2)
   (setq web-mode-markup-indent-offset 2)

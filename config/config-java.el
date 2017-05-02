@@ -21,6 +21,10 @@
 (use-package groovy-mode
   :ensure t
   :mode (("\\.gradle\\'" . groovy-mode)
-         ("\\.groovy\\'" . groovy-mode)))
+         ("\\.groovy\\'" . groovy-mode))
+  :init
+  (add-hook 'groovy-mode-hook
+            (lambda ()
+              (set-local-tab-width 4))))
 
 (provide 'config-java)
