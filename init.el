@@ -254,6 +254,14 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
+;; https://www.reddit.com/r/emacs/comments/69w9wg/can_we_do_this_in_emacs/dh9vra8/"
+(defun align-values (start end)
+  "Vertically aligns region based on lengths of the first value of each line."
+  (interactive "r")
+  (align-regexp start end
+                "\\S-+\\(\\s-+\\)"
+                1 1 nil))
+
 (defun comment-line-or-region ()
   "Comment either the current region if it is active or the current line."
   (interactive)
@@ -432,6 +440,7 @@
  "C-/" 'comment-line-or-region
  "C-\\" 'indent-line-or-region
  "C-|" 'sort-lines
+ "C-M-\\" 'align-values
  "<prior>" 'evil-scroll-up
  "<next>" 'evil-scroll-down
  "C-<prior>" 'tabbar-backward-tab
