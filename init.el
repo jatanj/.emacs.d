@@ -177,6 +177,7 @@
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8-unix)
 (set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16le-dos 'utf-8))
 
 ;; Backup files
