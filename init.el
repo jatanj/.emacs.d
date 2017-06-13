@@ -255,6 +255,15 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
+;; Create a new empty buffer without prompting for a name.
+;; http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
+(defun new-empty-buffer ()
+  (interactive)
+  (let ((-buf (generate-new-buffer "untitled")))
+    (switch-to-buffer -buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)))
+
 ;; https://www.reddit.com/r/emacs/comments/69w9wg/can_we_do_this_in_emacs/dh9vra8/"
 (defun align-values (start end)
   "Vertically aligns region based on lengths of the first value of each line."
@@ -464,6 +473,7 @@
  "f" 'helm-find
  "b" 'helm-buffers-list
  "m" (general-simulate-keys "C-c")
+ "!" 'new-empty-buffer
  "C-u" nil ; upcase-region
  "C-l" nil ; downcase-region
  "C-d" 'ido-dired
