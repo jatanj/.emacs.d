@@ -48,6 +48,7 @@
 (setq save-interprogram-paste-before-kill t)
 (setq w32-pipe-read-delay 0)
 (setq ad-redefinition-action 'accept)
+(setq inhibit-compacting-font-caches t)
 
 (setq configure-frame-functions '())
 (setq configure-display-buffer-alist '())
