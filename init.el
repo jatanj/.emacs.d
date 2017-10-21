@@ -297,6 +297,9 @@
                    (_ nil))))
       (apply 'call-process (executable-find local-terminal) nil 0 nil args))))
 
+;; Fixes Gnus vulnerability
+(eval-after-load "enriched" '(defun enriched-decode-display-prop (start end &optional param) (list start end)))
+
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
 
