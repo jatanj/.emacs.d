@@ -1,4 +1,4 @@
-;;; nord-theme.el
+;; nord-theme.el
 ;;; Inspired by the Nord color palette, https://github.com/arcticicestudio/nord.
 
 (require 'custom-theme-common)
@@ -26,7 +26,7 @@
   (magenta   "#8989c4")
   (cyan      "#5aa4c2")
   (builtin   "#90788c")
-  (keyword   "#c3a287")
+  (keyword   "#90788c")
   (const     fg1)
   (func      fg1)
   (str       "#ffebb5")
