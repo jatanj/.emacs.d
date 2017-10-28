@@ -15,6 +15,7 @@
     (apply 'magit-define-popup-action 'magit-file-popup action))
   (magit-auto-revert-mode -1) ; We already use global-auto-revert-mode
   (evil-set-initial-state 'magit-mode 'emacs)
+  (setq magit-rebase-arguments '("--committer-date-is-author-date"))
   (defhydra hydra-magit-blob (magit-blob-mode-map "g t")
     ("p" magit-blob-previous "Previous")
     ("n" magit-blob-next "Next")

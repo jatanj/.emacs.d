@@ -257,7 +257,7 @@
           (call-interactively 'backward-delete-char))))))
 
 ;; Create a new empty buffer without prompting for a name.
-;; http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
+;; http://ergoemacs.org/emacs/emacs_new_empty_buffer.html
 (defun new-empty-buffer ()
   (interactive)
   (let ((-buf (generate-new-buffer "untitled")))
@@ -467,7 +467,6 @@
  "S-<down>" (lambda () (interactive) (next-line 10))
  "S-<left>" (lambda () (interactive) (backward-char 10))
  "S-<right>" (lambda () (interactive) (forward-char 10)))
-
 (general-define-key
  :keymaps 'ctl-x-map
  "`" 'open-terminal-here
@@ -485,7 +484,6 @@
  "C-v" 'magit-status
  "C-b" nil
  "C-h" 'hscroll-mode)
-
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
@@ -496,12 +494,10 @@
  "C-n" 'neotree-switch-to-project-root
  "v" 'magit-file-popup
  "C-v" 'magit-status)
-
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
  "C-d" (general-simulate-keys "<next>")
  "C-u" (general-simulate-keys "<prior>"))
-
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
