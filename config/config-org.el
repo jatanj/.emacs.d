@@ -33,7 +33,7 @@
   :ensure t
   :after org
   :init
-  (setq org-ellipsis " …")
+  (setq org-ellipsis " ...")
   (setq org-bullets-bullet-list '("⚫")))
 
 (provide 'config-org)
