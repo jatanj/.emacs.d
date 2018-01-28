@@ -10,7 +10,8 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(eval-when-compile (require 'use-package))
+(eval-when-compile
+  (require 'use-package))
 
 ;; Load machine-specific settings
 (let ((local-settings "~/.emacs.d/local.el"))
@@ -476,7 +477,6 @@
  "f" 'helm-find
  "b" 'helm-buffers-list
  "m" (general-simulate-keys "C-c")
- "!" 'new-empty-buffer
  "C-u" nil ; upcase-region
  "C-l" nil ; downcase-region
  "C-d" 'ido-dired
@@ -491,6 +491,7 @@
  "s" helm-swoop-command-map
  "C-a" 'neotree-find
  "C-b" 'neotree-projectile
+ "n" 'new-empty-buffer
  "C-n" 'neotree-switch-to-project-root
  "v" 'magit-file-popup
  "C-v" 'magit-status)
