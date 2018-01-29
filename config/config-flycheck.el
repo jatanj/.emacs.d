@@ -1,6 +1,7 @@
 (use-package flycheck
   :ensure t
   :config
+  (setq flycheck-display-errors-delay 0.3)
   (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
   ;; https://github.com/amperser/proselint
   (when (executable-find "proselint")
