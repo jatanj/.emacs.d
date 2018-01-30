@@ -47,7 +47,7 @@
 
   (general-define-key
    :states '(normal visual)
-   "SPC" (general-simulate-keys "C-k"))
+   "SPC" (general-simulate-key "C-k"))
 
   (general-define-key
    :states '(normal insert visual)
@@ -62,10 +62,10 @@
    :states '(normal visual motion)
    "J" 'tabbar-backward-tab
    "K" 'tabbar-forward-tab
-   "S-<up>" (general-simulate-keys "10k")
-   "S-<down>" (general-simulate-keys "10j")
-   "S-<left>" (general-simulate-keys "10h")
-   "S-<right>" (general-simulate-keys "10l"))
+   "S-<up>" (lambda () (interactive) (evil-previous-line 10))
+   "S-<down>" (lambda () (interactive) (evil-next-line 10))
+   "S-<left>" (lambda () (interactive) (evil-backward-char 10))
+   "S-<right>" (lambda () (interactive) (evil-forward-char 10)))
 
   (general-define-key
    :states '(normal insert visual motion)

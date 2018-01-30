@@ -12,7 +12,7 @@
   :config
   (general-define-key
    :keymaps 'ibuffer-mode-map
-   "C-d" (general-simulate-keys "<next>")
-   "C-u" (general-simulate-keys "<prior>")))
+   "C-d" (general-simulate-key "<next>")
+   "C-u" (general-simulate-key "<prior>")))
 
 (provide 'config-ibuffer-projectile)

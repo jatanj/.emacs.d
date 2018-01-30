@@ -476,7 +476,7 @@
  "k" 'ido-kill-buffer
  "f" 'helm-find
  "b" 'helm-buffers-list
- "m" (general-simulate-keys "C-c")
+ "m" (general-simulate-key "C-c")
  "C-u" nil ; upcase-region
  "C-l" nil ; downcase-region
  "C-d" 'ido-dired
@@ -497,8 +497,8 @@
  "C-v" 'magit-status)
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
- "C-d" (general-simulate-keys "<next>")
- "C-u" (general-simulate-keys "<prior>"))
+ "C-d" (general-simulate-key "<next>")
+ "C-u" (general-simulate-key "<prior>"))
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward

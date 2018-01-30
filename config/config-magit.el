@@ -52,7 +52,7 @@
   (general-define-key
    :states '(magit normal visual)
    :keymaps 'magit-mode-map
-   "C-<tab>" (general-simulate-keys "^ <tab>")
+   "C-<tab>" (general-simulate-key "^ <tab>")
    "C-S-<tab>" 'magit-section-cycle-diffs
    "S-<up>" (lambda () (interactive) (evil-previous-line 10))
    "S-<down>" (lambda () (interactive) (evil-next-line 10))
