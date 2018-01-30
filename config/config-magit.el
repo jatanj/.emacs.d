@@ -45,7 +45,6 @@
 
 (use-package evil-magit
   :ensure t
-  :defer t
   :after magit
   :config
   (evil-define-key evil-magit-state magit-mode-map (kbd "C-k") nil)
