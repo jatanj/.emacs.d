@@ -286,7 +286,9 @@
   (interactive)
   (if (use-region-p)
       (indent-region (region-beginning) (region-end))
-    (funcall indent-line-function)))
+    (progn
+      (funcall indent-line-function)
+      (evil-next-line))))
 
 (defun open-terminal-here ()
   "Opens a terminal window in the current buffer's directory."
