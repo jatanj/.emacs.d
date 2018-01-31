@@ -58,7 +58,7 @@
    "C-S-h" 'anzu-query-replace-at-cursor-thing
    "C-b" 'do-nothing)
 
-  (general-define-key
+   (general-define-key
    :states '(normal visual motion)
    "J" 'tabbar-backward-tab
    "K" 'tabbar-forward-tab
