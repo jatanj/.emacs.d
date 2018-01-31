@@ -34,20 +34,32 @@
    :states 'insert
    "C-k" ctl-x-map
    "C-g" 'evil-force-normal-state
-   "<tab>" 'company-complete-selection-or-indent
+   "<tab>" 'company-complete-selection-or-indent)
+
+  (general-define-key
+   :states 'visual
+   ">" 'evil-shift-right-visual
+   "<" 'evil-shift-left-visual
+   ;; For some reason or other, using vim key chords like "10k"
+   ;; no longer works with general-simulate-key, so we'll do it
+   ;; the lame way!
+   "S-<up>" (general-simulate-key "k k k k k k k k k k")
+   "S-<down>" (general-simulate-key "j j j j j j j j j j")
+   "S-<left>" 'evil-beginning-of-visual-line
+   "S-<right>" 'evil-end-of-visual-line)
+
+   (general-define-key
+   :states '(normal insert)
    "S-<up>" (lambda () (interactive) (evil-previous-line 10))
    "S-<down>" (lambda () (interactive) (evil-next-line 10))
    "S-<left>" (lambda () (interactive) (evil-backward-char 10))
    "S-<right>" (lambda () (interactive) (evil-forward-char 10)))
 
   (general-define-key
-   :states 'visual
-   ">" 'evil-shift-right-visual
-   "<" 'evil-shift-left-visual)
-
-  (general-define-key
    :states '(normal visual)
-   "SPC" (general-simulate-key "C-k"))
+   "SPC" (general-simulate-key "C-k")
+   "J" 'tabbar-backward-tab
+   "K" 'tabbar-forward-tab)
 
   (general-define-key
    :states '(normal insert visual)
@@ -58,22 +70,13 @@
    "C-S-h" 'anzu-query-replace-at-cursor-thing
    "C-b" 'do-nothing)
 
-   (general-define-key
-   :states '(normal visual motion)
-   "J" 'tabbar-backward-tab
-   "K" 'tabbar-forward-tab
-   "S-<up>" (lambda () (interactive) (evil-previous-line 10))
-   "S-<down>" (lambda () (interactive) (evil-next-line 10))
-   "S-<left>" (lambda () (interactive) (evil-backward-char 10))
-   "S-<right>" (lambda () (interactive) (evil-forward-char 10)))
-
   (general-define-key
-   :states '(normal insert visual motion)
+   :states '(normal insert visual)
    "C-]" 'evil-jump-to-definition
    "C-q" 'evil-scroll-line-up)
 
   (general-define-key
-   :states '(normal insert visual emacs motion)
+   :states '(normal insert visual emacs)
    "<home>" 'back-to-indentation))
 
 ;; Improve shift to keep selection
