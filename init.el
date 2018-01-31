@@ -366,7 +366,8 @@
                 web-mode
                 which-key
                 window-numbering
-                winner))
+                winner
+                yaml))
   (require (intern (concat "config-" (symbol-name name)))))
 
 ;; Themes
