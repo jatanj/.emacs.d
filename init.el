@@ -300,6 +300,16 @@
                    (_ nil))))
       (apply 'call-process (executable-find local-terminal) nil 0 nil args))))
 
+(defun shell-command-replace-region (command)
+  "Replaces the current region with the output of the given shell command."
+  (interactive "sShell command replace region: ")
+  (let ((cmd (s-split " " command)))
+    (cond
+     ((s-blank? command) (message "Invalid argument"))
+     ((not (executable-find (car cmd))) (message "Command '%s' not found" (car cmd)))
+     ((not (use-region-p)) (message "No region was active"))
+     (t (shell-command-on-region (region-beginning) (region-end) command nil t)))))
+
 ;; Fixes Gnus vulnerability
 (eval-after-load "enriched" '(defun enriched-decode-display-prop (start end &optional param) (list start end)))
 
@@ -369,6 +379,7 @@
                 which-key
                 window-numbering
                 winner
+                xml
                 yaml))
   (require (intern (concat "config-" (symbol-name name)))))
 
