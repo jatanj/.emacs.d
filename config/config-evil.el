@@ -30,6 +30,24 @@
                               (all "C-p")
                               (all "C-S-p")))
 
+  (setq evil-jump-count 10)
+  (defun evil-previous-line-jump ()
+    (interactive)
+    (evil-previous-line evil-jump-count))
+  (defun evil-next-line-jump ()
+    (interactive)
+    (evil-next-line evil-jump-count))
+  (defun evil-forward-char-jump ()
+    (interactive)
+    (evil-forward-char evil-jump-count))
+  (defun evil-backward-char-jump ()
+    (interactive)
+    (evil-backward-char evil-jump-count))
+  (evil-declare-motion 'evil-next-line-jump)
+  (evil-declare-motion 'evil-previous-line-jump)
+  (evil-declare-motion 'evil-forward-char-jump)
+  (evil-declare-motion 'evil-backward-char-jump)
+
   (general-define-key
    :states 'insert
    "C-k" ctl-x-map
@@ -39,21 +57,14 @@
   (general-define-key
    :states 'visual
    ">" 'evil-shift-right-visual
-   "<" 'evil-shift-left-visual
-   ;; For some reason or other, using vim key chords like "10k"
-   ;; no longer works with general-simulate-key, so we'll do it
-   ;; the lame way!
-   "S-<up>" (general-simulate-key "k k k k k k k k k k")
-   "S-<down>" (general-simulate-key "j j j j j j j j j j")
-   "S-<left>" 'evil-beginning-of-visual-line
-   "S-<right>" 'evil-end-of-visual-line)
+   "<" 'evil-shift-left-visual)
 
-   (general-define-key
-   :states '(normal insert)
-   "S-<up>" (lambda () (interactive) (evil-previous-line 10))
-   "S-<down>" (lambda () (interactive) (evil-next-line 10))
-   "S-<left>" (lambda () (interactive) (evil-backward-char 10))
-   "S-<right>" (lambda () (interactive) (evil-forward-char 10)))
+  (general-define-key
+   :states '(normal insert visual)
+   "S-<up>" 'evil-previous-line-jump
+   "S-<down>" 'evil-next-line-jump
+   "S-<left>" 'evil-backward-char-jump
+   "S-<right>" 'evil-forward-char-jump)
 
   (general-define-key
    :states '(normal visual)
