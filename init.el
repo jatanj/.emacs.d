@@ -494,6 +494,7 @@
  "k" 'ido-kill-buffer
  "f" 'helm-find
  "b" 'helm-buffers-list
+ "t" 'new-empty-buffer
  "m" (general-simulate-key "C-c")
  "C-u" nil ; upcase-region
  "C-l" nil ; downcase-region
