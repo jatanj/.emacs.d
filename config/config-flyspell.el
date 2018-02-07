@@ -10,7 +10,7 @@
     (interactive)
     (let ((word (flyspell-get-word)))
       (when (consp word)
-        (flyspell-do-correct 'save nil (car word) (point) (cadr word) (caddr word) (point)))))
+        (flyspell-do-correct 'save nil (car word) (point) (cadr word) (cadr word) (point)))))
 
   (general-define-key
    :keymaps 'flyspell-mode-map
