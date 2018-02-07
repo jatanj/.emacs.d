@@ -2,6 +2,7 @@
   :ensure t
   :config
   (projectile-global-mode)
+  (setq projectile-mode-line "Projectile")
   (setq projectile-indexing-method 'alien)
   ;; (setq projectile-enable-caching t)
   ;; (setq 'projectile-ignored-projects '())

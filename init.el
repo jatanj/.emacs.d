@@ -182,6 +182,10 @@
 (setq-default buffer-file-coding-system 'utf-8-unix)
 (set-selection-coding-system (if (eq system-type 'windows-nt) 'utf-16le-dos 'utf-8))
 
+;; Tramp
+(setq tramp-copy-size-limit nil)
+(setq tramp-inline-compress-start-size nil)
+
 ;; Backup files
 (setq backup-by-copying t)
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
@@ -366,7 +370,7 @@
                 ranger
                 rust
                 scala
-                screenshow-mode
+                ;; screenshow-mode
                 shell
                 smartparens
                 smooth-scroll
