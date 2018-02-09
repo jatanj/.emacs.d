@@ -19,7 +19,7 @@
 (dolist (local-setting '((local-directory . "~/")
                          (local-terminal . nil)
                          (local-font-face . "Inconsolata-12")
-                         (local-default-theme . "evening-dark")
+                         (local-default-theme . "nord")
                          (local-desktop-window-params . nil)
                          (local-client-window-params . nil)))
   (unless (boundp (car local-setting))
