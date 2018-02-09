@@ -176,7 +176,7 @@
       `(magit-diff-hunk-heading-highlight ((,class (:background ,bg3))))
       `(magit-diffstat-added ((,class (:foreground ,info))))
       `(magit-diffstat-removed ((,class (:foreground ,error))))
-      `(magit-hash ((,class (:foreground ,fg2))))
+      `(magit-hash ((,class (:foreground ,type :bold t))))
       `(magit-head ((,class (:foreground ,success))))
       `(magit-hunk-heading ((,class (:background ,bg2))))
       `(magit-hunk-heading-highlight ((,class (:background ,bg2))))
