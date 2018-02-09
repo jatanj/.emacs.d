@@ -297,12 +297,17 @@
 (defun open-terminal-here ()
   "Opens a terminal window in the current buffer's directory."
   (interactive)
-  (when local-terminal
+  (let* ((candidates '("xfce4-terminal" "tilix" "terminator" "xterm"))
+         (terminal (or (let ((file (executable-find local-terminal)))
+                         (when file (list local-terminal file)))
+                       (car (->> candidates
+                                 (-map (lambda (x) (list x (executable-find x))))
+                                 (-filter (lambda (x) (second x))))))))
     (let* ((buffer-directory (file-name-directory (file-truename (buffer-file-name))))
-           (args (pcase local-terminal
+           (args (pcase (car terminal)
                    ("xfce4-terminal" `("--default-working-directory" ,buffer-directory))
                    (_ nil))))
-      (apply 'call-process (executable-find local-terminal) nil 0 nil args))))
+      (apply 'call-process (second terminal) nil 0 nil args))))
 
 (defun shell-command-replace-region (command)
   "Replaces the current region with the output of the given shell command."
