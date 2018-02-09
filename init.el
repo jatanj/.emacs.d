@@ -516,7 +516,6 @@
  "C-a" 'neotree-find
  "C-b" 'neotree-projectile
  "n" 'new-empty-buffer
- "C-n" 'neotree-switch-to-project-root
  "v" 'magit-file-popup
  "C-v" 'magit-status)
 (general-define-key
