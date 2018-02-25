@@ -8,6 +8,7 @@
   (setq company-require-match nil)
   (setq company-auto-complete nil)
   (setq company-tooltip-align-annotations t)
+  (setq company-selection-wrap-around t)
   (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
   (general-define-key "C-j" nil)
   (general-define-key
@@ -15,8 +16,14 @@
    "C-SPC" 'company-complete)
   (general-define-key
    :keymaps 'company-active-map
+   "<escape>" 'company-quit
    "<tab>" nil
    "<return>" (lookup-key (current-global-map) (kbd "RET"))))
+
+(defun company-quit ()
+  (interactive)
+  (company-cancel)
+  (evil-normal-state))
 
 (defun company-complete-selection-or-indent ()
   (interactive)
