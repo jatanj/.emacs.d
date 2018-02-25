@@ -8,7 +8,10 @@
       (ibuffer-projectile-set-filter-groups)
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))
-      (tabbar-blend-header-line "Buffers")))
+      (tabbar-blend-header-line
+       (format "Buffers [total %d, files %d]"
+               (length (buffer-list))
+               (length (file-list))))))
   :config
   (general-define-key
    :keymaps 'ibuffer-mode-map

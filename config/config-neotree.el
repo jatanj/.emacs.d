@@ -7,7 +7,7 @@
   (add-hook 'neotree-mode-hook
     (lambda ()
       (linum-mode -1)
-      (tabbar-blend-header-line "Folders")))
+      (tabbar-blend-header-line "Explorer")))
   :config
   (general-define-key
    :keymaps 'neotree-mode-map
