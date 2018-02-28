@@ -2,6 +2,7 @@
   :ensure t
   :defer t
   :mode (("\\.scala\\'" . scala-mode)
+         ("\\.sc\\'"    . scala-mode)
          ("\\.sbt\\'"   . scala-mode))
   :init
   (setq scala-indent:use-javadoc-style t)
