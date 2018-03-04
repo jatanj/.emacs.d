@@ -15,6 +15,8 @@
   (setq ensime-typecheck-interval 1)
   (setq ensime-typecheck-idle-interval 0.2)
   (setq ensime-use-helm t)
+  (setq ensime-company-idle-delay 0.1)
+  (setq ensime-eldoc-hints 'error)
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*ENSIME-Compilation-Result*" eos)
                  (display-buffer-reuse-window
