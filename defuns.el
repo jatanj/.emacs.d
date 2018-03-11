@@ -27,16 +27,19 @@
   "Opens a terminal window in the current buffer's directory."
   (interactive)
   (let* ((candidates '("xfce4-terminal" "tilix" "terminator" "xterm"))
-         (terminal (or (let ((file (executable-find local-terminal)))
-                         (when file (list local-terminal file)))
+         (terminal (or (and local-terminal
+                            (let ((file (executable-find local-terminal)))
+                              (when file (list local-terminal file))))
                        (car (->> candidates
                                  (-map (lambda (x) (list x (executable-find x))))
-                                 (-filter (lambda (x) (second x))))))))
-    (let* ((buffer-directory (file-name-directory (file-truename (buffer-file-name))))
-           (args (pcase (car terminal)
-                   ("xfce4-terminal" `("--default-working-directory" ,buffer-directory))
-                   (_ nil))))
-      (apply 'call-process (second terminal) nil 0 nil args))))
+                                 (-filter (lambda (x) (nth 1 x))))))))
+    (if terminal
+        (let* ((buffer-directory (file-name-directory (file-truename (buffer-file-name))))
+               (args (pcase (car terminal)
+                       ("xfce4-terminal" `("--default-working-directory" ,buffer-directory))
+                       (_ nil))))
+          (apply 'call-process (nth 1 terminal) nil 0 nil args))
+      (message "Unable to find terminal executable"))))
 
 (defun shell-command-replace-region (command)
   "Replaces the current region with the output of the given shell command."
