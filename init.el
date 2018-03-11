@@ -304,8 +304,15 @@
   (add-hook 'configure-frame-functions
             (lambda (frame) (load-initial-theme))))
 
-;; If we're using emacslient, we need to delay all configure-frame-functions
-;; until after the frame is created.
+;; https://stackoverflow.com/a/33298750
+(defun ec-disable-background (&optional frame)
+  "If the FRAME created in terminal don't load background color."
+  (unless (display-graphic-p frame)
+    (set-face-background 'default "unspecified-bg" frame)))
+(add-hook 'after-make-frame-functions 'ec-disable-background)
+
+;; Delay all configure-frame-functions for emacsclient until after the frame
+;; is created.
 (defun configure-frame (frame)
   (dolist (func configure-frame-functions)
     (funcall func frame))
