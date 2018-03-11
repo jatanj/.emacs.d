@@ -53,7 +53,7 @@
   (setq ensime-typecheck-idle-interval 0.2)
   (setq ensime-use-helm t)
   (setq ensime-company-idle-delay 0.1)
-  (setq ensime-eldoc-hints 'error)
+  (setq ensime-eldoc-hints 'all)
   (setq ensime-sem-high-enabled-p nil)
   (setq scala-auto-insert-asterisk-in-comments t)
 
@@ -81,11 +81,12 @@
    "<return>" 'scala-newline-and-indent-with-asterisk))
 
 (use-package flycheck-ensime
-  :after ensime
+  :after flycheck
   :config
-  (add-hook 'ensime-mode-hook
+  (add-hook 'flycheck-mode-hook #'flycheck-ensime-setup)
+  (add-hook 'scala-mode-hook
             (lambda ()
-              (flycheck-ensime-setup)
-              (flycheck-mode 1))))
+              (flycheck-mode 1)
+              (flycheck-pos-tip-enable))))
 
 (provide 'config-scala)
