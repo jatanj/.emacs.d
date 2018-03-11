@@ -15,6 +15,7 @@ company-statistics-cache.el
 /url
 /server/
 /meghanada
+/scratch
 /emacs-livedown/
 *~
 .\#*
