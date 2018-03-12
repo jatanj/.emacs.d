@@ -98,14 +98,14 @@
 (advice-add 'toggle-frame-fullscreen :around #'force-maximized-with-fullscreen)
 
 ;; Save desktop
-(unless (daemonp)
-  (setq desktop-restore-eager t)
-  (desktop-save-mode)
-  (dolist (no-save-mode '(magit-mode
-                          magit-log-mode))
-    (add-to-list 'desktop-modes-not-to-save no-save-mode))
-  (dolist (no-save-files '("\\`COMMIT_EDITMSG"))
-    (add-to-list 'desktop-files-not-to-save no-save-files)))
+(setq desktop-restore-eager t)
+(setq desktop-load-locked-desktop t)
+(desktop-save-mode 1)
+(dolist (no-save-mode '(magit-mode
+                        magit-log-mode))
+  (add-to-list 'desktop-modes-not-to-save no-save-mode))
+(dolist (no-save-files '("\\`COMMIT_EDITMSG"))
+  (add-to-list 'desktop-files-not-to-save no-save-files))
 
 ;; Set font
 (add-to-list 'default-frame-alist `(font . ,local-font-face))
