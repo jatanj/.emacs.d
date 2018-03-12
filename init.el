@@ -262,6 +262,7 @@
                 scala
                 screenshow-mode
                 shell
+                systemd
                 smartparens
                 smooth-scroll
                 spaceline
