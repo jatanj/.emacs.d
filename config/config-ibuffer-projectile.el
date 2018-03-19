@@ -9,7 +9,7 @@
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))
       (tabbar-blend-header-line
-       (format "Buffers [total %d, files %d]"
+       (format "Buffers [%d total, %d files]"
                (length (buffer-list))
                (length (file-list))))))
   :config
