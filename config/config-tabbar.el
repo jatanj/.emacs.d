@@ -118,7 +118,7 @@ mouse-2: delete other windows, mouse-3: kill buffer"
     (tabbar-local-disable))
   (setq header-line-format
         (concat (propertize " " 'display '((space :align-to 0)))
-                (or (propertize text 'face '(:foreground "#90788c" :weight bold)) " "))))
+                (or (propertize text 'face '(:foreground "#4fc1e9" :weight bold)) " "))))
 
 (defun tabbar-select-tab-by-number (n)
   "Switch to the nth tab in the current tabset."

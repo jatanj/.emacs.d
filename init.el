@@ -131,6 +131,8 @@
     (horizontal-scroll-bar-mode -1)))
 
 ;; Horizontal scrolling
+(setq-default truncate-partial-width-windows nil)
+(setq-default truncate-lines t)
 (setq hscroll-step 1)
 (setq hscroll-margin 1)
 (defun toggle-hscroll-mode (&optional arg global)
@@ -256,16 +258,17 @@
                 neotree
                 org
                 projectile
+                quickrun
                 rainbow-mode
                 ranger
                 rust
                 scala
                 screenshow-mode
                 shell
-                systemd
                 smartparens
                 smooth-scroll
                 spaceline
+                systemd
                 tabbar
                 term
                 typescript
