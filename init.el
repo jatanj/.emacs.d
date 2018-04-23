@@ -101,6 +101,8 @@
 (setq desktop-restore-eager t)
 (setq desktop-load-locked-desktop t)
 (desktop-save-mode 1)
+(if (daemonp)
+    (setq desktop-restore-frames nil))
 (dolist (no-save-mode '(magit-mode
                         magit-log-mode))
   (add-to-list 'desktop-modes-not-to-save no-save-mode))
