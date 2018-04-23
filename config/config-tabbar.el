@@ -54,6 +54,7 @@
             ((memq major-mode '(dired-mode)) '("Dir"))
             ((string-equal "*" (substring (buffer-name) 0 1)) '("Emacs"))
             ((memq major-mode '(org-mode calendar-mode diary-mode)) '("Org"))
+            ((memq major-mode '(magit-status-mode magit-diff-mode magit-log-mode magit-mode)) '("Magit"))
             ((condition-case err (projectile-project-root) (error nil)) (list (projectile-project-name)))
             (t '("User"))))
       (symbol-value 'tabbar-projectile-tabbar-buffer-group-calc)))
