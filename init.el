@@ -413,6 +413,7 @@
  "p" projectile-command-map
  "b" 'ibuffer
  "s" helm-swoop-command-map
+ "d" 'desktop-save
  "C-a" 'neotree-find
  "C-b" 'neotree-projectile
  "n" 'new-empty-buffer
