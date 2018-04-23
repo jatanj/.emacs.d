@@ -17,6 +17,8 @@ company-statistics-cache.el
 /meghanada
 /scratch
 /emacs-livedown/
+/eclipse.jdt.ls
+/.cache
 *~
 .\#*
 \#*\#
