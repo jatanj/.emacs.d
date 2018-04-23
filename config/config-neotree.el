@@ -11,7 +11,7 @@
   (add-hook 'neotree-mode-hook
     (lambda ()
       (linum-mode -1)
-      (tabbar-blend-header-line " Explorer")))
+      (tabbar-blend-header-line " File Explorer")))
   :config
   (general-define-key
    :keymaps 'neotree-mode-map
