@@ -3,7 +3,7 @@
   :init
   (setq tabbar-use-images nil)
   :config
-  (unless (daemonp) (tabbar-mode 1))
+  (tabbar-mode 1)
   (add-hook 'configure-frame-functions
             (lambda (frame)
               (when (bound-and-true-p tabbar-mode)

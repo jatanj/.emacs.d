@@ -69,6 +69,7 @@ When SHOW is t, the neotree buffer will be shown if it's currently hidden."
                      (-first 'bufferp))))
     (when buffer
       (with-current-buffer buffer
+        (setq display-line-numbers nil)
         (face-remap-set-base 'default :background "#232630")))))
 
 (defun neotree-projectile ()

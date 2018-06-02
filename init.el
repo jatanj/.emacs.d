@@ -106,8 +106,8 @@
 (dolist (no-save-mode '(magit-mode
                         magit-log-mode))
   (add-to-list 'desktop-modes-not-to-save no-save-mode))
-(dolist (no-save-files '("\\`COMMIT_EDITMSG"))
-  (add-to-list 'desktop-files-not-to-save no-save-files))
+; (dolist (f '("\\`COMMIT_EDITMSG"))
+;   (add-to-list 'desktop-files-not-to-save f))
 
 ;; Set font
 (add-to-list 'default-frame-alist `(font . ,local-font-face))
@@ -119,9 +119,12 @@
 (setq-default cursor-in-non-selected-windows nil)
 
 ;; Line numbers
-(global-linum-mode 1)
-(setq linum-format "%4d ")
+(linum-mode -1)
 (setq-default left-fringe-width 10)
+(global-display-line-numbers-mode 1)
+(setq-default display-line-numbers t)
+(setq-default display-line-numbers-grow-only t)
+(setq-default display-line-numbers-width-start t)
 
 ;; Vertical scrolling
 (setq scroll-step 1)
@@ -309,13 +312,6 @@
         (add-hook hook #'load-initial-theme)))
   (add-hook 'configure-frame-functions
             (lambda (frame) (load-initial-theme))))
-
-;; https://stackoverflow.com/a/33298750
-(defun ec-disable-background (&optional frame)
-  "If the FRAME created in terminal don't load background color."
-  (unless (display-graphic-p frame)
-    (set-face-background 'default "unspecified-bg" frame)))
-(add-hook 'after-make-frame-functions 'ec-disable-background)
 
 ;; Delay all configure-frame-functions for emacsclient until after the frame
 ;; is created.

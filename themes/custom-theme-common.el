@@ -30,6 +30,8 @@
       `(hl-line ((,class (:foreground ,fg1 :background ,match))))
       `(link ((,class (:foreground ,const :underline t))))
       `(linum ((,class (:foreground ,bg4 :background ,bg1))))
+      `(line-number ((,class (:foreground ,bg4 :background ,bg1))))
+      `(line-number-current-line ((,class (:foreground ,bg4 :background ,bg1))))
       `(match ((,class (:foreground ,fg1 :background ,match))))
       `(minibuffer-prompt ((,class (:bold t :foreground ,keyword))))
       `(region ((,class (:foreground ,fg1 :background ,bg3))))
