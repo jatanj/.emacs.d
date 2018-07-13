@@ -9,9 +9,9 @@
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))
       (tabbar-blend-header-line
-       (format "Buffers [%d total, %d files]"
-               (length (buffer-list))
-               (length (file-list))))))
+       (format "Buffers [%d files, %d total]"
+               (length (file-list))
+               (length (buffer-list))))))
   :config
   (general-define-key
    :keymaps 'ibuffer-mode-map

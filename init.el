@@ -177,13 +177,9 @@
 (defun isearch-center-cursor (&rest _)
   (sit-for 0)
   (if (and
-       ;; not the scrolling command
        (not (eq this-command 'isearch-other-control-char))
-       ;; not the empty string
        (> (length isearch-string) 0)
-       ;; not the first key (to lazy highlight all matches w/o recenter)
        (> (length isearch-cmds) 2)
-       ;; the point in within the given window boundaries
        (let ((line (count-screen-lines (point) (window-start))))
          (or (> line (* (/ (window-height) 4) 3))
              (< line (* (/ (window-height) 9) 1)))))
@@ -258,6 +254,7 @@
                 javascript
                 json
                 litable
+                lsp
                 magit
                 markdown
                 neotree
