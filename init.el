@@ -255,6 +255,7 @@
                 json
                 litable
                 lsp
+                lua
                 magit
                 markdown
                 neotree
