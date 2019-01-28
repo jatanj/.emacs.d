@@ -4,8 +4,8 @@
   (setq company-frontends
         '(company-pseudo-tooltip-frontend))
   (setq company-dabbrev-downcase 0)
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 0)
+  (setq company-idle-delay 0.35)
+  (setq company-minimum-prefix-length 3)
   (setq company-require-match nil)
   (setq company-auto-complete nil)
   (setq company-tooltip-align-annotations t)
