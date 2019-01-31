@@ -364,6 +364,7 @@
  "C-+" 'enlarge-window
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
+ "C-M-p" 'helm-M-x
  "C-p" 'helm-projectile-find-file
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
@@ -381,6 +382,10 @@
  "M-<right>" 'windmove-right
  "M-<up>" 'windmove-up
  "M-<down>" 'windmove-down
+ "C-<left>" 'windmove-left
+ "C-<right>" 'windmove-right
+ "C-<up>" 'windmove-up
+ "C-<down>" 'windmove-down
  "S-<up>" (lambda () (interactive) (previous-line 10))
  "S-<down>" (lambda () (interactive) (next-line 10))
  "S-<left>" (lambda () (interactive) (backward-char 10))
@@ -401,7 +406,7 @@
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" nil
- "C-h" 'hscroll-mode)
+ "C-j" 'hscroll-mode)
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
@@ -420,7 +425,7 @@
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
- "C-h" 'isearch-query-replace-regexp
+ "C-j" 'isearch-query-replace-regexp
  "C-w" 'helm-swoop-from-isearch
  "<up>" 'isearch-ring-retreat
  "<down>" 'isearch-ring-advance)
