@@ -70,7 +70,7 @@ When SHOW is t, the neotree buffer will be shown if it's currently hidden."
     (when buffer
       (with-current-buffer buffer
         (setq display-line-numbers nil)
-        (face-remap-set-base 'default :background "#232630")))))
+        (face-remap-set-base 'default :background (face-attribute 'neo-banner-face :background))))))
 
 (defun neotree-projectile ()
   "Open neotree with projectile as root and open node for current file.

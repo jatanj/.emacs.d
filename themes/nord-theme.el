@@ -18,7 +18,7 @@
   (bg3 "#434c5e")
   (bg4 "#4c566a")
   (bg5 "#5d6678")
-  (bg6 "#232630")
+  (bg6 "#292d3e")
   (red       "#bf616a")
   (green     "#a3be8c")
   (yellow    "#ebcb8b")
