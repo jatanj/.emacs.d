@@ -5,7 +5,8 @@
   :ensure t
   :after lsp-mode
   :init
-  (add-hook 'java-mode-hook #'lsp-intellij-enable))
+  ;; (add-hook 'java-mode-hook #'lsp-intellij-enable)
+  (setq lsp-intellij-server-port 8282))
 
 (use-package lsp-ui
   :ensure t

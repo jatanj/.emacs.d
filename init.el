@@ -257,7 +257,7 @@
                 javascript
                 json
                 litable
-                lsp
+                ;; lsp
                 lua
                 magit
                 markdown
