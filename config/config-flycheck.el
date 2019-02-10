@@ -54,6 +54,7 @@
   (setq flycheck-pos-tip-timeout most-positive-fixnum)
   (setq flycheck-pos-tip-display-minibuffer-errors nil)
   (defun flycheck-pos-tip-enable ()
+    (interactive)
     (flycheck-pos-tip-mode 1)
     (setq flycheck-display-errors-function
           (lambda (errors)
@@ -61,7 +62,8 @@
             (unless (company-tooltip-visible-p)
               (flycheck-pos-tip-error-messages errors))
             (when flycheck-pos-tip-display-minibuffer-errors
-              (flycheck-display-error-messages-unless-error-list errors)))))
+              (flycheck-display-error-messages-unless-error-list errors))))
+    nil)
   (defun flycheck-pos-tip-toggle ()
     (interactive)
     (if (bound-and-true-p flycheck-pos-tip-mode)
