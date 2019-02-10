@@ -2,12 +2,16 @@
   :ensure t
   :config
   (require 'helm-config)
+  (helm-mode 1)
   (helm-autoresize-mode 1)
   (setq helm-autoresize-max-height 35)
   (setq helm-M-x-fuzzy-match t)
   (setq helm-buffers-fuzzy-matching t)
   (setq helm-recentf-fuzzy-match t)
   (setq helm-semantic-fuzzy-match t)
+  (setq helm-mode-fuzzy-match t)
+  (setq helm-mode-handle-completion-in-region t)
+  (setq helm-display-header-line nil)
   (setq helm-split-window-in-side-p t)
   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s")
   (add-to-list 'display-buffer-alist
