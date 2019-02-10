@@ -31,6 +31,13 @@
                          (local-client-window-params . nil)))
   (unless (boundp (car local-setting))
     (set (car local-setting) (cdr local-setting))))
+
+;; Configuration dependencies
+(use-package general :ensure t :demand)
+(use-package hydra :ensure t :demand)
+(use-package dash :ensure t :demand)
+(use-package s :ensure t :demand)
+
 (load (expand-file-name "defuns.el" user-emacs-directory))
 
 ;; Set up load path
@@ -212,10 +219,6 @@
 
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
-
-(use-package general :ensure t :demand)
-(use-package hydra :ensure t :demand)
-(use-package dash :ensure t :demand)
 
 ;; Dired
 (put 'dired-find-alternate-file 'disabled nil)
