@@ -25,7 +25,9 @@
   (setq doom-themes-enable-bold t)
   (setq doom-themes-enable-italic nil)
   :config
-  (doom-themes-neotree-config))
+  (doom-themes-neotree-config)
+  (setq doom-neotree-enable-file-icons t)
+  (set-display-table-slot standard-display-table 0 ?\ ))
 
 (use-package nlinum-hl
   :ensure t
@@ -70,6 +72,7 @@ When SHOW is t, the neotree buffer will be shown if it's currently hidden."
     (when buffer
       (with-current-buffer buffer
         (setq display-line-numbers nil)
+        (hl-line-mode -1)
         (face-remap-set-base 'default :background (face-attribute 'neo-banner-face :background))))))
 
 (defun neotree-projectile ()
