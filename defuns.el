@@ -1,12 +1,6 @@
 (require 'dash)
 (require 's)
 
-(defun file-list ()
-  "Display a list of all open files."
-  (->> (buffer-list)
-       (-map (lambda (x) (buffer-file-name x)))
-       (-non-nil)))
-
 (defun comment-line-or-region ()
   "Comment either the current region if it is active or the current line."
   (interactive)

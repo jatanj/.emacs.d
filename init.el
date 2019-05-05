@@ -13,16 +13,20 @@
 (eval-when-compile
   (require 'use-package))
 
-(defconst init-themes-dir
-  (expand-file-name "themes" user-emacs-directory))
-(defconst init-config-dir
-  (expand-file-name "config" user-emacs-directory))
+(defun user-emacs-path (name)
+  (expand-file-name name user-emacs-directory))
+
+(defconst init-themes-path (user-emacs-path "themes"))
+(defconst init-config-path (user-emacs-path "config"))
+(defconst init-site-lisp-path (user-emacs-path "site-lisp"))
+(defconst init-local-path (user-emacs-path "local.el"))
+(defconst init-custom-path (user-emacs-path "custom.el"))
+(defconst init-defuns-path (user-emacs-path "defuns.el"))
+(defconst init-config-name-prefix "config-")
 
 ;; Load machine-specific settings
-(let ((init-local-el
-       (expand-file-name "local.el" user-emacs-directory)))
-  (when (file-exists-p init-local-el)
-    (load init-local-el)))
+(when (file-exists-p init-local-path)
+  (load init-local-path))
 (dolist (local-setting '((local-directory . "~/")
                          (local-terminal . nil)
                          (local-font-face . "Inconsolata-12")
@@ -38,18 +42,16 @@
 (use-package dash :ensure t :demand)
 (use-package s :ensure t :demand)
 
-(load (expand-file-name "defuns.el" user-emacs-directory))
+(load init-defuns-path)
 
 ;; Set up load path
-(dolist
-    (package (directory-files
-              (expand-file-name "site-lisp" user-emacs-directory) t "\\w+"))
-  (when (file-directory-p package)
-    (add-to-list 'load-path package)))
+(when (file-directory-p init-site-lisp-path)
+  (dolist (package (directory-files init-site-lisp-path t "\\w+"))
+    (when (file-directory-p package)
+      (add-to-list 'load-path package))))
 
 ;; Keep custom settings in separate file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+(load init-custom-path)
 
 ;; Startup options
 (setq frame-title-format "Emacs - %b")
@@ -233,7 +235,7 @@
              '("\\`\\*Help\\*\\'" help-mode))
 
 ;; Load config files
-(add-to-list 'load-path (expand-file-name init-config-dir))
+(add-to-list 'load-path (expand-file-name init-config-path))
 (dolist (name '(all-the-icons
                 anzu
                 beacon
@@ -286,11 +288,11 @@
                 xml
                 yaml))
   (require (intern
-            (concat "config-" (symbol-name name)))))
+            (concat init-config-name-prefix (symbol-name name)))))
 
 ;; Themes
-(setq custom-theme-directory init-themes-dir)
-(add-to-list 'load-path init-themes-dir)
+(setq custom-theme-directory init-themes-path)
+(add-to-list 'load-path init-themes-path)
 (defun switch-theme (&optional name)
   (interactive)
   (let* ((available-themes (custom-available-themes))
