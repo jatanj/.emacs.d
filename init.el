@@ -238,10 +238,12 @@
 (add-to-list 'load-path (expand-file-name init-config-path))
 (dolist (name '(all-the-icons
                 anzu
+                apache
                 beacon
                 c-cpp
                 clojure
                 company
+                cql
                 d
                 dumb-jump
                 emacs-lisp
@@ -276,6 +278,7 @@
                 smartparens
                 smooth-scroll
                 spaceline
+                sql
                 systemd
                 tabbar
                 term
