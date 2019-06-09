@@ -10,9 +10,7 @@
         (ibuffer-do-sort-by-alphabetic))
       (tabbar-blend-header-line
        (format "Buffers [%d files, %d total]"
-               (length (->> (buffer-list)
-                            (-map (lambda (x) (buffer-file-name x)))
-                            (-non-nil)))
+               (length (file-list))
                (length (buffer-list))))))
   :config
   (general-define-key

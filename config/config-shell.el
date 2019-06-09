@@ -1,4 +1,5 @@
-(dolist (assoc '(("PKGBUILD" . shell-script-mode)))
+(dolist (assoc '(("\\.sh\\'" . sh-mode)
+                 ("PKGBUILD" . sh-mode)))
   (add-to-list 'auto-mode-alist assoc))
 
 (use-package xterm-color
@@ -13,7 +14,6 @@
               (add-hook
                'comint-preoutput-filter-functions
                'xterm-color-filter nil t))))
-
 
 (add-hook 'sh-mode-hook
           (lambda ()
