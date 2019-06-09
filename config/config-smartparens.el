@@ -18,6 +18,7 @@
                   d-mode
                   rust-mode
                   typescript-mode
+                  js-mode
                   js2-mode
                   css-mode
                   scss-mode))
