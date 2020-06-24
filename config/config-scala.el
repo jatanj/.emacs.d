@@ -1,4 +1,4 @@
-(use-package ensime
+(use-package scala-mode
   :ensure t
   :defer t
   :mode (("\\.scala\\'" . scala-mode)
@@ -44,17 +44,6 @@
   (setq scala-indent:use-javadoc-style t)
 
   :config
-  (setq ensime-startup-notification nil)
-  (setq ensime-startup-snapshot-notification nil)
-  (setq ensime-implicit-gutter-icons nil)
-  (setq ensime-left-margin-gutter nil)
-  (setq ensime-sbt-perform-on-save "compile")
-  (setq ensime-typecheck-interval 1)
-  (setq ensime-typecheck-idle-interval 0.2)
-  (setq ensime-use-helm t)
-  (setq ensime-company-idle-delay 0.1)
-  (setq ensime-eldoc-hints 'all)
-  (setq ensime-sem-high-enabled-p nil)
   (setq scala-auto-insert-asterisk-in-comments t)
 
   (defun scala-newline-and-indent-with-asterisk ()
@@ -70,23 +59,8 @@
                  (window-height   . 0.20)))
 
   (general-define-key
-   :keymaps 'ensime-mode-map
-   "C-c C-]" 'ensime-edit-definition
-   "C-c C-k" 'ensime-inf-eval-buffer
-   "C-c C-s" 'ensime-print-errors-at-point)
-
-  (general-define-key
    :keymaps 'scala-mode-map
    :states 'insert
    "<return>" 'scala-newline-and-indent-with-asterisk))
-
-(use-package flycheck-ensime
-  :after flycheck
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-ensime-setup)
-  (add-hook 'scala-mode-hook
-            (lambda ()
-              (flycheck-mode 1)
-              (flycheck-pos-tip-enable))))
 
 (provide 'config-scala)
