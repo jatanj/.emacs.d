@@ -1,6 +1,8 @@
 (add-hook 'emacs-lisp-mode-hook
   (lambda ()
     (company-mode 1)
+    (eldoc-mode -1)
+    (rainbow-delimiters-mode-enable)
     (set-local-tab-width 2)))
 
 ;; https://emacs.wordpress.com/2007/01/17/eval-and-replace-anywhere/
@@ -23,12 +25,5 @@
  "C-f" 'eval-defun
  "C-k" 'eval-buffer
  "C-a" 'eval-and-replace)
-
-(use-package flylisp
-  :ensure t
-  :config
-  (add-hook 'emacs-lisp-mode-hook
-    (lambda ()
-      (flylisp-mode 1))))
 
 (provide 'config-emacs-lisp)

@@ -9,11 +9,20 @@
   (setq helm-buffers-fuzzy-matching t)
   (setq helm-recentf-fuzzy-match t)
   (setq helm-semantic-fuzzy-match t)
+  (setq helm-locate-fuzzy-match t)
+  (setq helm-semantic-fuzzy-match t)
+  (setq helm-imenu-fuzzy-match t)
+  (setq helm-apropos-fuzzy-match t)
+  (setq helm-session-fuzzy-match t)
+  (setq helm-etags-fuzzy-match t)
+  (setq helm-lisp-fuzzy-completion t)
   (setq helm-mode-fuzzy-match t)
+  (setq helm-completion-in-region-fuzzy-match t)
   (setq helm-mode-handle-completion-in-region t)
   (setq helm-display-header-line nil)
   (setq helm-split-window-in-side-p t)
   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s")
+  (add-to-list 'completion-styles `,(if (version< emacs-version "27") 'helm-flex 'flex) t)
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*helm" (* not-newline) "*" eos)
                  (display-buffer-in-side-window)
@@ -60,29 +69,5 @@
    "s s" 'helm-do-ag-project-root
    "s f" 'helm-do-ag-this-file
    "s b" 'helm-do-ag-buffers))
-
-(use-package helm-swoop
-  :ensure t
-  :after helm
-  :config
-  (setq helm-swoop-split-window-function
-        (lambda ($buf)
-          (display-buffer $buf)))
-  (add-to-list 'display-buffer-alist
-               `("\\`\\*Helm Swoop\\*\\'"
-                 (display-buffer-in-side-window)
-                 (inhibit-same-window . t)
-                 (side . bottom)
-                 (window-height . 0.35)))
-  (setq helm-swoop-use-line-number-face t)
-  (setq helm-swoop-command-map (make-sparse-keymap))
-  (general-define-key
-   :keymaps 'helm-swoop-map
-   "C-e" 'helm-swoop-edit)
-  (general-define-key
-   :keymaps 'helm-swoop-command-map
-   "p" 'helm-multi-swoop-projectile
-   "f" 'helm-swoop
-   "b" 'helm-multi-swoop-all))
 
 (provide 'config-helm)

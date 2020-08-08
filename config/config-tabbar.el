@@ -133,6 +133,6 @@ mouse-2: delete other windows, mouse-3: kill buffer"
   "Disable tabbar-mode if it's currently enabled."
   (interactive)
   (when (bound-and-true-p tabbar-mode)
-    (tabbar-local-mode)))
+    (ignore-errors (tabbar-local-mode))))
 
 (provide 'config-tabbar)

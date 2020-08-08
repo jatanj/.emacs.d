@@ -2,6 +2,10 @@
   :ensure t
   :config
   (require 'spaceline-config)
+  (spaceline-define-segment buffer-id
+    (if (buffer-file-name)
+        (abbreviate-file-name (buffer-file-name))
+      (powerline-buffer-id)))
   (setq powerline-default-separator nil)
   (setq spaceline-workspace-numbers-unicode t)
   (setq spaceline-window-numbers-unicode nil)

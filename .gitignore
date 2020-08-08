@@ -1,5 +1,5 @@
 /auto-save-list/
-/elpa/
+/elpa*/
 ido.last
 local.el
 recentf
@@ -22,3 +22,7 @@ company-statistics-cache.el
 *~
 .\#*
 \#*\#
+.lsp-session*
+/eshell/
+/transient/
+*.elc

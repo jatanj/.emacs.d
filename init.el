@@ -1,7 +1,6 @@
 ;; init.el -- Emacs configuration
 
-;; Bootstrap use-package.
-;; http://stackoverflow.com/questions/10092322#answer-10093312
+;; Bootstrap use-package
 (require 'package)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
@@ -30,6 +29,7 @@
 (dolist (local-setting '((local-directory . "~/")
                          (local-terminal . nil)
                          (local-font-face . "Inconsolata-12")
+                         (local-menu-font-face . "Fira Code Medium-10")
                          (local-default-theme . "nord")
                          (local-desktop-window-params . nil)
                          (local-client-window-params . nil)))
@@ -51,19 +51,21 @@
       (add-to-list 'load-path package))))
 
 ;; Keep custom settings in separate file
-(load init-custom-path)
+(setq custom-file init-custom-path)
+(load custom-file)
 
 ;; Startup options
 (setq frame-title-format "Emacs - %b")
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message t)
 (defun display-startup-echo-area-message () (message ""))
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(tooltip-mode -1)
 
 ;; General configuration
 (setq-default major-mode 'text-mode)
-(setq tooltip-use-echo-area t)
 (setq x-gtk-use-system-tooltips nil)
 (setq isearch-allow-scroll t)
 (setq load-prefer-newer t)
@@ -72,6 +74,11 @@
 (setq w32-pipe-read-delay 0)
 (setq ad-redefinition-action 'accept)
 (setq inhibit-compacting-font-caches t)
+(setq delete-by-moving-to-trash t)
+
+;; Performance
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024))
 
 (setq configure-frame-functions '())
 (setq configure-display-buffer-alist '())
@@ -80,6 +87,7 @@
 (show-paren-mode 1)
 (global-superword-mode 1)
 (global-auto-revert-mode 1)
+(column-number-mode 1)
 
 ;; Window size and position
 (setq default-frame-alist
@@ -219,12 +227,11 @@
 ;; Fixes Gnus vulnerability
 (eval-after-load "enriched" '(defun enriched-decode-display-prop (start end &optional param) (list start end)))
 
+;; Auto-save if Emacs loses focus
+(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
-
-;; Dired
-(put 'dired-find-alternate-file 'disabled nil)
-(add-hook 'dired-mode-hook #'hl-line-mode)
 
 ;; DocView
 (add-hook 'doc-view-mode-hook (lambda () (linum-mode -1)))
@@ -234,64 +241,14 @@
 (add-to-list 'configure-display-buffer-alist
              '("\\`\\*Help\\*\\'" help-mode))
 
-;; Load config files
-(add-to-list 'load-path (expand-file-name init-config-path))
-(dolist (name '(all-the-icons
-                anzu
-                apache
-                beacon
-                c-cpp
-                clojure
-                company
-                cql
-                d
-                dumb-jump
-                emacs-lisp
-                evil
-                expand-region
-                fill-column-indicator
-                flycheck
-                flyspell
-                fsharp
-                haskell
-                helm
-                ibuffer-projectile
-                ido
-                java
-                javascript
-                json
-                litable
-                ;; lsp
-                lua
-                magit
-                markdown
-                neotree
-                org
-                projectile
-                quickrun
-                rainbow-mode
-                ranger
-                rust
-                scala
-                screenshow-mode
-                shell
-                smartparens
-                smooth-scroll
-                spaceline
-                sql
-                systemd
-                tabbar
-                term
-                typescript
-                uniquify
-                web-mode
-                which-key
-                window-numbering
-                winner
-                xml
-                yaml))
-  (require (intern
-            (concat init-config-name-prefix (symbol-name name)))))
+;; File Templates
+(auto-insert-mode 1)
+(setq auto-insert t)
+(setq auto-insert-directory (concat (file-name-as-directory user-emacs-directory) "file-templates"))
+(setq auto-insert-query nil)
+(defun auto-insert-yas-expand()
+  (yas-expand-snippet (buffer-string) (point-min) (point-max)))
+(setq auto-insert-alist '())
 
 ;; Themes
 (setq custom-theme-directory init-themes-path)
@@ -318,6 +275,66 @@
         (add-hook hook #'load-initial-theme)))
   (add-hook 'configure-frame-functions
             (lambda (frame) (load-initial-theme))))
+
+;; Load config files
+(add-to-list 'load-path (expand-file-name init-config-path))
+(dolist (name '(all-the-icons
+                anzu
+                apache
+                beacon
+                c-cpp
+                clojure
+                company
+                cql
+                d
+                dashboard
+                doom
+                dumb-jump
+                emacs-lisp
+                evil
+                expand-region
+                fill-column-indicator
+                flycheck
+                flyspell
+                fsharp
+                haskell
+                helm
+                ibuffer-projectile
+                ido
+                java
+                javascript
+                json
+                litable
+                lsp
+                lua
+                magit
+                markdown
+                neotree
+                org
+                projectile
+                quickrun
+                rainbow-delimiters
+                rainbow-mode
+                ranger
+                rust
+                scala
+                screenshow-mode
+                shell
+                smartparens
+                sql
+                systemd
+                centaur-tabs
+                term
+                typescript
+                uniquify
+                web-mode
+                which-key
+                window-numbering
+                winner
+                xml
+                yaml))
+  (require (intern
+            (concat init-config-name-prefix (symbol-name name)))))
 
 ;; Delay all configure-frame-functions for emacsclient until after the frame
 ;; is created.
@@ -394,10 +411,11 @@
  "C-<right>" 'windmove-right
  "C-<up>" 'windmove-up
  "C-<down>" 'windmove-down
- "S-<up>" (lambda () (interactive) (previous-line 10))
- "S-<down>" (lambda () (interactive) (next-line 10))
+ "S-<up>" (lambda () (interactive) (forward-line -10))
+ "S-<down>" (lambda () (interactive) (forward-line 10))
  "S-<left>" (lambda () (interactive) (backward-char 10))
  "S-<right>" (lambda () (interactive) (forward-char 10)))
+
 (general-define-key
  :keymaps 'ctl-x-map
  "`" 'open-terminal-here
@@ -414,26 +432,28 @@
  "C-p" 'helm-projectile-find-file-in-known-projects
  "C-v" 'magit-status
  "C-b" nil
+ "C-t" nil
  "C-j" 'hscroll-mode)
+
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
  "b" 'ibuffer
- "s" helm-swoop-command-map
- "d" 'desktop-save
- "C-a" 'neotree-find
+ "C-d" 'desktop-save
+ "C-a" 'neotree-projectile-find
  "C-b" 'neotree-projectile
  "n" 'new-empty-buffer
  "v" 'magit-file-popup
  "C-v" 'magit-status)
+
 (general-define-key
  :keymaps '(fundamental-mode-map text-mode-map special-mode-map)
  "C-d" (general-simulate-key "<next>")
  "C-u" (general-simulate-key "<prior>"))
+
 (general-define-key
  :keymaps 'isearch-mode-map
  "C-f" 'isearch-repeat-forward
  "C-j" 'isearch-query-replace-regexp
- "C-w" 'helm-swoop-from-isearch
  "<up>" 'isearch-ring-retreat
  "<down>" 'isearch-ring-advance)

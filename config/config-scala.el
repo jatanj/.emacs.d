@@ -42,6 +42,7 @@
   (defvar scala-font-lock:braces-face
     'scala-font-lock:parentheses-face)
   (setq scala-indent:use-javadoc-style t)
+  (add-hook 'scala-mode-hook (lambda () (rainbow-delimiters-mode 1)))
 
   :config
   (setq scala-auto-insert-asterisk-in-comments t)

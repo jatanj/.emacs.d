@@ -1,10 +1,11 @@
 (use-package magit
   :ensure t
   :init
-  (add-hook 'magit-mode-hook
+  (add-hook 'magit-status-mode-hook
     (lambda ()
       (tabbar-blend-header-line "Magit")
-      (hscroll-mode -1)))
+      (hscroll-mode -1))
+    t)
   (add-hook 'magit-popup-mode-hook #'tabbar-local-disable)
   (add-hook 'magit-blob-mode-hook #'tabbar-blend-header-line)
   :config
@@ -63,7 +64,7 @@
   :init
   (add-hook 'git-commit-mode-hook
     (lambda ()
-      (tabbar-blend-header-line "Commit")
+      (tabbar-blend-header-line "Magit - Commit")
       (toggle-save-place 0)
       (require 'ispell)
       (when (executable-find ispell-program-name)

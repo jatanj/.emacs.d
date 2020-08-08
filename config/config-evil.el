@@ -10,8 +10,7 @@
   (setq-default evil-shift-width 2)
   (dolist (mode '(Buffer-menu-mode
                   neotree-mode
-                  flycheck-error-list-mode
-                  cider-repl-mode))
+                  flycheck-error-list-mode))
     (evil-set-initial-state mode 'emacs))
 
   ;; Unbind some keys.

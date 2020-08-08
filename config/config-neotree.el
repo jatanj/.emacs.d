@@ -10,34 +10,24 @@
   (setq doom-neotree-line-spacing 0)
   (add-hook 'neotree-mode-hook
     (lambda ()
+      (setq mode-line-format nil)
       (linum-mode -1)
-      (tabbar-blend-header-line " File Explorer")))
+      (display-line-numbers-mode -1)
+      (hscroll-mode 1)
+      (setq buffer-face-mode-face `(:background ,(car (get 'custom-theme-face-bg6 'saved-value)) :family "Fira Code Medium" :height 100))
+      (buffer-face-mode 1)))
   :config
+  (dolist (func '(switch-to-buffer
+                  previous-buffer
+                  kill-this-buffer))
+    (advice-add func :after (lambda (&rest _)
+                              (neotree-switch-to-project-root))))
   (general-define-key
    :keymaps 'neotree-mode-map
    "C-f" 'isearch-forward-regexp
+   "C-l C-a" 'delete-window
    "C-<prior>" 'ignore
    "C-<next>" 'ignore))
-
-(use-package doom-themes
-  :ensure t
-  :init
-  (setq doom-themes-enable-bold t)
-  (setq doom-themes-enable-italic nil)
-  :config
-  (doom-themes-neotree-config)
-  (setq doom-neotree-enable-file-icons t)
-  (set-display-table-slot standard-display-table 0 ?\ ))
-
-(use-package nlinum-hl
-  :ensure t
-  :demand)
-
-(dolist (func '(switch-to-buffer
-                previous-buffer
-                kill-this-buffer))
-  (advice-add func :after (lambda (&rest _)
-                            (neotree-switch-to-project-root))))
 
 (defun neotree-switch-to-project-root (&optional show)
   "Switch the neotree buffer root directory to the projectile project root.
@@ -53,7 +43,7 @@ When SHOW is t, the neotree buffer will be shown if it's currently hidden."
                                     (projectile-project-p))
                                (projectile-project-root)
                              (file-name-directory file-name))))))
-        (when dir-name
+        (when (and dir-name (file-directory-p dir-name))
           (if (neo-global--window-exists-p)
               (with-selected-window neo-global--window
                 (let ((read-only buffer-read-only))
@@ -63,26 +53,19 @@ When SHOW is t, the neotree buffer will be shown if it's currently hidden."
                   (setq buffer-read-only read-only)))
             (neotree-dir dir-name))))))
 
-(defun neotree-customize-buffer ()
-  (let ((buffer (->> (buffer-list)
-                     (-map (lambda (x)
-                             (and (string-match (regexp-opt '("*NeoTree*")) (buffer-name x))
-                                  x)))
-                     (-first 'bufferp))))
-    (when buffer
-      (with-current-buffer buffer
-        (setq display-line-numbers nil)
-        (hl-line-mode -1)
-        (face-remap-set-base 'default :background (face-attribute 'neo-banner-face :background))))))
-
-(defun neotree-projectile ()
+(defun neotree-projectile (&optional switch-only)
   "Open neotree with projectile as root and open node for current file.
   If projectile unavailable or not in a project, open node at file path.
   If file path is not available, open $HOME."
   (interactive)
-  (if (neo-global--window-exists-p)
+  (if (and (not switch-only) (neo-global--window-exists-p))
       (call-interactively 'neotree-hide)
-    (neotree-switch-to-project-root t)
-    (neotree-customize-buffer)))
+    (neotree-switch-to-project-root t)))
+
+(defun neotree-projectile-find ()
+  (interactive)
+  (let* ((file (buffer-file-name (current-buffer))))
+    (neotree-projectile t)
+    (neotree-find file)))
 
 (provide 'config-neotree)

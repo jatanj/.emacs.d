@@ -25,4 +25,9 @@
   (when (executable-find ispell-program-name)
     (flyspell-mode 1)))
 
+(use-package synosaurus
+  :ensure t
+  :init
+  (synosaurus-mode 1))
+
 (provide 'config-flyspell)

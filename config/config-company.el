@@ -2,15 +2,30 @@
   :ensure t
   :config
   (setq company-frontends
-        '(company-pseudo-tooltip-frontend))
-  (setq company-dabbrev-downcase 0)
-  (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 1)
+        '(company-pseudo-tooltip-frontend
+          company-echo-metadata-frontend))
+  (setq company-idle-delay 0.0)
+  (setq company-minimum-prefix-length 0)
   (setq company-require-match nil)
   (setq company-auto-complete nil)
   (setq company-tooltip-align-annotations t)
   (setq company-selection-wrap-around t)
-  ;; (add-to-list 'company-transformers 'company-sort-prefer-same-case-prefix)
+  (setq company-eclim-auto-save nil)
+  (setq company-dabbrev-downcase nil)
+  (setq company-backends '(company-capf))
+  (remove-hook 'completion-at-point-functions #'tags-completion-at-point-function)
+
+  (defun company-complete-selection-or-indent ()
+    (interactive)
+    (if (company-tooltip-visible-p)
+        (company-complete-selection)
+      (tab-to-tab-stop)))
+
+  (defun company-quit ()
+    (interactive)
+    (company-cancel)
+    (evil-normal-state))
+
   (general-define-key "C-j" nil)
   (general-define-key
    :keymaps 'company-mode-map
@@ -21,29 +36,19 @@
    "<tab>" nil
    "<return>" (lookup-key (current-global-map) (kbd "RET"))))
 
-(use-package company-flx
-  :ensure t
-  :init
-  (add-hook 'company-mode-hook #'company-flx-mode))
-
-(defun company-quit ()
-  (interactive)
-  (company-cancel)
-  (evil-normal-state))
-
-(defun company-complete-selection-or-indent ()
-  (interactive)
-  (if (company-tooltip-visible-p)
-      (company-complete-selection)
-    (tab-to-tab-stop)))
-
-(use-package company-statistics
-  :ensure t
-  :init
-  (company-statistics-mode 1))
+;; (use-package company-fuzzy
+;;   :ensure t
+;;   :after company
+;;   :init
+;;   (setq company-fuzzy-sorting-backend 'flx)
+;;   (add-hook 'company-mode-hook (lambda () (company-fuzzy-mode 1)))
+;;   :config
+;;   (add-to-list 'company-fuzzy--no-prefix-backends 'company-yasnippet))
 
 (use-package company-quickhelp
   :ensure t
-  :after company)
+  :after company
+  :init
+  (setq company-quickhelp-delay nil))
 
 (provide 'config-company)

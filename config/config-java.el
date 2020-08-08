@@ -2,7 +2,8 @@
   :init
   (add-hook 'java-mode-hook
             (lambda ()
-              (customize-cc-mode)))
+              (customize-cc-mode)
+              (rainbow-delimiters-mode-enable)))
   :config
   (general-define-key
    :keymaps 'java-mode-map
