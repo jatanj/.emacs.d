@@ -5,6 +5,8 @@
   :init
   (add-hook 'clojure-mode-hook
             (lambda ()
+              ;; Disable company initially until we connect to server
+              (company-mode -1)
               (eldoc-mode -1)
               (set-local-tab-width 2)
               (rainbow-delimiters-mode-enable)))
@@ -49,9 +51,9 @@
               (eldoc-mode -1)
               (company-quickhelp-mode -1)
               (setq-local completion-at-point-functions nil)
+              (setq-local help-window-select t)
               (if (bound-and-true-p lsp-mode)
-                  (add-hook 'completion-at-point-functions #'lsp-completion-at-point t))
-              ))
+                  (add-hook 'completion-at-point-functions #'lsp-completion-at-point t))))
   :config
   (setq nrepl-log-messages t)
   (setq nrepl-hide-special-buffers nil)
@@ -71,7 +73,7 @@
   (setq cider-lein-parameters "repl :headless :host localhost")
   ;; (setq cider-cljs-lein-repl
   ;;       "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
-  (setq cider-doc-auto-select-buffer nil)
+  (setq cider-doc-auto-select-buffer t)
   (setq safe-local-variable-values
         '((cider-shadow-cljs-default-options . "app")
           (cider-default-cljs-repl . "shadow")))
@@ -88,11 +90,22 @@
    "C-c C-v" 'cider-insert-commands-map
    "C-c C-j" 'cider-start-map
    "C-c C-x" nil
-   "C-c C-]" 'cider-find-var)
+   "C-c C-]" 'cider-find-var
+   "C-\"" 'cider-apropos)
+  (general-define-key
+   :keymaps 'cider-eval-commands-map
+   "q" 'cider-inspect-last-result
+   "C-q" 'cider-inspect-last-result)
   (general-define-key
    :keymaps 'cider-repl-mode-map
    "C-c C-l" 'cider-repl-clear-buffer
    "<return>" 'cider-repl-return))
+
+(use-package helm-cider
+  :ensure t
+  :after cider
+  :init
+  (add-hook 'cider-mode-hook #'helm-cider-mode))
 
 (use-package flycheck-clj-kondo
   :ensure t

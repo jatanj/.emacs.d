@@ -15,15 +15,26 @@
 
   (add-hook 'lsp-mode-hook
             (lambda ()
-              (company-mode 1)
-              (eldoc-mode -1)
+              ;; Disable company initially until we connect to server
+              (company-mode -1)
               (setq-local company-backends '(company-capf))
               (setq-local flycheck-check-syntax-automatically '(save idle-change mode-enabled))))
 
+  (add-hook 'lsp-after-initialize-hook
+            (lambda ()
+              (company-mode )
+              (eldoc-mode -1)))
+
   (defun lsp-evil-jump-to-definition-a (orig &rest args)
-    (if (bound-and-true-p lsp-mode)
-        (lsp-find-definition)
-      (funcall-interactively orig)))
+    (cond
+     ((bound-and-true-p lsp-mode)
+      (lsp-find-definition)
+      (if (s-starts-with-p "Not found for:" (current-message) t)
+          (progn
+            (message nil)
+            (cider-find-var))))
+     ((bound-and-true-p cider-mode) (cider-find-var))
+     (t (funcall-interactively orig))))
   (advice-add 'evil-jump-to-definition :around #'lsp-evil-jump-to-definition-a)
 
   (dolist (m '(clojure-mode
@@ -45,29 +56,36 @@
                   ("X-isCustom" t)
                   ("X-customPredicate"
                    '(lambda ()
-                      (--> (seq-map #'flycheck-error-message (flycheck-overlay-errors-at (point)))
-                           (-any (lambda (s) (s-starts-with? "Unknown namespace" s t)) it))))
+                      (->> (seq-map #'flycheck-error-message (flycheck-overlay-errors-at (point)))
+                           (-any (lambda (s)
+                                   (--any (s-starts-with? it s t)
+                                          '("Unknown namespace"
+                                            "Unresolved symbol"
+                                            "Unresolved namespace")))))))
                   ("X-customHandler" #'cljr-add-missing-libspec))))
 
   (defun lsp-execute-code-action-custom ()
     "Show a LSP code action popup with custom (non-LSP) commands."
     (interactive)
     (let ((actions (lsp-code-actions-at-point)))
-      (cond
-       ((seq-empty-p actions)
-        (signal 'lsp-no-code-actions nil))
-       ((and (eq (seq-length actions) 1) lsp-auto-execute-action)
-        (lsp-seq-first actions))
-       (t (progn
-            (dolist (a lsp--custom-code-actions)
-              (if (and (if-let ((p (ht-get a "X-customPredicate"))) (funcall p) t)
-                       (-none? (lambda (x) (eq (ht-get x "title") (ht-get a "title"))) actions))
-                  (add-to-list 'actions a))
-              (let ((selected (lsp--select-action actions)))
-                (if (ht-get selected "X-isCustom")
-                    (progn
-                      (funcall (ht-get selected "X-customHandler")))
-                  (lsp-execute-code-action selected)))))))))
+      (dolist (a lsp--custom-code-actions)
+        (if (and (if-let ((p (ht-get a "X-customPredicate"))) (funcall p) t)
+                 (-none? (lambda (x) (eq (ht-get x "title") (ht-get a "title"))) actions))
+            (add-to-list 'actions a))
+        (cond
+         ((seq-empty-p actions)
+          (signal 'lsp-no-code-actions nil))
+         ((and (eq (seq-length actions) 1) lsp-auto-execute-action)
+          (lsp-seq-first actions))
+         (t (let ((selected (unwind-protect
+                                (progn
+                                  (framey--enable-helm)
+                                  (lsp--select-action actions))
+                              (framey--disable-helm))))
+              (if (ht-get selected "X-isCustom")
+                  (progn
+                    (funcall (ht-get selected "X-customHandler")))
+                (lsp-execute-code-action selected))))))))
 
   (general-define-key
    :keymaps 'lsp-mode-map
@@ -93,5 +111,12 @@
             (lambda ()
               (lsp-ui-mode 1)
               (lsp-ui-sideline-mode -1))))
+
+(use-package helm-lsp
+  :ensure t
+  :after lsp-mode
+  :config
+  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
+  (define-key lsp-mode-map [remap helm-apropos] #'helm-lsp-workspace-symbol))
 
 (provide 'config-lsp)

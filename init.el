@@ -63,6 +63,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
+(global-eldoc-mode -1)
 
 ;; General configuration
 (setq-default major-mode 'text-mode)
@@ -236,11 +237,6 @@
 ;; DocView
 (add-hook 'doc-view-mode-hook (lambda () (linum-mode -1)))
 
-;; Help
-;; (setq help-window-select t)
-(add-to-list 'configure-display-buffer-alist
-             '("\\`\\*Help\\*\\'" help-mode))
-
 ;; File Templates
 (auto-insert-mode 1)
 (setq auto-insert t)
@@ -299,6 +295,7 @@
                 fsharp
                 haskell
                 helm
+                help
                 ibuffer-projectile
                 ido
                 java
@@ -390,6 +387,7 @@
  "C-_" 'shrink-window
  "C-S-p" 'helm-M-x
  "C-M-p" 'helm-M-x
+ "C-'" 'helm-apropos
  "C-p" 'helm-projectile-find-file
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop

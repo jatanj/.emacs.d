@@ -26,8 +26,8 @@
         evil-visual-state-tag (propertize " <V> " 'face '((:foreground "#f8f8f8" :background "#e6987a")))
         evil-operator-state-tag (propertize " <O> " 'face '((:foreground "#f8f8f8" :background "#4f3598"))))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number " " evil-state " " matches buffer-info remote-host buffer-position word-count parrot selection-info checker)
-    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs))
+    '(bar workspace-name window-number " " evil-state " " matches buffer-info remote-host parrot selection-info checker)
+    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes buffer-position word-count  input-method indent-info buffer-encoding major-mode process vcs))
   (doom-modeline-mode 1)
   :config
   (defun doom-modeline-refresh ()
