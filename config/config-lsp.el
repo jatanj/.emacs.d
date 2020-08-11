@@ -77,11 +77,7 @@
           (signal 'lsp-no-code-actions nil))
          ((and (eq (seq-length actions) 1) lsp-auto-execute-action)
           (lsp-seq-first actions))
-         (t (let ((selected (unwind-protect
-                                (progn
-                                  (framey--enable-helm)
-                                  (lsp--select-action actions))
-                              (framey--disable-helm))))
+         (t (let ((selected (lsp--select-action actions)))
               (if (ht-get selected "X-isCustom")
                   (progn
                     (funcall (ht-get selected "X-customHandler")))

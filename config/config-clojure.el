@@ -8,8 +8,7 @@
               ;; Disable company initially until we connect to server
               (company-mode -1)
               (eldoc-mode -1)
-              (set-local-tab-width 2)
-              (rainbow-delimiters-mode-enable)))
+              (set-local-tab-width 2)))
   :config
   (setq clojure-indent-style :always-align)
   (define-clojure-indent

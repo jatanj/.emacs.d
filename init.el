@@ -306,7 +306,6 @@
                 lua
                 magit
                 markdown
-                neotree
                 org
                 projectile
                 quickrun
@@ -322,6 +321,7 @@
                 systemd
                 centaur-tabs
                 term
+                treemacs
                 typescript
                 uniquify
                 web-mode
@@ -436,10 +436,12 @@
 (general-define-key
  :prefix leader-key
  "p" projectile-command-map
+ "C-p" projectile-command-map
  "b" 'ibuffer
  "C-d" 'desktop-save
- "C-a" 'neotree-projectile-find
- "C-b" 'neotree-projectile
+ "C-a" 'treemacs-toggle-find-file-collapse-other-projects
+ "C-b" 'treemacs-toggle-find-file
+ "C-w" treemacs-project-map
  "n" 'new-empty-buffer
  "v" 'magit-file-popup
  "C-v" 'magit-status)

@@ -88,10 +88,14 @@
                           org-agenda-log-mode
                           diary-mode))
        "OrgMode")
-      ((string-match-p ".jar:" (buffer-file-name))
+      ((when-let ((name (buffer-file-name)))
+         (and (stringp name) (string-match-p ".jar:" name)))
        "Jars")
-      (t (let ((projectile-root (projectile-project-root)))
-           (or projectile-root (centaur-tabs-get-group-name (current-buffer))))))))
+      (t (or (when-let* ((projectile-root (projectile-project-root))
+                         (group-name (centaur-tabs-get-group-name (current-buffer)))
+                         (stringp group-name))
+               group-name)
+             "Other")))))
 
   (defalias 'tabbar-mode 'centaur-tabs-mode)
   (defalias 'tabbar-backward-tab 'centaur-tabs-backward)
