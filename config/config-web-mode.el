@@ -1,7 +1,5 @@
 (use-package web-mode
   :ensure t
-  :defer t
-  :after tide
   :mode (("\\.phtml\\'"     . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.[agj]sp\\'"   . web-mode)
@@ -11,10 +9,6 @@
          ("\\.html?\\'"     . web-mode)
          ("\\.tsx\\'"       . web-mode))
   :init
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (string= (file-name-extension (buffer-file-name)) "tsx")
-                (setup-tide-mode))))
   (add-hook 'nxml-mode-hook
             (lambda ()
               (setq nxml-child-indent 2)
@@ -24,8 +18,24 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq css-indent-offset 2)
   (setq web-mode-enable-auto-quoting nil)
   (setq web-mode-enable-current-element-highlight t))
+
+(use-package scss-mode
+  :ensure t
+  :init
+  (defun flycheck-scss-set-stylelintrc-file ()
+    (let* ((stylelintrc ".stylelintrc.json")
+           (candidates (list (concat (file-name-as-directory (or (projectile-project-p) "")) stylelintrc)
+                             (expand-file-name (concat "~/" stylelintrc)))))
+      (setq-local flycheck-stylelintrc (--first (file-exists-p it) candidates))))
+  (add-hook 'scss-mode-hook
+            (lambda ()
+              (setq-local flycheck-checker 'scss-stylelint)
+              (flycheck-scss-set-stylelintrc-file)
+              (flycheck-mode 1)
+              (set-local-tab-width 2)))
+  :config
+  (setq css-indent-offset 2))
 
 (provide 'config-web-mode)
