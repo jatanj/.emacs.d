@@ -50,7 +50,7 @@
       (hl-line-mode -1)
       (display-line-numbers-mode -1)
       (hscroll-mode 1)
-      (setq buffer-face-mode-face `(:background ,(car (get 'custom-theme-face-bg6 'saved-value))
+      (setq buffer-face-mode-face `(:background ,(car (get 'custom-theme-color-bg6 'saved-value))
                                     :family "Fira Code Medium"
                                     :height 100))
       (buffer-face-mode 1)))

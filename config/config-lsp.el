@@ -13,35 +13,39 @@
   (setq lsp-auto-execute-action nil)
   (setq lsp-modeline-code-actions-segments '(count icon))
 
-  (add-hook 'lsp-mode-hook
-            (lambda ()
-              ;; Disable company initially until we connect to server
-              (company-mode -1)
-              (setq-local company-backends '(company-capf))
-              (setq-local flycheck-check-syntax-automatically '(save idle-change mode-enabled))))
-
-  (add-hook 'lsp-after-initialize-hook
-            (lambda ()
-              (company-mode )
-              (eldoc-mode -1)))
+  (defun lsp-enable (&rest args)
+    (interactive)
+    (lsp-diagnostics--enable)
+    (flycheck-buffer)
+    (when (and (not lsp--buffer-workspaces)
+               (--any? (eq major-mode (car it)) lsp-language-id-configuration))
+      (make-thread
+       (lambda ()
+         (lsp)
+         (company-mode 1)))))
 
   (defun lsp-evil-jump-to-definition-a (orig &rest args)
     (cond
      ((bound-and-true-p lsp-mode)
-      (lsp-find-definition)
-      (if (s-starts-with-p "Not found for:" (current-message) t)
-          (progn
-            (message nil)
-            (cider-find-var))))
+      (let ((pos (point))
+            (buffer (current-buffer)))
+        (ignore-error (lsp-find-definition))
+        (when (and (= pos (point))
+                   (eq buffer (current-buffer)))
+          (cider-find-var))))
      ((bound-and-true-p cider-mode) (cider-find-var))
      (t (funcall-interactively orig))))
   (advice-add 'evil-jump-to-definition :around #'lsp-evil-jump-to-definition-a)
 
-  (dolist (m '(clojure-mode
-               clojurec-mode
-               clojurescript-mode
-               clojurex-mode))
-    (add-to-list 'lsp-language-id-configuration `(,m . "clojure")))
+  (dolist (m '((clojure-mode . "clojure")
+               (clojurec-mode . "clojure")
+               (clojurescript-mode . "clojure")
+               (clojurex-mode . "clojure")))
+    (add-to-list 'lsp-language-id-configuration m))
+  (dolist (m '((sass-mode . "sass")
+               (scss-mode . "scss")))
+    (delete m lsp-language-id-configuration))
+
   (setq lsp-clojure-server-command '("bash" "-c" "clojure-lsp"))
   (dolist (ignored '("[/\\\\]resources$"
                      "[/\\\\]\\.shadow-cljs$"
@@ -82,6 +86,23 @@
                   (progn
                     (funcall (ht-get selected "X-customHandler")))
                 (lsp-execute-code-action selected))))))))
+
+  (add-hook 'lsp-mode-hook
+            (lambda ()
+              ;; Disable company initially until we connect to server
+              (when (not lsp--buffer-workspaces)
+                (company-mode -1))
+              (setq-local company-backends '(company-capf))
+              (setq-local flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch mode-enabled))
+              (eldoc-mode -1)))
+
+  (add-hook 'lsp-after-initialize-hook
+            (lambda ()
+              (add-hook 'switch-buffer-functions #'lsp-enable)))
+
+  (add-hook 'lsp-after-uninitialized-functions
+            (lambda ()
+              (remove-hook 'switch-buffer-functions #'lsp-enable)))
 
   (general-define-key
    :keymaps 'lsp-mode-map

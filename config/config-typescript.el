@@ -1,9 +1,12 @@
 (use-package tide
   :ensure t
-  :defer t
   :mode ("\\(\\.d\\)?\\.ts\\'" . typescript-mode)
   :init
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string= (file-name-extension (buffer-file-name)) "tsx")
+                (setup-tide-mode))))
   :config
   (setq typescript-indent-level 2)
   (setq tide-format-options '(:indentSize 2

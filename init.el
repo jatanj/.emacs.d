@@ -41,6 +41,7 @@
 (use-package hydra :ensure t :demand)
 (use-package dash :ensure t :demand)
 (use-package s :ensure t :demand)
+(use-package ht :ensure t :demand)
 
 (load init-defuns-path)
 
@@ -52,7 +53,8 @@
 
 ;; Keep custom settings in separate file
 (setq custom-file init-custom-path)
-(load custom-file)
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;; Startup options
 (setq frame-title-format "Emacs - %b")
@@ -206,6 +208,10 @@
 (advice-add 'isearch-update :before #'isearch-center-cursor)
 (advice-add 'evil-search :after #'isearch-center-cursor)
 
+;; Switching buffers
+(use-package switch-buffer-functions
+  :ensure t)
+
 ;; Use UTF-8 everywhere
 (set-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8)
@@ -279,6 +285,7 @@
                 apache
                 beacon
                 c-cpp
+                centaur-tabs
                 clojure
                 company
                 cql
@@ -314,12 +321,10 @@
                 ranger
                 rust
                 scala
-                screenshow-mode
                 shell
                 smartparens
                 sql
                 systemd
-                centaur-tabs
                 term
                 treemacs
                 typescript

@@ -36,15 +36,6 @@
    "<tab>" nil
    "<return>" (lookup-key (current-global-map) (kbd "RET"))))
 
-;; (use-package company-fuzzy
-;;   :ensure t
-;;   :after company
-;;   :init
-;;   (setq company-fuzzy-sorting-backend 'flx)
-;;   (add-hook 'company-mode-hook (lambda () (company-fuzzy-mode 1)))
-;;   :config
-;;   (add-to-list 'company-fuzzy--no-prefix-backends 'company-yasnippet))
-
 (use-package company-quickhelp
   :ensure t
   :after company

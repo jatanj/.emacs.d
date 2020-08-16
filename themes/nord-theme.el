@@ -6,7 +6,8 @@
 (deftheme nord)
 (custom-theme-set-common
  'nord
- ((class '((class color) (min-colors 89)))
+ ((custom--inhibit-theme-enable nil)
+  (class '((class color) (min-colors 89)))
   (fg1 "#f8f8f8")
   (fg2 "#e4e4e4")
   (fg3 "#d0d0d0")

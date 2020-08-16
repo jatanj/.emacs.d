@@ -56,23 +56,23 @@
     (when (and input-format output-format)
       (markdown--pandoc-convert-to-format input-format output-format))))
 
-(define-minor-mode markdown-pandoc-mode
-  :keymap (let ((map (make-sparse-keymap)))
-            (define-key map (kbd "C-c C-p") 'markdown-pandoc-convert-buffer)
-            map)
-  :group 'markdown
-  (if (bound-and-true-p markdown-pandoc-mode)
-      (progn
-        (make-local-variable 'markdown-pandoc-output-format)
-        (add-hook 'after-save-hook 'markdown-pandoc-convert-buffer))
-    (remove-hook 'after-save-hook 'markdown-pandoc-convert-buffer)))
+; (define-minor-mode markdown-pandoc-mode
+;   :keymap (let ((map (make-sparse-keymap)))
+;             (define-key map (kbd "C-c C-p") 'markdown-pandoc-convert-buffer)
+;             map)
+;   :group 'markdown
+;   (if (bound-and-true-p markdown-pandoc-mode)
+;       (progn
+;         (make-local-variable 'markdown-pandoc-output-format)
+;         (add-hook 'after-save-hook 'markdown-pandoc-convert-buffer))
+;     (remove-hook 'after-save-hook 'markdown-pandoc-convert-buffer)))
 
-(defun enable-markdown-pandoc-mode (output-format)
-  (markdown-pandoc-mode 1)
-  (message (format "Converting to %s on save..." (upcase (symbol-name output-format))))
-  (setq markdown-pandoc-output-format output-format))
+; (defun enable-markdown-pandoc-mode (output-format)
+;   (markdown-pandoc-mode 1)
+;   (message (format "Converting to %s on save..." (upcase (symbol-name output-format))))
+;   (setq markdown-pandoc-output-format output-format))
 
-(defun enable-markdown-pandoc-mode-pdf () (interactive) (enable-markdown-pandoc-mode 'pdf))
-(defun enable-markdown-pandoc-mode-odt () (interactive) (enable-markdown-pandoc-mode 'odt))
+; (defun enable-markdown-pandoc-mode-pdf () (interactive) (enable-markdown-pandoc-mode 'pdf))
+; (defun enable-markdown-pandoc-mode-odt () (interactive) (enable-markdown-pandoc-mode 'odt))
 
 (provide 'config-markdown)

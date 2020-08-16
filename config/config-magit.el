@@ -6,8 +6,25 @@
       (tabbar-blend-header-line "Magit")
       (hscroll-mode -1))
     t)
-  (add-hook 'magit-popup-mode-hook #'tabbar-local-disable)
-  (add-hook 'magit-blob-mode-hook #'tabbar-blend-header-line)
+
+  (dolist (hook '(magit-popup-mode-hook
+                  magit-process-mode-hook
+                  magit-status-mode-hook
+                  magit-diff-mode-hook
+                  magit-log-mode-hook
+                  magit-blob-mode-hook
+                  magit-blame-mode-hok
+                  magit-revision-mode-hook))
+    (add-hook hook #'centaur-tabs-local-disable))
+  (add-hook 'magit-file-mode-hook
+            (lambda ()
+              (if (not buffer-file-name)
+                  (centaur-tabs-local-mode))))
+
+  (advice-add 'magit-set-header-line-format :around
+              (lambda (orig &rest args)
+                (apply 'centaur-tabs-blend-header-line args)))
+
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (dolist (action '((?d "Diff..." magit-diff-buffer-file-popup)
@@ -63,16 +80,17 @@
   :ensure t
   :init
   (add-hook 'git-commit-mode-hook
-    (lambda ()
-      (tabbar-blend-header-line "Magit - Commit")
-      (toggle-save-place 0)
-      (require 'ispell)
-      (when (executable-find ispell-program-name)
-        (git-commit-turn-on-flyspell))
-      (turn-on-proselint)
-      (setq fill-column 72)
-      (git-commit-turn-on-auto-fill)
-      (fci-mode)))
+            (lambda ()
+              (centaur-tabs-local-mode)
+              (centaur-tabs-blend-header-line "Magit - Commit")
+              (toggle-save-place 0)
+              (require 'ispell)
+              (when (executable-find ispell-program-name)
+                (git-commit-turn-on-flyspell))
+              (turn-on-proselint)
+              (setq fill-column 72)
+              (git-commit-turn-on-auto-fill)
+              (fci-mode)))
   :config
   (global-git-commit-mode)
   (setq vc-follow-symlinks t))

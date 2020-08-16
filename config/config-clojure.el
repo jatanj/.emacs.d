@@ -5,8 +5,6 @@
   :init
   (add-hook 'clojure-mode-hook
             (lambda ()
-              ;; Disable company initially until we connect to server
-              (company-mode -1)
               (eldoc-mode -1)
               (set-local-tab-width 2)))
   :config
@@ -31,7 +29,13 @@
                "C-:" 'eval-expression
                "C-c C-s" 'lsp-mode-map
                "C-c C-q" nil))
-            t))
+            t)
+
+  (defun clojure-resolve-jdk-src-paths ()
+    (if-let* ((java-home (file-name-as-directory (file-truename (getenv "JAVA_HOME"))))
+              (file-directory-p java-home))
+        (--filter (file-exists-p it)
+                  (list (concat java-home "src/"))))))
 
 (use-package clojure-mode-extra-font-locking
   :ensure t
@@ -41,18 +45,38 @@
   :ensure t
   :after clojure-mode
   :init
+  (defun cider--append-completion-at-point ()
+    (add-hook 'completion-at-point-functions #'cider-complete-at-point nil t))
+  (defun cider-add-to-lsp-completion ()
+    "Configure `completion-at-point-functions' to use both Cider and LSP for completions."
+    (when (functionp 'lsp)
+      (when lsp--buffer-workspaces
+        (cider--override-completion-at-point))
+      (add-hook 'lsp-after-open-hook #'cider--append-completion-at-point t)))
+  (defun cider-reset-to-lsp-completion ()
+    (when (and (functionp 'lsp)
+               lsp--buffer-workspaces)
+      (setq-local completion-at-point-functions nil)
+      (add-hook 'completion-at-point-functions #'lsp-completion-at-point nil t)))
+  ;; (add-hook 'cider-connected-hook #'cider-add-to-lsp-completion)
+  ;; (add-hook 'cider-disconnected-hook #'cider-reset-to-lsp-completion)
+
   (add-hook 'cider-repl-mode-hook
             (lambda ()
               (company-mode 1)
-              (cider-company-enable-fuzzy-completion)))
+              (hscroll-mode 1)))
   (add-hook 'cider-mode-hook
             (lambda ()
+              ;; (company-mode 1)
               (eldoc-mode -1)
-              (company-quickhelp-mode -1)
-              (setq-local completion-at-point-functions nil)
-              (setq-local help-window-select t)
-              (if (bound-and-true-p lsp-mode)
-                  (add-hook 'completion-at-point-functions #'lsp-completion-at-point t))))
+              (company-quickhelp-mode -1)))
+
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*cider-doc" (* not-newline) "*" eos)
+                 (display-buffer-in-side-window)
+                 (inhibit-same-window . t)
+                 (side . bottom)
+                 (window-height . 0.35)))
   :config
   (setq nrepl-log-messages t)
   (setq nrepl-hide-special-buffers nil)
@@ -77,6 +101,20 @@
         '((cider-shadow-cljs-default-options . "app")
           (cider-default-cljs-repl . "shadow")))
   (setq cider-prompt-for-symbol nil)
+
+  (dolist (path (clojure-resolve-jdk-src-paths))
+    (add-to-list 'cider-jdk-src-paths path))
+  (dolist (path cider-jdk-src-paths)
+    (when (not (file-directory-p path))
+      (delete path cider-jdk-src-paths)))
+
+  (defun cider--jump-to-loc-from-info-java-file-a (orig &rest args)
+    (when-let* ((info (car args))
+                (class (nrepl-dict-get info "class"))
+                (_ (not (nrepl-dict-contains info "file"))))
+      (nrepl-dict-put info "file" (cider-resolve-java-class class)))
+    (apply orig args))
+  (advice-add 'cider--jump-to-loc-from-info :around #'cider--jump-to-loc-from-info-java-file-a)
 
   (general-define-key
    :keymaps 'cider-mode-map
@@ -122,6 +160,7 @@
   :init
   (setq cljr-add-ns-to-blank-clj-files nil)
   (setq cljr-magic-requires nil)
+  (setq cljr-auto-clean-ns nil)
   (add-hook 'clojure-mode-hook
             (lambda ()
               (clj-refactor-mode 1)

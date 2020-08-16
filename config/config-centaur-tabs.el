@@ -11,10 +11,9 @@
   (setq centaur-tabs-modified-marker "*")
   (setq centaur-tabs-cycle-scope 'tabs)
   (setq centaur-tabs-hide-hash (make-hash-table :test 'equal))
-  (setq centaur-tabs-hide-tabs-hooks '(reb-mode-hook completion-list-mode-hook))
   (centaur-tabs-enable-buffer-reordering)
   (setq centaur-tabs-adjust-buffer-order t)
-  (setq centaur-tabs-adjust-buffer-order 'left)
+  (setq centaur-tabs-adjust-buffer-order 'right)
 
   ;; When in daemon mode, this needs to be run after the frame is created to ensure
   ;; (display-graphic-p) returns t.
@@ -22,96 +21,98 @@
       (add-hook 'configure-frame-functions
                 (lambda (frame)
                   (with-selected-frame frame
-                    (set-face-attribute 'header-line nil :background (car (get 'custom-theme-face-bg6 'saved-value)))
+                    (set-face-attribute 'header-line nil :background (car (get 'custom-theme-color-bg6 'saved-value)))
                     (centaur-tabs-headline-match)
                     (centaur-tabs-mode 1))))
     (centaur-tabs-mode 1))
 
-  (defun centaur-tabs-hide-tab (x)
-    "Do no to show buffer X in tabs."
-    (let ((name (format "%s" x)))
-      (or
-       ;; Current window is not dedicated window.
-       (window-dedicated-p (selected-window))
+  ;; Hack -- the tabs don't seem to render correctly until we switch tabs at least once.
+  (add-hook 'configure-frame-functions
+            (lambda (frame)
+              (when (bound-and-true-p centaur-tabs-mode)
+                (centaur-tabs-forward)
+                (centaur-tabs-backward))))
 
-       ;; Buffer name not match below blacklist.
-       (string-prefix-p "*epc" name)
-       (string-prefix-p "*helm" name)
-       (string-prefix-p "*Helm" name)
-       (string-prefix-p "*Compile-Log*" name)
-       (string-prefix-p "*lsp" name)
-       (string-prefix-p "*company" name)
-       (string-prefix-p "*Flycheck" name)
-       (string-prefix-p "*tramp" name)
-       (string-prefix-p " *Mini" name)
-       ;; (string-prefix-p "*help" name)
-       (string-prefix-p "*straight" name)
-       (string-prefix-p " *temp" name)
-       ;; (string-prefix-p "*Help" name)
+  (defvar centaur-tabs--projectile-project-cache (ht-create)
+    "Cached projectile project roots to improve performance of `centaur-tabs-buffer-groups'")
 
-       ;; Is not magit buffer.
-       (and (string-prefix-p "magit" name)
-            (not (file-name-extension name))))))
+  (defun centaur-tabs-cached-projectile-root (dir)
+    "Find the projectile project root for DIR."
+    (or (ht-get centaur-tabs--projectile-project-cache dir)
+        (when-let* ((projectile-root (projectile-project-p dir)))
+          (ht-set centaur-tabs--projectile-project-cache dir projectile-root)
+          projectile-root)))
+
+  (defun centaur-tabs-clear-projectile-cache ()
+    "Clear the projectile project cache."
+    (interactive)
+    (setq centaur-tabs--projectile-project-cache (ht-create)))
 
   (defun centaur-tabs-buffer-groups ()
     "`centaur-tabs-buffer-groups' control buffers' group rules.
     Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
     All buffer name start with * will group to \"Emacs\".
     Other buffer group by `centaur-tabs-get-group-name' with project name."
-    (list
-     (cond
-      ((memq major-mode '(cider-repl-mode))
-       "Repl")
-      ((or (string-equal "*" (substring (buffer-name) 0 1))
-           (memq major-mode '(magit-process-mode
-                              magit-status-mode
-                              magit-diff-mode
-                              magit-log-mode
-                              magit-file-mode
-                              magit-blob-mode
-                              magit-blame-mode
-                              magit-revision-mode)))
-       "Emacs")
-      ((derived-mode-p 'dired-mode)
-       "Dired")
-      ((memq major-mode '(helpful-mode
-                          help-mode))
-       "Help")
-      ((memq major-mode '(org-mode
-                          org-agenda-clockreport-mode
-                          org-src-mode
-                          org-agenda-mode
-                          org-beamer-mode
-                          org-indent-mode
-                          org-bullets-mode
-                          org-cdlatex-mode
-                          org-agenda-log-mode
-                          diary-mode))
-       "OrgMode")
-      ((when-let ((name (buffer-file-name)))
-         (and (stringp name) (string-match-p ".jar:" name)))
-       "Jars")
-      (t (or (when-let* ((projectile-root (projectile-project-root))
-                         (group-name (centaur-tabs-get-group-name (current-buffer)))
-                         (stringp group-name))
-               group-name)
-             "Other")))))
+    (let ((file (buffer-file-name)))
+      (list
+       (cond
+        ((memq major-mode '(cider-repl-mode))
+         "Repl")
+        ((or (memq major-mode '(magit-process-mode
+                                magit-status-mode
+                                magit-diff-mode
+                                magit-log-mode
+                                magit-blob-mode
+                                magit-blame-mode
+                                magit-revision-mode))
+             (and (memq major-mode '(magit-file-mode-hook))
+                  (not buffer-file-name)))
+         "Magit")
+        ((string-equal "*" (substring (buffer-name) 0 1))
+         "Emacs")
+        ((derived-mode-p 'dired-mode)
+         "Dired")
+        ((memq major-mode '(helpful-mode
+                            help-mode))
+         "Help")
+        ((memq major-mode '(org-mode
+                            org-agenda-clockreport-mode
+                            org-src-mode
+                            org-agenda-mode
+                            org-beamer-mode
+                            org-indent-mode
+                            org-bullets-mode
+                            org-cdlatex-mode
+                            org-agenda-log-mode
+                            diary-mode))
+         "OrgMode")
+        ((and (stringp file)
+              (string-match-p ".jar:" file))
+         "Jars")
+        (t (or (if-let* ((projectile-root (centaur-tabs-cached-projectile-root file)))
+                   projectile-root
+                 (when-let* ((group-name (centaur-tabs-get-group-name (current-buffer)))
+                             (stringp group-name))
+                   group-name))
+               "Other"))))))
 
   (defalias 'tabbar-mode 'centaur-tabs-mode)
   (defalias 'tabbar-backward-tab 'centaur-tabs-backward)
   (defalias 'tabbar-forward-tab 'centaur-tabs-forward)
 
-  (defun tabbar-local-disable ()
-    "Disable tabbar-mode if it's currently enabled."
+  (defun centaur-tabs-local-disable ()
+    "Disable centaur-tabs-mode if it's currently enabled."
     (interactive)
-    (when (bound-and-true-p tabbar-mode)
-      (ignore-errors (tabbar-mode))))
+    (when (bound-and-true-p centaur-tabs-mode)
+      (ignore-errors (centaur-tabs-local-mode))))
+  (defalias 'tabbar-local-disable 'centaur-tabs-local-disable)
 
-  (defun tabbar-blend-header-line (&optional text)
-    (face-remap-add-relative 'header-line `(:box (:line-width 7 :color ,(car (get 'custom-theme-face-bg6 'saved-value)))))
+  (defun centaur-tabs-blend-header-line (&optional text)
+    (face-remap-add-relative 'header-line `(:box (:line-width 7 :color ,(car (get 'custom-theme-color-bg6 'saved-value)))))
     (setq header-line-format
           (concat (propertize " " 'display '((space :align-to 0)))
-                  (or (propertize text 'face `(:foreground ,(car (get 'custom-theme-face-delim 'saved-value)) :family "Fira Code Light" :height 130)) " "))))
+                  (or (propertize text 'face `(:foreground ,(car (get 'custom-theme-color-delim 'saved-value)) :family "Fira Code Light" :height 130)) " "))))
+  (defalias 'tabbar-blend-header-line 'centaur-tabs-blend-header-line)
 
   (general-define-key
    :keymaps 'centaur-tabs-mode-map

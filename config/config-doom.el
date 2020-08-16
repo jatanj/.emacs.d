@@ -20,13 +20,13 @@
     (when (bound-and-true-p evil-local-mode)
       (evil-state-property evil-state :tag t)))
   (setq evil-normal-state-tag (propertize " <N> " 'face '((:foreground "#f8f8f8" :background "#4f3598")))
-        evil-emacs-state-tag (propertize " <E> " 'face  `(((:foreground "#f8f8f8" :background ,(get 'custom-theme-face-bg2 'saved-value)))))
+        evil-emacs-state-tag (propertize " <E> " 'face  `(((:foreground "#f8f8f8" :background ,(get 'custom-theme-color-bg2 'saved-value)))))
         evil-insert-state-tag (propertize " <I> " 'face '((:foreground "#f8f8f8" :background "#7eaefd")))
         evil-motion-state-tag (propertize " <M> " 'face '((:foreground "#f8f8f8" :background "#e6987a")))
         evil-visual-state-tag (propertize " <V> " 'face '((:foreground "#f8f8f8" :background "#e6987a")))
         evil-operator-state-tag (propertize " <O> " 'face '((:foreground "#f8f8f8" :background "#4f3598"))))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number " " evil-state " " matches buffer-info remote-host parrot selection-info checker)
+    '(bar " " evil-state " " workspace-name matches buffer-info remote-host parrot selection-info checker)
     '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes buffer-position word-count  input-method indent-info buffer-encoding major-mode process vcs))
   (doom-modeline-mode 1)
   :config

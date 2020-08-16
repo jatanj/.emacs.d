@@ -2,6 +2,7 @@
 /elpa*/
 ido.last
 local.el
+custom.el
 recentf
 auto-save-list
 .emacs.desktop*
