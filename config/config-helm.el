@@ -70,4 +70,7 @@
    "s f" 'helm-do-ag-this-file
    "s b" 'helm-do-ag-buffers))
 
+(use-package helm-xref
+  :ensure t)
+
 (provide 'config-helm)
