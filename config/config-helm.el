@@ -17,18 +17,12 @@
   (setq helm-etags-fuzzy-match t)
   (setq helm-lisp-fuzzy-completion t)
   (setq helm-mode-fuzzy-match t)
+  (setq helm-completion-style 'helm-fuzzy)
   (setq helm-completion-in-region-fuzzy-match t)
   (setq helm-mode-handle-completion-in-region t)
   (setq helm-display-header-line nil)
   (setq helm-split-window-in-side-p t)
   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s")
-  (add-hook 'helm-mode-hook
-            (lambda ()
-              (setq completion-styles
-                    (cond ((assq 'helm-flex completion-styles-alist)
-                           '(helm-flex))
-                          ((assq 'flex completion-styles-alist)
-                           '(flex))))))
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*helm" (* not-newline) "*" eos)
                  (display-buffer-in-side-window)

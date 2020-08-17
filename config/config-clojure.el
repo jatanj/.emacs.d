@@ -8,7 +8,7 @@
               (eldoc-mode -1)
               (set-local-tab-width 2)))
   :config
-  (setq clojure-indent-style :always-align)
+  (setq clojure-indent-style 'always-align)
   (define-clojure-indent
     (match 1)
     (are 2)
@@ -28,7 +28,8 @@
                :keymaps 'clojure-mode-map
                "C-:" 'eval-expression
                "C-c C-s" 'lsp-mode-map
-               "C-c C-q" nil))
+               "C-c C-q" nil
+               "C-c C-\\" 'clojure-align))
             t)
 
   (defun clojure-resolve-jdk-src-paths ()
@@ -68,6 +69,9 @@
   (add-hook 'cider-mode-hook
             (lambda ()
               ;; (company-mode 1)
+              (setq-local safe-local-variable-values
+                          '((cider-shadow-cljs-default-options . "app")
+                            (cider-default-cljs-repl . "shadow")))
               (eldoc-mode -1)
               (company-quickhelp-mode -1)))
 
@@ -97,9 +101,6 @@
   ;; (setq cider-cljs-lein-repl
   ;;       "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
   (setq cider-doc-auto-select-buffer t)
-  (setq safe-local-variable-values
-        '((cider-shadow-cljs-default-options . "app")
-          (cider-default-cljs-repl . "shadow")))
   (setq cider-prompt-for-symbol nil)
 
   (dolist (path (clojure-resolve-jdk-src-paths))
@@ -161,6 +162,9 @@
   (setq cljr-add-ns-to-blank-clj-files nil)
   (setq cljr-magic-requires nil)
   (setq cljr-auto-clean-ns nil)
+  (setq cljr-auto-sort-ns nil)
+  (setq cljr-auto-eval-ns-form nil)
+
   (add-hook 'clojure-mode-hook
             (lambda ()
               (clj-refactor-mode 1)

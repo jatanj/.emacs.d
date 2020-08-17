@@ -11,9 +11,8 @@
   (setq centaur-tabs-modified-marker "*")
   (setq centaur-tabs-cycle-scope 'tabs)
   (setq centaur-tabs-hide-hash (make-hash-table :test 'equal))
-  (centaur-tabs-enable-buffer-reordering)
+  (centaur-tabs-enable-buffer-alphabetical-reordering)
   (setq centaur-tabs-adjust-buffer-order t)
-  (setq centaur-tabs-adjust-buffer-order 'right)
 
   ;; When in daemon mode, this needs to be run after the frame is created to ensure
   ;; (display-graphic-p) returns t.
@@ -111,7 +110,7 @@
     (face-remap-add-relative 'header-line `(:box (:line-width 7 :color ,(car (get 'custom-theme-color-bg6 'saved-value)))))
     (setq header-line-format
           (concat (propertize " " 'display '((space :align-to 0)))
-                  (or (propertize text 'face `(:foreground ,(car (get 'custom-theme-color-delim 'saved-value)) :family "Fira Code Light" :height 130)) " "))))
+                  (or (propertize text 'face `(:foreground ,(car (get 'custom-theme-color-delim 'saved-value)) :family "Fira Code Light" :height 110)) " "))))
   (defalias 'tabbar-blend-header-line 'centaur-tabs-blend-header-line)
 
   (general-define-key

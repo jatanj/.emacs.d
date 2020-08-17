@@ -1,10 +1,8 @@
 (use-package company
   :ensure t
   :config
-  (setq company-frontends
-        '(company-pseudo-tooltip-frontend
-          company-echo-metadata-frontend))
-  (setq company-idle-delay 0.0)
+  (setq company-frontends '(company-pseudo-tooltip-frontend))
+  (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 0)
   (setq company-require-match nil)
   (setq company-auto-complete nil)
@@ -13,6 +11,9 @@
   (setq company-eclim-auto-save nil)
   (setq company-dabbrev-downcase nil)
   (setq company-backends '(company-capf))
+  (add-hook 'company-mode-hook
+            (lambda ()
+              (setq-local completion-styles '(emacs22))))
   (remove-hook 'completion-at-point-functions #'tags-completion-at-point-function)
 
   (defun company-complete-selection-or-indent ()

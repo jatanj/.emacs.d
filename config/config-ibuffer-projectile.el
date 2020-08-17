@@ -8,7 +8,8 @@
       (ibuffer-projectile-set-filter-groups)
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))
-      (tabbar-blend-header-line "Buffers")))
+      (centaur-tabs-local-disable)
+      (centaur-tabs-blend-header-line "Buffers")))
   :config
   (general-define-key
    :keymaps 'ibuffer-mode-map

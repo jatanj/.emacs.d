@@ -78,6 +78,7 @@
 (setq ad-redefinition-action 'accept)
 (setq inhibit-compacting-font-caches t)
 (setq delete-by-moving-to-trash t)
+(setq completion-styles '(flex))
 
 ;; Performance
 (setq gc-cons-threshold 100000000)

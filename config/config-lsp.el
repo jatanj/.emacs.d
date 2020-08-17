@@ -7,7 +7,7 @@
   (setq lsp-eldoc-enable-hover nil)
   (setq lsp-enable-folding nil)
   (setq lsp-modeline-diagnostics-enable nil)
-  (setq lsp-completion-no-cache t)
+  (setq lsp-completion-no-cache nil)
   (setq lsp-diagnostic-clean-after-change nil)
   (setq lsp-diagnostic-package :flycheck)
   (setq lsp-auto-execute-action nil)
@@ -15,21 +15,22 @@
 
   (defun lsp-enable (&rest args)
     (interactive)
-    (lsp-diagnostics--enable)
-    (flycheck-buffer)
-    (when (and (not lsp--buffer-workspaces)
-               (--any? (eq major-mode (car it)) lsp-language-id-configuration))
-      (make-thread
-       (lambda ()
-         (lsp)
-         (company-mode 1)))))
+    (when (bound-and-true-p lsp-mode)
+      (lsp-diagnostics--enable)
+      (flycheck-buffer)
+      (when (and (not lsp--buffer-workspaces)
+                 (--any? (eq major-mode (car it)) lsp-language-id-configuration))
+        (make-thread
+         (lambda ()
+           (lsp)
+           (company-mode 1))))))
 
   (defun lsp-evil-jump-to-definition-a (orig &rest args)
     (cond
      ((bound-and-true-p lsp-mode)
       (let ((pos (point))
             (buffer (current-buffer)))
-        (ignore-error (lsp-find-definition))
+        (call-interactively 'lsp-find-definition)
         (when (and (= pos (point))
                    (eq buffer (current-buffer)))
           (cider-find-var))))
@@ -37,16 +38,10 @@
      (t (funcall-interactively orig))))
   (advice-add 'evil-jump-to-definition :around #'lsp-evil-jump-to-definition-a)
 
-  (dolist (m '((clojure-mode . "clojure")
-               (clojurec-mode . "clojure")
-               (clojurescript-mode . "clojure")
-               (clojurex-mode . "clojure")))
-    (add-to-list 'lsp-language-id-configuration m))
   (dolist (m '((sass-mode . "sass")
                (scss-mode . "scss")))
     (delete m lsp-language-id-configuration))
 
-  (setq lsp-clojure-server-command '("bash" "-c" "clojure-lsp"))
   (dolist (ignored '("[/\\\\]resources$"
                      "[/\\\\]\\.shadow-cljs$"
                      "[/\\\\]\\.lsp$"
@@ -93,6 +88,8 @@
               (when (not lsp--buffer-workspaces)
                 (company-mode -1))
               (setq-local company-backends '(company-capf))
+              (setq-local company-idle-delay 0)
+              (setq-local completion-styles '(flex))
               (setq-local flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch mode-enabled))
               (eldoc-mode -1)))
 

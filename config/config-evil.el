@@ -13,8 +13,6 @@
                   flycheck-error-list-mode))
     (evil-set-initial-state mode 'emacs))
 
-  ;; Unbind some keys.
-  ;; No idea why this doesn't work with general.
   (defun evil-unbind-key (pair)
     (let ((unbind (lambda (state key)
                     (define-key
