@@ -17,7 +17,7 @@
   ;; When in daemon mode, this needs to be run after the frame is created to ensure
   ;; (display-graphic-p) returns t.
   (if (daemonp)
-      (add-hook 'configure-frame-functions
+      (add-hook 'config/configure-frame-functions
                 (lambda (frame)
                   (with-selected-frame frame
                     (set-face-attribute 'header-line nil :background (car (get 'custom-theme-color-bg6 'saved-value)))
@@ -26,7 +26,7 @@
     (centaur-tabs-mode 1))
 
   ;; Hack -- the tabs don't seem to render correctly until we switch tabs at least once.
-  (add-hook 'configure-frame-functions
+  (add-hook 'config/configure-frame-functions
             (lambda (frame)
               (when (bound-and-true-p centaur-tabs-mode)
                 (centaur-tabs-forward)
@@ -35,12 +35,21 @@
   (defvar centaur-tabs--projectile-project-cache (ht-create)
     "Cached projectile project roots to improve performance of `centaur-tabs-buffer-groups'")
 
+  (defvar centaur-tabs--projectile-ignore-dirs '("/usr" "/bin")
+    "List of directories to ignore when querying the projectile project root.")
+
   (defun centaur-tabs-cached-projectile-root (dir)
     "Find the projectile project root for DIR."
-    (or (ht-get centaur-tabs--projectile-project-cache dir)
-        (when-let* ((projectile-root (projectile-project-p dir)))
-          (ht-set centaur-tabs--projectile-project-cache dir projectile-root)
-          projectile-root)))
+    (let ((path (and (stringp dir)
+                     (expand-file-name dir))))
+      (if (--any (s-starts-with? it path)
+                 centaur-tabs--projectile-ignore-dirs)
+          (ht-set centaur-tabs--projectile-project-cache dir dir)
+        (if-let ((cached-value (ht-get centaur-tabs--projectile-project-cache dir)))
+            cached-value
+          (let ((projectile-root (or (projectile-project-p dir) dir)))
+            (ht-set centaur-tabs--projectile-project-cache dir projectile-root)
+            projectile-root)))))
 
   (defun centaur-tabs-clear-projectile-cache ()
     "Clear the projectile project cache."
@@ -48,10 +57,7 @@
     (setq centaur-tabs--projectile-project-cache (ht-create)))
 
   (defun centaur-tabs-buffer-groups ()
-    "`centaur-tabs-buffer-groups' control buffers' group rules.
-    Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-    All buffer name start with * will group to \"Emacs\".
-    Other buffer group by `centaur-tabs-get-group-name' with project name."
+    "Group the centaur tabs buffers."
     (let ((file (buffer-file-name)))
       (list
        (cond
@@ -87,12 +93,9 @@
          "OrgMode")
         ((and (stringp file)
               (string-match-p ".jar:" file))
-         "Jars")
+         "Archives")
         (t (or (if-let* ((projectile-root (centaur-tabs-cached-projectile-root file)))
-                   projectile-root
-                 (when-let* ((group-name (centaur-tabs-get-group-name (current-buffer)))
-                             (stringp group-name))
-                   group-name))
+                   projectile-root)
                "Other"))))))
 
   (defalias 'tabbar-mode 'centaur-tabs-mode)

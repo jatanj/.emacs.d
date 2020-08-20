@@ -2,7 +2,7 @@
   (lambda ()
     (company-mode 1)
     (eldoc-mode -1)
-    (set-local-tab-width 2)))
+    (config/set-local-tab-width 2)))
 
 ;; https://emacs.wordpress.com/2007/01/17/eval-and-replace-anywhere/
 (defun eval-and-replace ()

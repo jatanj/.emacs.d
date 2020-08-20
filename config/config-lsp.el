@@ -15,32 +15,38 @@
 
   (defun lsp-enable (&rest args)
     (interactive)
-    (when (bound-and-true-p lsp-mode)
-      (lsp-diagnostics--enable)
-      (flycheck-buffer)
+    (when-let* ((file-name (buffer-file-name))
+                (_ (and (file-exists-p file-name) (not buffer-read-only))))
       (when (and (not lsp--buffer-workspaces)
                  (--any? (eq major-mode (car it)) lsp-language-id-configuration))
-        (make-thread
-         (lambda ()
-           (lsp)
-           (company-mode 1))))))
+        (lsp)
+        (company-mode 1))
+      (when (eq flycheck-checker 'lsp)
+        (lsp-diagnostics--enable)
+        (flycheck-buffer))))
 
   (defun lsp-evil-jump-to-definition-a (orig &rest args)
-    (cond
-     ((bound-and-true-p lsp-mode)
-      (let ((pos (point))
-            (buffer (current-buffer)))
-        (call-interactively 'lsp-find-definition)
-        (when (and (= pos (point))
-                   (eq buffer (current-buffer)))
-          (cider-find-var))))
-     ((bound-and-true-p cider-mode) (cider-find-var))
-     (t (funcall-interactively orig))))
-  (advice-add 'evil-jump-to-definition :around #'lsp-evil-jump-to-definition-a)
-
-  (dolist (m '((sass-mode . "sass")
-               (scss-mode . "scss")))
-    (delete m lsp-language-id-configuration))
+    (let ((do-first-jump (lambda (funcs)
+                           (let ((pos (point))
+                                 (buffer (current-buffer)))
+                             (-any (lambda (func)
+                                     (let ((inhibit-message t))
+                                       (ignore-errors (call-interactively func)))
+                                     (and (not (and (= pos (point))
+                                                    (eq buffer (current-buffer))))
+                                          func))
+                                   funcs))))
+          (funcs (-flatten
+                  (list (when (bound-and-true-p lsp-mode)
+                          '(lsp-find-definition))
+                        (when (bound-and-true-p cider-mode)
+                          '(config/cider-find-var-at-point))))))
+      (let ((result (funcall do-first-jump funcs))
+            (inhibit-message t))
+        (message "lsp-evil-jump-to-definition-a : %s" result)
+        (when (not result)
+          (funcall-interactively orig)))))
+  (advice-add 'evil-goto-definition :around #'lsp-evil-jump-to-definition-a)
 
   (dolist (ignored '("[/\\\\]resources$"
                      "[/\\\\]\\.shadow-cljs$"
@@ -109,7 +115,16 @@
   (general-define-key
    :keymaps 'lsp-command-map
    "d" 'lsp-ui-doc-glance
-   "C-d" 'lsp-ui-doc-glance))
+   "C-d" 'lsp-ui-doc-glance)
+
+  (dolist (map '(clojure-mode-map
+                 clojurescript-mode-map
+                 web-mode-map
+                 css-mode-map
+                 scss-mode-map))
+    (general-define-key
+     :keymaps map
+     "C-c C-a C-s" 'lsp)))
 
 (use-package lsp-ui
   :ensure t

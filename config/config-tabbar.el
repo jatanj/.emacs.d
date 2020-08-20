@@ -4,7 +4,7 @@
   (setq tabbar-use-images nil)
   :config
   (tabbar-mode 1)
-  (add-hook 'configure-frame-functions
+  (add-hook 'config/configure-frame-functions
             (lambda (frame)
               (when (bound-and-true-p tabbar-mode)
                 (tabbar-forward-tab)

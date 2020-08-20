@@ -14,6 +14,6 @@
   :init
   (add-hook 'groovy-mode-hook
             (lambda ()
-              (set-local-tab-width 4))))
+              (config/set-local-tab-width 4))))
 
 (provide 'config-java)

@@ -80,7 +80,7 @@
 
   (general-define-key
    :states '(normal insert visual)
-   "C-]" 'evil-jump-to-definition
+   "C-]" 'evil-goto-definition
    "C-q" 'evil-scroll-line-up)
 
   (general-define-key
@@ -95,14 +95,6 @@
   (evil-visual-restore))
 (defun evil-shift-left-visual () (interactive) (evil-shift-visual 'evil-shift-left))
 (defun evil-shift-right-visual () (interactive) (evil-shift-visual 'evil-shift-right))
-
-(setq local-jump-to-definition nil)
-(defun evil-jump-to-definition ()
-  (interactive)
-  (if (and (boundp 'local-jump-to-definition)
-           local-jump-to-definition)
-      (funcall-interactively local-jump-to-definition)
-    (call-interactively 'dumb-jump-go)))
 
 (use-package evil-anzu
   :ensure t)

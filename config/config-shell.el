@@ -18,6 +18,6 @@
 (add-hook 'sh-mode-hook
           (lambda ()
             (flycheck-mode)
-            (set-local-tab-width 4)))
+            (config/set-local-tab-width 4)))
 
 (provide 'config-shell)

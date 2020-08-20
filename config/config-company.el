@@ -35,7 +35,16 @@
    :keymaps 'company-active-map
    "<escape>" 'company-quit
    "<tab>" nil
-   "<return>" (lookup-key (current-global-map) (kbd "RET"))))
+   "<return>" (general-simulate-key "RET" :state 'insert)))
+
+(use-package company-box
+  :ensure t
+  :config
+  (setq company-box-show-single-candidate t)
+  (setq company-box-max-candidates 50)
+  (setq company-box-backends-colors nil)
+  (setq company-box-icons-alist 'company-box-icons-images)
+  (setq company-box-doc-enable nil))
 
 (use-package company-quickhelp
   :ensure t

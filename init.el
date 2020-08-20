@@ -12,15 +12,17 @@
 (eval-when-compile
   (require 'use-package))
 
-(defun user-emacs-path (name)
+(defun config/user-emacs-path (name)
+  (interactive)
   (expand-file-name name user-emacs-directory))
 
-(defconst init-themes-path (user-emacs-path "themes"))
-(defconst init-config-path (user-emacs-path "config"))
-(defconst init-site-lisp-path (user-emacs-path "site-lisp"))
-(defconst init-local-path (user-emacs-path "local.el"))
-(defconst init-custom-path (user-emacs-path "custom.el"))
-(defconst init-defuns-path (user-emacs-path "defuns.el"))
+(defconst init-file-path (config/user-emacs-path "init.el"))
+(defconst init-themes-path (config/user-emacs-path "themes"))
+(defconst init-config-path (config/user-emacs-path "config"))
+(defconst init-site-lisp-path (config/user-emacs-path "site-lisp"))
+(defconst init-local-path (config/user-emacs-path "local.el"))
+(defconst init-custom-path (config/user-emacs-path "custom.el"))
+(defconst init-defuns-path (config/user-emacs-path "defuns.el"))
 (defconst init-config-name-prefix "config-")
 
 ;; Load machine-specific settings
@@ -35,6 +37,9 @@
                          (local-client-window-params . nil)))
   (unless (boundp (car local-setting))
     (set (car local-setting) (cdr local-setting))))
+
+;; Emacs 28 temporary fixes
+(setq minibuffer-local-must-match-filename-map (make-sparse-keymap))
 
 ;; Configuration dependencies
 (use-package general :ensure t :demand)
@@ -84,8 +89,8 @@
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024))
 
-(setq configure-frame-functions '())
-(setq configure-display-buffer-alist '())
+(setq config/configure-frame-functions '())
+(setq config/quick-kill-buffer-list '())
 
 ;; Useful minor modes
 (show-paren-mode 1)
@@ -110,13 +115,13 @@
            (toggle-frame-fullscreen) (toggle-frame-maximized)))))
 
 ;; Fix toggle-frame-fullscreen to preserve our window position
-(defun force-maximized-with-fullscreen (orig-fun &rest args)
+(defun config/force-maximized-with-fullscreen (orig-fun &rest args)
   (let ((fullscreen-parameter (frame-parameter nil 'fullscreen)))
     (unless (or (string= fullscreen-parameter 'fullboth)
                 (string= fullscreen-parameter 'maximized))
       (toggle-frame-maximized)))
   (apply orig-fun args))
-(advice-add 'toggle-frame-fullscreen :around #'force-maximized-with-fullscreen)
+(advice-add 'toggle-frame-fullscreen :around #'config/force-maximized-with-fullscreen)
 
 ;; Save desktop
 (setq desktop-restore-eager t)
@@ -151,7 +156,7 @@
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq scroll-error-top-bottom t)
-(add-hook 'configure-frame-functions
+(add-hook 'config/configure-frame-functions
   (lambda (frame)
     (scroll-bar-mode -1)
     (horizontal-scroll-bar-mode -1)))
@@ -188,7 +193,7 @@
 (setq tab-stop-list (number-sequence 2 200 2))
 (setq-default indent-line-function 'insert-tab)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(defun set-local-tab-width (n)
+(defun config/set-local-tab-width (n)
   (setq tab-width n)
   (setq evil-shift-width n)
   (set (make-local-variable 'tab-stop-list) (number-sequence n 200 n)))
@@ -227,13 +232,19 @@
 (setq tramp-copy-size-limit nil)
 (setq tramp-inline-compress-start-size nil)
 
+;; Byte compilation
+;; https://emacs.stackexchange.com/questions/13532/
+(defun config/dont-delay-compile-warnings (fun type &rest args)
+  (if (eq type 'bytecomp)
+      (let ((after-init-time t))
+        (apply fun type args))
+    (apply fun type args)))
+(advice-add 'display-warning :around #'config/dont-delay-compile-warnings)
+
 ;; Backup files
 (setq backup-by-copying t)
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-;; Fixes Gnus vulnerability
-(eval-after-load "enriched" '(defun enriched-decode-display-prop (start end &optional param) (list start end)))
 
 ;; Auto-save if Emacs loses focus
 (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
@@ -256,7 +267,7 @@
 ;; Themes
 (setq custom-theme-directory init-themes-path)
 (add-to-list 'load-path init-themes-path)
-(defun switch-theme (&optional name)
+(defun config/switch-theme (&optional name)
   (interactive)
   (let* ((available-themes (custom-available-themes))
          (name (or name (completing-read "Switch to theme: " available-themes)))
@@ -265,19 +276,19 @@
         (progn (load-theme theme t)
                (setq custom-current-theme name))
       (message "Could not find theme '%s'" theme))))
-(defun load-initial-theme ()
-  (switch-theme (or (and (boundp 'custom-current-theme)
-                         custom-current-theme)
-                    local-default-theme)))
+(defun config/load-initial-theme ()
+  (config/switch-theme (or (and (boundp 'custom-current-theme)
+                                custom-current-theme)
+                           local-default-theme)))
 (if (bound-and-true-p desktop-save-mode)
     (progn
       (add-to-list 'desktop-globals-to-save 'custom-current-theme)
       (dolist (hook '(desktop-after-read-hook
                       desktop-not-loaded-hook
                       desktop-no-desktop-file-hook))
-        (add-hook hook #'load-initial-theme)))
-  (add-hook 'configure-frame-functions
-            (lambda (frame) (load-initial-theme))))
+        (add-hook hook #'config/load-initial-theme)))
+  (add-hook 'config/configure-frame-functions
+            (lambda (frame) (config/load-initial-theme))))
 
 ;; Load config files
 (add-to-list 'load-path (expand-file-name init-config-path))
@@ -341,19 +352,19 @@
 
 ;; Delay all configure-frame-functions for emacsclient until after the frame
 ;; is created.
-(defun configure-frame (frame)
-  (dolist (func configure-frame-functions)
+(defun config/configure-frame (frame)
+  (dolist (func config/configure-frame-functions)
     (funcall func frame))
   (redraw-frame frame))
 (if (daemonp)
     (add-hook 'after-make-frame-functions
       (lambda (frame)
-        (configure-frame frame)))
-  (configure-frame (selected-frame)))
+        (config/configure-frame frame)))
+  (config/configure-frame (selected-frame)))
 
 ;; Configure how these buffers are displayed and add some shortcuts to quickly
 ;; close them
-(dolist (it configure-display-buffer-alist)
+(dolist (it config/quick-kill-buffer-list)
   (pcase it
     (`(,regexp ,mode)
      (general-define-key
@@ -445,9 +456,10 @@
  "C-p" projectile-command-map
  "b" 'ibuffer
  "C-d" 'desktop-save
- "C-a" 'treemacs-toggle-find-file-collapse-other-projects
- "C-b" 'treemacs-toggle-find-file
+ "C-a" 'config/treemacs-toggle-find-file-collapse-other-projects
+ "C-b" 'config/treemacs-toggle-find-file
  "C-w" treemacs-project-map
+ "C-f" 'helm-do-grep-ag
  "n" 'new-empty-buffer
  "v" 'magit-file-popup
  "C-v" 'magit-status)

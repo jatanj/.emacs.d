@@ -7,6 +7,6 @@
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'case-label '+)
   (c-set-offset 'arglist-intro '+)
-  (set-local-tab-width 4))
+  (config/set-local-tab-width 4))
 
 (provide 'config-c-cpp)

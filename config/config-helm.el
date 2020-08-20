@@ -2,8 +2,10 @@
   :ensure t
   :config
   (require 'helm-config)
+
   (helm-mode 1)
   (helm-autoresize-mode 1)
+
   (setq helm-autoresize-max-height 35)
   (setq helm-M-x-fuzzy-match t)
   (setq helm-buffers-fuzzy-matching t)
@@ -23,12 +25,14 @@
   (setq helm-display-header-line nil)
   (setq helm-split-window-in-side-p t)
   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s")
+
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*helm" (* not-newline) "*" eos)
                  (display-buffer-in-side-window)
                  (inhibit-same-window . t)
                  (side . bottom)
                  (window-height . 0.35)))
+
   (setq helm-boring-buffer-regexp-list
         '("\\` "
           "\\*helm"
@@ -39,14 +43,15 @@
           "\\*Ibuffer\\*"
           "\\*tide-server\\*"
           "\\*fsharp-complete\\*"))
-  (defun filter-buffers (buffer-list)
+  (defun helm-custom-filter-buffers-a (buffer-list)
     (delq nil (mapcar
                (lambda (buffer)
                  (cond
                   ((eq (with-current-buffer buffer major-mode) 'dired-mode) nil)
                   (t buffer)))
                buffer-list)))
-  (advice-add 'helm-skip-boring-buffers :filter-return 'filter-buffers)
+  (advice-add 'helm-skip-boring-buffers :filter-return 'helm-custom-filter-buffers-a)
+
   (global-set-key (kbd "C-S-p") 'helm-M-x)
   (global-set-key (kbd "C-p") 'helm-buffers-list)
   (general-define-key

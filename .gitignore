@@ -27,3 +27,4 @@ company-statistics-cache.el
 /eshell/
 /transient/
 *.elc
+/eln-cache/

@@ -12,7 +12,7 @@
   (add-hook 'nxml-mode-hook
             (lambda ()
               (setq nxml-child-indent 2)
-              (set-local-tab-width 2)))
+              (config/set-local-tab-width 2)))
   :config
   (setq sgml-basic-offset 2)
   (setq web-mode-markup-indent-offset 2)
@@ -24,18 +24,32 @@
 (use-package scss-mode
   :ensure t
   :init
-  (defun flycheck-scss-set-stylelintrc-file ()
+  (defun config/flycheck-scss-set-stylelintrc-file ()
     (let* ((stylelintrc ".stylelintrc.json")
            (candidates (list (concat (file-name-as-directory (or (projectile-project-p) "")) stylelintrc)
                              (expand-file-name (concat "~/" stylelintrc)))))
       (setq-local flycheck-stylelintrc (--first (file-exists-p it) candidates))))
+
+  (defun config/scss-newline-and-indent ()
+    (interactive)
+    (newline-and-indent)
+    (when (and (eq (char-after) ?\})
+               (eq (char-before) ?\n))
+      (newline-and-indent)
+      (previous-line)
+      (let ((inhibit-message t))
+        (call-interactively (general-simulate-key "TAB")))))
+
   (add-hook 'scss-mode-hook
             (lambda ()
               (setq-local flycheck-checker 'scss-stylelint)
-              (flycheck-scss-set-stylelintrc-file)
+              (config/flycheck-scss-set-stylelintrc-file)
               (flycheck-mode 1)
-              (set-local-tab-width 2)))
+              (config/set-local-tab-width 2)))
   :config
-  (setq css-indent-offset 2))
+  (setq css-indent-offset 2)
+  (general-define-key
+   :keymaps 'scss-mode-map
+   "C-c C-c" nil))
 
 (provide 'config-web-mode)
