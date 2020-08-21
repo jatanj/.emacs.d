@@ -317,6 +317,7 @@
                 help
                 ibuffer-projectile
                 ido
+                indent-guides
                 java
                 javascript
                 json
