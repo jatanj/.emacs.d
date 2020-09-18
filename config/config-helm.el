@@ -1,6 +1,7 @@
 (use-package helm
   :ensure t
   :config
+  (defalias 'browse-url-mosaic-program #'browse-url-chromium)
   (require 'helm-config)
 
   (helm-mode 1)
@@ -52,6 +53,18 @@
                buffer-list)))
   (advice-add 'helm-skip-boring-buffers :filter-return 'helm-custom-filter-buffers-a)
 
+  (defun config/helm-skip-dots (old-func &rest args)
+    "Skip . and .. initially in helm-find-files.  First call OLD-FUNC with ARGS."
+    (apply old-func args)
+    (let ((sel (helm-get-selection)))
+      (if (and (stringp sel) (string-match "/\\.$" sel))
+          (helm-next-line 2)))
+    (let ((sel (helm-get-selection))) ; if we reached .. move back
+      (if (and (stringp sel) (string-match "/\\.\\.$" sel))
+          (helm-previous-line 1))))
+  (advice-add #'helm-preselect :around #'config/helm-skip-dots)
+  (advice-add #'helm-ff-move-to-first-real-candidate :around #'config/helm-skip-dots)
+
   (global-set-key (kbd "C-S-p") 'helm-M-x)
   (global-set-key (kbd "C-p") 'helm-buffers-list)
   (general-define-key
@@ -60,7 +73,7 @@
 
 (use-package helm-projectile
   :ensure t
-  :after projectile
+  :after (helm projectile)
   :config
   (helm-projectile-on))
 

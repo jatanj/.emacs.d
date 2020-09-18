@@ -42,14 +42,25 @@
   (defvar scala-font-lock:braces-face
     'scala-font-lock:parentheses-face)
   (setq scala-indent:use-javadoc-style t)
-  (add-hook 'scala-mode-hook (lambda () (rainbow-delimiters-mode 1)))
+
+  (defun config/scala-mode-init ()
+    (rainbow-delimiters-mode 1)
+    (yas-minor-mode 1)
+    (eldoc-mode -1))
+  (add-hook 'scala-mode-hook #'config/scala-mode-init)
 
   :config
   (setq scala-auto-insert-asterisk-in-comments t)
 
-  (defun scala-newline-and-indent-with-asterisk ()
+  (defun config/scala-newline-and-indent ()
     (interactive)
     (newline-and-indent)
+    (when (save-excursion
+            (beginning-of-line)
+            (looking-at "[\t ]*}[\t ]*"))
+      (previous-line)
+      (end-of-line)
+      (newline-and-indent))
     (when scala-auto-insert-asterisk-in-comments
       (scala-indent:insert-asterisk-on-multiline-comment)))
 
@@ -62,6 +73,6 @@
   (general-define-key
    :keymaps 'scala-mode-map
    :states 'insert
-   "<return>" 'scala-newline-and-indent-with-asterisk))
+   "<return>" 'config/scala-newline-and-indent))
 
 (provide 'config-scala)

@@ -20,11 +20,10 @@
 (defun open-terminal-here ()
   "Opens a terminal window in the current buffer's directory."
   (interactive)
-  (let* ((candidates '("xfce4-terminal" "tilix" "terminator" "xterm"))
-         (terminal (or (and local-terminal
+  (let* ((terminal (or (and local-terminal
                             (let ((file (executable-find local-terminal)))
                               (when file (list local-terminal file))))
-                       (car (->> candidates
+                       (car (->> local-terminals
                                  (-map (lambda (x) (list x (executable-find x))))
                                  (-filter (lambda (x) (nth 1 x))))))))
     (if terminal
@@ -45,9 +44,9 @@
      ((not (use-region-p)) (message "No region was active"))
      (t (shell-command-on-region (region-beginning) (region-end) command nil t)))))
 
-;; Copy/cut entire line when no region is active
-;; http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html
 (defun slick-cut (beg end)
+  "Copy/cut entire line when no region is active.
+  http://emacs-fu.blogspot.com/2009/11/copying-lines-without-selecting-them.html"
   (interactive
    (if mark-active
        (list (region-beginning) (region-end))
@@ -94,10 +93,9 @@
               (backward-kill-word 1))))
       (kill-region cp (- cp 1)))))
 
-;; Backspace previous tab stop
-;; https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop
 (defun backspace-whitespace-to-tab-stop ()
-  "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
+  "Delete whitespace backwards to the next tab-stop, otherwise delete one character.
+  https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop"
   (interactive)
   (if (or indent-tabs-mode
           (region-active-p)
@@ -115,17 +113,22 @@
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
           (call-interactively 'backward-delete-char))))))
 
-;; Create a new empty buffer without prompting for a name.
-;; http://ergoemacs.org/emacs/emacs_new_empty_buffer.html
 (defun new-empty-buffer ()
+  "Create a new empty buffer without prompting for a name.
+  http://ergoemacs.org/emacs/emacs_new_empty_buffer.html"
   (interactive)
   (let ((-buf (generate-new-buffer "untitled")))
     (switch-to-buffer -buf)
     (funcall initial-major-mode)
     (setq buffer-offer-save t)))
 
-;; https://www.reddit.com/r/emacs/comments/69w9wg/can_we_do_this_in_emacs/dh9vra8/"
 (defun align-values (start end)
-  "Vertically aligns region based on lengths of the first value of each line."
+  "Vertically aligns region based on lengths of the first value of each line.
+  https://www.reddit.com/r/emacs/comments/69w9wg/can_we_do_this_in_emacs/dh9vra8/"
   (interactive "r")
   (align-regexp start end "\\S-+\\(\\s-+\\)" 1 1 nil))
+
+(defun browse-emacs-d ()
+  "Open .emacs.d in Dired."
+  (interactive)
+  (dired user-emacs-directory))

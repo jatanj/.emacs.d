@@ -30,16 +30,6 @@
                              (expand-file-name (concat "~/" stylelintrc)))))
       (setq-local flycheck-stylelintrc (--first (file-exists-p it) candidates))))
 
-  (defun config/scss-newline-and-indent ()
-    (interactive)
-    (newline-and-indent)
-    (when (and (eq (char-after) ?\})
-               (eq (char-before) ?\n))
-      (newline-and-indent)
-      (previous-line)
-      (let ((inhibit-message t))
-        (call-interactively (general-simulate-key "TAB")))))
-
   (add-hook 'scss-mode-hook
             (lambda ()
               (setq-local flycheck-checker 'scss-stylelint)

@@ -33,6 +33,7 @@
                          (local-font-face . "Inconsolata-12")
                          (local-menu-font-face . "Fira Code Medium-10")
                          (local-default-theme . "nord")
+                         (local-terminals . '("xterm"))
                          (local-desktop-window-params . nil)
                          (local-client-window-params . nil)))
   (unless (boundp (car local-setting))
@@ -40,6 +41,7 @@
 
 ;; Emacs 28 temporary fixes
 (setq minibuffer-local-must-match-filename-map (make-sparse-keymap))
+(setq browse-url-mosaic-program nil)
 
 ;; Configuration dependencies
 (use-package general :ensure t :demand)
@@ -84,6 +86,10 @@
 (setq inhibit-compacting-font-caches t)
 (setq delete-by-moving-to-trash t)
 (setq completion-styles '(flex))
+(setq enable-recursive-minibuffers t)
+(setq echo-keystrokes 0.02)
+(setq inhibit-compacting-font-caches t)
+(advice-add #'yes-or-no-p :override #'y-or-n-p)
 
 ;; Performance
 (setq gc-cons-threshold 100000000)
@@ -336,6 +342,7 @@
                 scala
                 shell
                 smartparens
+                smooth-scroll
                 sql
                 systemd
                 term
@@ -396,7 +403,6 @@
 ;; Keybindings
 (general-define-key
  "C-k" ctl-x-map
- "C-;" 'execute-extended-command
  "C-:" 'eval-expression
  "M-<f4>" (if (daemonp) 'delete-frame 'save-buffers-kill-emacs)
  "C-=" 'enlarge-window-horizontally
@@ -438,7 +444,8 @@
  "w" 'kill-this-buffer
  "p" 'helm-projectile-find-file-in-known-projects
  "k" 'ido-kill-buffer
- "f" 'helm-find
+ "C-f" 'helm-find-files
+ "f" 'find-file
  "b" 'helm-buffers-list
  "t" 'new-empty-buffer
  "m" (general-simulate-key "C-c")

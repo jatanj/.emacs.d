@@ -15,7 +15,7 @@
   (setq doom-modeline-indent-info t)
   (setq doom-modeline-height 30)
   (setq doom-modeline-icon t)
-  (setq inhibit-compacting-font-caches t)
+  (setq doom-modeline-buffer-file-name-style 'relative-to-project)
   (doom-modeline-def-segment evil-state
     (when (bound-and-true-p evil-local-mode)
       (evil-state-property evil-state :tag t)))
@@ -26,8 +26,8 @@
         evil-visual-state-tag (propertize " [V] " 'face '((:foreground "#f8f8f8" :background "#e6987a")))
         evil-operator-state-tag (propertize " [O] " 'face '((:foreground "#f8f8f8" :background "#4f3598"))))
   (doom-modeline-def-modeline 'main
-    '(bar " " evil-state " " workspace-name matches buffer-info remote-host parrot selection-info checker)
-    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes buffer-position word-count  input-method indent-info buffer-encoding major-mode process vcs))
+    '(bar window-number " " evil-state " " workspace-name matches buffer-info remote-host parrot selection-info checker)
+    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes word-count input-method indent-info buffer-position buffer-encoding process vcs "  "))
   (doom-modeline-mode 1)
   :config
   (defun doom-modeline-refresh ()

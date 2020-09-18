@@ -48,8 +48,7 @@
   (general-define-key
    :states 'insert
    "C-k" ctl-x-map
-   "C-g" 'evil-force-normal-state
-   "<tab>" 'company-complete-selection-or-indent)
+   "C-g" 'evil-force-normal-state)
 
   (general-define-key
    :states 'visual

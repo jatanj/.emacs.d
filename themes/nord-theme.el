@@ -29,7 +29,7 @@
   (cyan      "#5aa4c2")
   (builtin   "#90788c")
   (keyword   "#90788c")
-  (const     fg1)
+  (const     "#55AAAA")
   (func      fg1)
   (str       "#ffebb5")
   (type      "#8787d7")
