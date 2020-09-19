@@ -198,7 +198,18 @@
 (setq-default tab-width 2)
 (setq tab-stop-list (number-sequence 2 200 2))
 (setq-default indent-line-function 'insert-tab)
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defun config/delete-trailing-whitespace ()
+  (let ((end-previous-line (save-excursion
+                             (previous-line)
+                             (end-of-line)
+                             (point)))
+        (start-next-line (save-excursion
+                           (next-line)
+                           (beginning-of-line)
+                           (point))))
+    (delete-trailing-whitespace (point-min) end-previous-line)
+    (delete-trailing-whitespace start-next-line (point-max))))
+(add-hook 'before-save-hook 'config/delete-trailing-whitespace)
 (defun config/set-local-tab-width (n)
   (setq tab-width n)
   (setq evil-shift-width n)
@@ -251,9 +262,6 @@
 (setq backup-by-copying t)
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-;; Auto-save if Emacs loses focus
-(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
@@ -344,6 +352,7 @@
                 smartparens
                 smooth-scroll
                 sql
+                super-save
                 systemd
                 term
                 treemacs

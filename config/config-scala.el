@@ -46,7 +46,10 @@
   (defun config/scala-mode-init ()
     (rainbow-delimiters-mode 1)
     (yas-minor-mode 1)
-    (eldoc-mode -1))
+    (eldoc-mode -1)
+    ;; Metals only seems to check for errors after a save, so we'll save often.
+    (when (bound-and-true-p super-save-mode)
+      (setq-local super-save-idle-duration 1)))
   (add-hook 'scala-mode-hook #'config/scala-mode-init)
 
   :config
