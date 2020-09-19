@@ -61,7 +61,7 @@
       `(company-scrollbar-bg ((,class (:background ,bg6))))
       `(company-scrollbar-fg ((,class (:background ,bg4))))
       `(company-template-fist-eld ((,class (:inherit region))))
-      `(company-tooltip ((,class (:foreground ,fg2 :background ,bg6 :bold nil :box (:line-width 1 :color ,ml-border)))))
+      `(company-tooltip ((,class (:foreground ,fg2 :background ,bg6 :bold nil))))
       `(company-tooltip-annotation ((,class (:foreground ,type))))
       `(company-tooltip-annotation-selection ((,class (:foreground ,type))))
       `(company-tooltip-common ((,class (:foreground ,success))))

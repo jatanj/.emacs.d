@@ -3,17 +3,18 @@
   :init
   (setq lsp-keymap-prefix "C-c s")
   :config
-  (setq lsp-enable-indentation nil)
+  (setq config/lsp-enable-indentation nil)
   (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-enable-folding nil)
+  (setq config/lsp-enable-folding nil)
   (setq lsp-modeline-diagnostics-enable nil)
   (setq lsp-completion-no-cache nil)
   (setq lsp-diagnostic-clean-after-change nil)
   (setq lsp-diagnostic-package :flycheck)
   (setq lsp-auto-execute-action nil)
+  (setq lsp-signature-auto-activate nil)
   (setq lsp-modeline-code-actions-segments '(count icon))
 
-  (defun lsp-enable (&rest args)
+  (defun config/lsp-enable (&rest args)
     (interactive)
     (when-let* ((file-name (buffer-file-name))
                 (_ (and (file-exists-p file-name))))
@@ -66,9 +67,9 @@
                      "[/\\\\]\\.lsp$"
                      "[/\\\\]\\.clj-kondo$"))
     (add-to-list 'lsp-file-watch-ignored ignored))
-  (setq lsp-enable-file-watchers nil)
+  (setq config/lsp-enable-file-watchers nil)
 
-  (setq lsp--custom-code-actions
+  (setq config/lsp--custom-code-actions
         (list (ht ("title" "Add missing libspec (CLJR)")
                   ("kind" "quickfix")
                   ("isPreferred" t)
@@ -83,11 +84,11 @@
                                             "Unresolved namespace")))))))
                   ("X-customHandler" #'cljr-add-missing-libspec))))
 
-  (defun lsp-execute-code-action-custom ()
+  (defun config/lsp-execute-code-action-custom ()
     "Show a LSP code action popup with custom (non-LSP) commands."
     (interactive)
     (let ((actions (lsp-code-actions-at-point)))
-      (dolist (a lsp--custom-code-actions)
+      (dolist (a config/lsp--custom-code-actions)
         (if (and (if-let ((p (ht-get a "X-customPredicate"))) (funcall p) t)
                  (-none? (lambda (x) (eq (ht-get x "title") (ht-get a "title"))) actions))
             (add-to-list 'actions a))
@@ -109,29 +110,37 @@
     (setq-local company-backends '(company-capf))
     (setq-local company-idle-delay 0)
     (setq-local flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch mode-enabled))
-    ; (lsp-ui-sideline-mode -1)
     (eldoc-mode -1))
   (add-hook 'lsp-mode-hook #'config/lsp-mode-init)
 
   (add-hook 'lsp-after-initialize-hook
             (lambda ()
-              (add-hook 'switch-buffer-functions #'lsp-enable)))
+              (add-hook 'switch-buffer-functions #'config/lsp-enable)))
 
   (add-hook 'lsp-after-uninitialized-functions
             (lambda ()
-              (remove-hook 'switch-buffer-functions #'lsp-enable)))
+              (remove-hook 'switch-buffer-functions #'config/lsp-enable)))
+
+  (defun config/lsp-ui-doc-glance ()
+    (interactive)
+    (lsp-ui-doc-show)
+    (run-with-timer (+ lsp-ui-doc-delay 0.1) nil
+                    (lambda ()
+                      (add-hook 'post-command-hook #'config/lsp-ui-doc-hide nil t))))
+  (defun config/lsp-ui-doc-hide ()
+    (interactive)
+    (lsp-ui-doc-hide)
+    (remove-hook 'post-command-hook #'config/lsp-ui-doc-hide t))
 
   (general-define-key
    :keymaps 'lsp-mode-map
-   "C-<return>" 'lsp-execute-code-action-custom
+   "C-<return>" 'config/lsp-execute-code-action-custom
    "C-c C-s" lsp-command-map
    "C-c C-r r" 'lsp-rename
    "C-}" 'lsp-find-references)
   (general-define-key
    :keymaps 'lsp-command-map
-   ; "d" 'lsp-ui-doc-glance
-   ; "C-d" 'lsp-ui-doc-glance
-   )
+   "C-d" 'config/lsp-ui-doc-glance)
 
   (general-define-key
    :keymaps '(clojure-mode-map
@@ -164,21 +173,33 @@
   :ensure t
   :init
   (defun config/lsp-metals-init ()
-    ; (lsp-ui-sideline-mode -1)
-    )
+    nil)
   (add-hook 'lsp-metals-after-open-hook #'config/lsp-metals-init))
 
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :after lsp-mode
-;;   :init
-;;   (setq lsp-ui-sideline-show-symbol nil)
-;;   (setq lsp-ui-sideline-show-hover nil)
-;;   (setq lsp-ui-sideline-show-code-actions nil)
-;;   (setq lsp-ui-sideline-show-diagnostics nil)
-;;   (setq lsp-ui-peek-enable nil)
-;;   (setq lsp-ui-doc-enable nil)
-;;   (add-hook 'lsp-mode-hook #'lsp-ui-mode))
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode
+  :init
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-symbol nil)
+  (setq lsp-ui-sideline-show-hover nil)
+  (setq lsp-ui-sideline-show-code-actions nil)
+  (setq lsp-ui-sideline-show-diagnostics t)
+  (setq lsp-ui-sideline-diagnostic-max-lines 10)
+  (setq lsp-ui-peek-enable nil)
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-show-with-cursor nil)
+  (setq lsp-ui-doc-show-with-mouse nil)
+  (setq lsp-ui-doc-position 'at-point)
+
+  (defun config/lsp-ui-init ()
+    (when (and (bound-and-true-p flycheck-mode)
+               lsp-ui-sideline-enable
+               lsp-ui-sideline-show-diagnostics)
+      (setq-local flycheck-display-errors-function nil)))
+
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode)
+  (add-hook 'lsp-ui-mode-hook #'config/lsp-ui-init))
 
 (use-package helm-lsp
   :ensure t
@@ -188,5 +209,21 @@
   :config
   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
   (define-key lsp-mode-map [remap helm-apropos] #'helm-lsp-workspace-symbol))
+
+(use-package lsp-sonarlint
+  :ensure t
+  :after lsp-mode
+  :init
+  (setq lsp-sonarlint-disable-telemetry t)
+
+  (defun config/lsp-sonarlint-enable (lang)
+    (let ((pkg (intern (message "lsp-sonarlint-%s" lang))))
+      (require pkg)
+      (set (intern (message "%s-enabled" pkg)) t)))
+
+  :config
+  (config/lsp-sonarlint-enable 'java)
+  (config/lsp-sonarlint-enable 'scala)
+  (config/lsp-sonarlint-enable 'html))
 
 (provide 'config-lsp)

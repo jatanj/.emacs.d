@@ -59,7 +59,15 @@
 (use-package company-box
   :ensure t
   :init
-  (add-hook 'company-mode-hook #'company-box-mode)
+  (defun config/company-box-init (&rest _)
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (when (bound-and-true-p company-mode)
+          (company-box-mode 1))))
+    (add-hook 'company-mode-hook #'company-box-mode))
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook #'config/company-box-init)
+    (config/company-box-init))
   :config
   (setq company-box-frame-behavior 'default)
   (setq company-box-show-single-candidate 'always)
@@ -69,8 +77,8 @@
   (setq company-box-icons-alist 'company-box-icons-images)
   (setq company-box-scrollbar nil)
   (setq company-box-doc-enable nil)
-  (setq company-box-tooltip-minimum-width 60)
-  (setq company-box-tooltip-maximum-width 120))
+  (setq company-tooltip-minimum-width 60)
+  (setq company-tooltip-maximum-width 140))
 
 (use-package company-quickhelp
   :ensure t
