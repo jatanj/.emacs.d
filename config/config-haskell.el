@@ -1,5 +1,5 @@
 (use-package haskell-mode
-  :ensure t
+  :straight t
   :defer t
   :mode ("\\.l?hs\\'" . haskell-mode)
   :init
@@ -22,7 +22,7 @@
    "C-c C-d" 'haskell-mode-jump-to-def-or-tag))
 
 (use-package flycheck-haskell
-  :ensure t
+  :straight t
   :after flycheck
   :init
   (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))

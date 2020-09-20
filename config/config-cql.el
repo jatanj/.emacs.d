@@ -1,5 +1,5 @@
 (use-package cql-mode
-  :ensure t
+  :straight t
   :mode (("\\.cql\\'" . cql-mode))
   :init
   (add-hook 'cql-mode-hook #'sqlind-minor-mode))

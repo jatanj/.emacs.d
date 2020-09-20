@@ -1,5 +1,5 @@
 (use-package treemacs
-  :ensure t
+  :straight t
   :init
   (setq treemacs-show-cursor t)
   (setq treemacs-show-hidden-files t)
@@ -76,22 +76,22 @@
    "D" nil))
 
 (use-package treemacs-projectile
-  :ensure t
+  :straight t
   :after treemacs projectile
   :init)
 
 (use-package treemacs-evil
-  :ensure t
+  :straight t
   :after treemacs evil
   :init)
 
 (use-package treemacs-magit
-  :ensure t
+  :straight t
   :after treemacs magit
   :init)
 
 (use-package treemacs-all-the-icons
-  :ensure t
+  :straight t
   :after treemacs
   :config
   (treemacs-load-theme "all-the-icons"))

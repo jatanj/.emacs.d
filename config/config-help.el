@@ -1,5 +1,5 @@
 (use-package helpful
-  :ensure t
+  :straight t
   :init
   (require 'help)
   (setq help-window-select t)

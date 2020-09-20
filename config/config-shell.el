@@ -3,7 +3,7 @@
   (add-to-list 'auto-mode-alist assoc))
 
 (use-package xterm-color
-  :ensure t
+  :straight t
   :init
   (setq comint-output-filter-functions
         (remove

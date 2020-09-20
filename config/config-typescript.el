@@ -1,5 +1,5 @@
 (use-package tide
-  :ensure t
+  :straight t
   :mode ("\\(\\.d\\)?\\.ts\\'" . typescript-mode)
   :init
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
@@ -27,7 +27,7 @@
     (tide-hl-identifier-mode 1))
 
 (use-package ts-comint
-  :ensure t
+  :straight t
   :after tide
   :config
   (general-define-key

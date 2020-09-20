@@ -1,5 +1,5 @@
 (use-package sql-indent
-  :ensure t
+  :straight t
   :init
   (add-hook 'sql-mode-hook
             (lambda ()

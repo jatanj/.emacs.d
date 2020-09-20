@@ -1,5 +1,5 @@
 (use-package flycheck
-  :ensure t
+  :straight t
   :config
   (setq flycheck-display-errors-delay 0.1)
   (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
@@ -48,7 +48,7 @@
   (flycheck-mode 'toggle))
 
 (use-package flycheck-pos-tip
-  :ensure t
+  :straight t
   :after flycheck
   :config
   (setq flycheck-pos-tip-timeout most-positive-fixnum)

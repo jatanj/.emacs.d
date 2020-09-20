@@ -1,5 +1,5 @@
 (use-package web-mode
-  :ensure t
+  :straight t
   :mode (("\\.phtml\\'"     . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.[agj]sp\\'"   . web-mode)
@@ -22,7 +22,7 @@
   (setq web-mode-enable-current-element-highlight t))
 
 (use-package scss-mode
-  :ensure t
+  :straight t
   :init
   (defun config/flycheck-scss-set-stylelintrc-file ()
     (let* ((stylelintrc ".stylelintrc.json")

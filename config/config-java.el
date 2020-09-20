@@ -8,7 +8,7 @@
    "C-<return>" 'c-indent-new-comment-line))
 
 (use-package groovy-mode
-  :ensure t
+  :straight t
   :mode (("\\.gradle\\'" . groovy-mode)
          ("\\.groovy\\'" . groovy-mode))
   :init

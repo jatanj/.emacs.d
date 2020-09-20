@@ -1,12 +1,12 @@
 (use-package rust-mode
-  :ensure t
+  :straight t
   :init
   (add-hook 'rust-mode-hook
     (lambda ()
       (config/set-local-tab-width 4))))
 
 (use-package racer
-  :ensure t
+  :straight t
   :init
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook
@@ -22,7 +22,7 @@
    "C-c C-d" 'racer-describe))
 
 (use-package flycheck-rust
-  :ensure t
+  :straight t
   :init
   (add-hook 'rust-mode-hook
             (lambda ()

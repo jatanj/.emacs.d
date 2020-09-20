@@ -1,5 +1,5 @@
 (use-package centaur-tabs
-  :ensure t
+  :straight t
   :config
   (setq centaur-tabs-style "bar")
   (setq centaur-tabs-set-icons t)

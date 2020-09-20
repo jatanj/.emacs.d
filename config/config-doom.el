@@ -1,5 +1,5 @@
 (use-package doom-themes
-  :ensure t
+  :straight t
   :init
   (setq doom-themes-enable-bold t)
   (setq doom-themes-enable-italic nil)
@@ -9,7 +9,7 @@
   (setq doom-neotree-enable-file-icons t))
 
 (use-package doom-modeline
-  :ensure t
+  :straight t
   :init
   (require 'doom-modeline)
   (setq doom-modeline-indent-info t)

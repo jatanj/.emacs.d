@@ -1,5 +1,5 @@
 (use-package helm
-  :ensure t
+  :straight t
   :config
   (defalias 'browse-url-mosaic-program #'browse-url-chromium)
   (require 'helm-config)
@@ -72,13 +72,13 @@
    "f" 'helm-find))
 
 (use-package helm-projectile
-  :ensure t
+  :straight t
   :after (helm projectile)
   :config
   (helm-projectile-on))
 
 (use-package helm-ag
-  :ensure t
+  :straight t
   :config
   (setq helm-ag-fuzzy-match t)
   (setq helm-ag-base-command "rg --smart-case --no-heading")
@@ -89,6 +89,6 @@
    "s b" 'helm-do-ag-buffers))
 
 (use-package helm-xref
-  :ensure t)
+  :straight t)
 
 (provide 'config-helm)

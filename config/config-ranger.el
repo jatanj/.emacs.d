@@ -1,5 +1,5 @@
 (use-package ranger
-  :ensure t
+  :straight t
   :init
   (setq ranger-show-hidden t)
   (setq ranger-cleanup-eagerly t)
@@ -25,7 +25,7 @@
    "C-k" ctl-x-map))
 
 (use-package all-the-icons-dired
-  :ensure t
+  :straight t
   :config
   (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
 

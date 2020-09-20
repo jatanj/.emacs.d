@@ -1,4 +1,4 @@
 (use-package json-mode
-  :ensure t)
+  :straight t)
 
 (provide 'config-json)

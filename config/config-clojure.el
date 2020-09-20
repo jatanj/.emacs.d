@@ -1,5 +1,5 @@
 (use-package clojure-mode
-  :ensure t
+  :straight t
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.cljs\\'" . clojurescript-mode))
   :init
@@ -41,11 +41,11 @@
                   (list (concat java-home "src/"))))))
 
 (use-package clojure-mode-extra-font-locking
-  :ensure t
+  :straight t
   :after clojure-mode)
 
 (use-package cider
-  :ensure t
+  :straight t
   :after (evil clojure-mode)
   :init
   (defun config/cider-set-completion-at-point ()
@@ -208,7 +208,7 @@
   (config/cider-define-keybindings))
 
 (use-package helm-cider
-  :ensure t
+  :straight t
   :after (helm cider)
   :init
   ;; Redefine keybindings afterwards to overwrite whatever helm-cider defines.
@@ -216,7 +216,7 @@
   (add-hook 'helm-cider-mode-hook #'config/cider-define-keybindings))
 
 (use-package flycheck-clj-kondo
-  :ensure t
+  :straight t
   :init
   (add-hook 'clojure-mode-hook
             (lambda ()
@@ -224,7 +224,7 @@
               (flycheck-mode 1))))
 
 (use-package clj-refactor
-  :ensure t
+  :straight t
   :after clojure-mode
   :init
   (setq cljr-add-ns-to-blank-clj-files t)
@@ -245,7 +245,7 @@
    "/" nil))
 
 (use-package html-to-hiccup
-  :ensure t
+  :straight t
   :init
   (defun custom/html-to-hiccup-convert-region (start end)
     (interactive "r")

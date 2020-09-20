@@ -1,5 +1,5 @@
 (use-package dumb-jump
-  :ensure t
+  :straight t
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 

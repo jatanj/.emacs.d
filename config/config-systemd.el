@@ -1,5 +1,5 @@
 (use-package systemd
-  :ensure t
+  :straight t
   :mode (("\\.service\\'" . systemd-mode))
   :init
   (add-hook 'systemd-mode-hook

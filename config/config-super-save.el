@@ -1,5 +1,5 @@
 (use-package super-save
-  :ensure t
+  :straight t
   :init
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 5)

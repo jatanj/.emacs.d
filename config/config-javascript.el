@@ -1,5 +1,5 @@
 (use-package js2-mode
-  :ensure t
+  :straight t
   :defer t
   :after tide
   :mode (("\\.js\\'"  . js2-mode)
@@ -22,7 +22,7 @@
   (setq js2-mode-show-strict-warnings nil))
 
 (use-package js2-refactor
-  :ensure t
+  :straight t
   :config
   (js2r-add-keybindings-with-prefix "C-c C-r")
   (add-hook 'js2-mode-hook #'js2-refactor-mode))

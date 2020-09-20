@@ -1,5 +1,5 @@
 (use-package gcmh
-  :ensure t
+  :straight t
   :init
   (gcmh-mode 1))
 

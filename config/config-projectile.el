@@ -1,5 +1,5 @@
 (use-package projectile
-  :ensure t
+  :straight t
   :config
   (projectile-global-mode)
   (setq projectile-mode-line "Projectile")

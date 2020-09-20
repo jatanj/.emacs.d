@@ -1,5 +1,5 @@
 (use-package smartparens
-  :ensure t
+  :straight t
   :config
   (require 'smartparens-config)
   (smartparens-global-mode 1)

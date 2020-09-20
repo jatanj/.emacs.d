@@ -1,5 +1,5 @@
 (use-package lsp-mode
-  :ensure t
+  :straight t
   :init
   (setq lsp-keymap-prefix "C-c s")
   :config
@@ -170,14 +170,14 @@
    "RET" 'config/lsp-goto-xref))
 
 (use-package lsp-metals
-  :ensure t
+  :straight t
   :init
   (defun config/lsp-metals-init ()
     nil)
   (add-hook 'lsp-metals-after-open-hook #'config/lsp-metals-init))
 
 (use-package lsp-ui
-  :ensure t
+  :straight t
   :after lsp-mode
   :init
   (setq lsp-ui-sideline-enable t)
@@ -202,7 +202,7 @@
   (add-hook 'lsp-ui-mode-hook #'config/lsp-ui-init))
 
 (use-package helm-lsp
-  :ensure t
+  :straight t
   :after (lsp-mode helm-projectile)
   :init
   (setq helm-lsp-treemacs-icons nil)
@@ -211,7 +211,7 @@
   (define-key lsp-mode-map [remap helm-apropos] #'helm-lsp-workspace-symbol))
 
 (use-package lsp-sonarlint
-  :ensure t
+  :straight t
   :after lsp-mode
   :init
   (setq lsp-sonarlint-disable-telemetry t)

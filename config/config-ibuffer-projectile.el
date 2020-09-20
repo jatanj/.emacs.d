@@ -1,5 +1,5 @@
 (use-package ibuffer-projectile
-  :ensure t
+  :straight t
   :after projectile
   :init
   (add-hook 'ibuffer-hook
@@ -17,7 +17,7 @@
    "C-u" (general-simulate-key "<prior>")))
 
 (use-package all-the-icons-ibuffer
-  :ensure t
+  :straight t
   :init
   (all-the-icons-ibuffer-mode 1))
 

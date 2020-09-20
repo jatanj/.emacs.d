@@ -1,5 +1,5 @@
 (use-package rainbow-mode
-  :ensure t
+  :straight t
   :init
   (dolist (mode '(css-mode scss-mode))
     (add-hook (intern (format "%s-hook" mode)) #'rainbow-mode)))

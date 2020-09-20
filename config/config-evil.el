@@ -1,5 +1,5 @@
 (use-package evil
-  :ensure t
+  :straight t
   :init
   (setq evil-want-C-u-scroll t)
   (setq evil-toggle-key "<f5>")
@@ -96,25 +96,25 @@
 (defun evil-shift-right-visual () (interactive) (evil-shift-visual 'evil-shift-right))
 
 (use-package evil-anzu
-  :ensure t)
+  :straight t)
 
 (use-package evil-surround
-  :ensure t
+  :straight t
   :config
   (global-evil-surround-mode 1))
 
 (use-package evil-visualstar
-  :ensure t
+  :straight t
   :config
   (global-evil-visualstar-mode 1))
 
 (use-package evil-matchit
-  :ensure t
+  :straight t
   :config
   (global-evil-matchit-mode 1))
 
 (use-package evil-args
-  :ensure t
+  :straight t
   :config
   ;; Bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
@@ -122,12 +122,12 @@
   (add-to-list 'evil-args-delimiters " "))
 
 (use-package evil-exchange
-  :ensure t
+  :straight t
   :config
   (evil-exchange-install))
 
 (use-package evil-lion
-  :ensure t
+  :straight t
   :config
   (evil-lion-mode))
 

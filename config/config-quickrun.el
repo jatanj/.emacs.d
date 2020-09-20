@@ -1,5 +1,5 @@
 (use-package quickrun
-  :ensure t
+  :straight t
   :init
   (setq quickrun-focus-p nil)
   (setq quickrun-timeout-seconds nil)

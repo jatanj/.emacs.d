@@ -1,5 +1,5 @@
 (use-package yaml-mode
-  :ensure t
+  :straight t
   :config
   (general-define-key
    :keymaps 'yaml-mode-map))

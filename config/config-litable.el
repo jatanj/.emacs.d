@@ -1,5 +1,5 @@
 (use-package litable
-  :ensure t
+  :straight t
   :defer
   :commands (litable-mode))
 

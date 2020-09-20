@@ -1,4 +1,4 @@
 (use-package lua-mode
-  :ensure t)
+  :straight t)
 
 (provide 'config-lua)

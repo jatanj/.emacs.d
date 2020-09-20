@@ -1,5 +1,5 @@
 (use-package d-mode
-  :ensure t
+  :straight t
   :defer t
   :mode ("\\.d\\'" . d-mode)
   :init

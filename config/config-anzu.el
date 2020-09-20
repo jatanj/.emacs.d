@@ -1,5 +1,5 @@
 (use-package anzu
-  :ensure t
+  :straight t
   :config
   (global-anzu-mode 1)
   (set-face-attribute 'anzu-mode-line nil :foreground "#639743" :weight 'normal)

@@ -1,5 +1,5 @@
 (use-package apache-mode
-  :ensure t
+  :straight t
   :mode (("\\.htaccess\\'"   . apache-mode)
          ("httpd\\.conf\\'"  . apache-mode)
          ("srm\\.conf\\'"    . apache-mode)

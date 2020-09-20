@@ -31,7 +31,7 @@
    "M-<right>" nil))
 
 (use-package org-bullets
-  :ensure t
+  :straight t
   :after org
   :init
   (setq org-ellipsis " ...")

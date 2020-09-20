@@ -1,5 +1,5 @@
 (use-package window-numbering
-  :ensure t
+  :straight t
   :config
   (defun window-numbering-install-mode-line (&optional position))
   (window-numbering-mode 1)

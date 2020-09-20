@@ -1,5 +1,5 @@
 (use-package which-key
-  :ensure t
+  :straight t
   :config
   (which-key-mode)
   (which-key-setup-side-window-bottom))

@@ -1,5 +1,5 @@
 (use-package highlight-indent-guides
-  :ensure t
+  :straight t
   :init
   (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-character ?|))

@@ -1,5 +1,5 @@
 (use-package tabbar
-  :ensure t
+  :straight t
   :init
   (setq tabbar-use-images nil)
   :config

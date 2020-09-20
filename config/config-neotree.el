@@ -1,5 +1,5 @@
 (use-package neotree
-  :ensure t
+  :straight t
   :after doom-themes
   :init
   (setq neo-theme (if (display-graphic-p) 'icons 'ascii))

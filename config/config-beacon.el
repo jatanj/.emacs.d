@@ -1,5 +1,5 @@
 (use-package beacon
-  :ensure t
+  :straight t
   :config
   (beacon-mode 1)
   (setq beacon-blink-duration 0.3)

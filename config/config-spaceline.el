@@ -1,5 +1,5 @@
 (use-package spaceline
-  :ensure t
+  :straight t
   :config
   (require 'spaceline-config)
   (spaceline-define-segment buffer-id

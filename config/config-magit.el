@@ -1,5 +1,9 @@
+(use-package magit-popup
+  :straight t)
+
 (use-package magit
-  :ensure t
+  :straight t
+  :after magit-popup
   :init
   (add-hook 'magit-status-mode-hook
     (lambda ()
@@ -66,7 +70,7 @@
       (magit-mode-bury-buffer))))
 
 (use-package evil-magit
-  :ensure t
+  :straight t
   :after magit
   :config
   (evil-define-key evil-magit-state magit-mode-map (kbd "C-k") nil)
@@ -81,7 +85,7 @@
    "S-<right>" (lambda () (interactive) (evil-forward-char 10))))
 
 (use-package git-commit
-  :ensure t
+  :straight t
   :init
   (add-hook 'git-commit-mode-hook
             (lambda ()
@@ -100,7 +104,7 @@
   (setq vc-follow-symlinks t))
 
 (use-package gitconfig-mode
-  :ensure t
+  :straight t
   :defer t
   :mode ("\\.gitconfig\\'" . gitconfig-mode)
   :init
@@ -110,7 +114,7 @@
         (electric-indent-local-mode)))))
 
 (use-package gitignore-mode
-  :ensure t
+  :straight t
   :defer t
   :mode ("\\.gitignore\\'" . gitignore-mode)
   :init
@@ -119,7 +123,7 @@
       (setq indent-line-function 'indent-relative-maybe))))
 
 (use-package git-gutter-fringe
-  :ensure t
+  :straight t
   :init
   (setq git-gutter-fr:side 'right-fringe)
   ;; https://github.com/hlissner/doom-emacs
@@ -144,7 +148,7 @@
     "XXXX...."))
 
 (use-package fringe-helper
-  :ensure t)
+  :straight t)
 
 (defun git-gutter-global-toggle ()
   (interactive)

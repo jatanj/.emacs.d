@@ -1,5 +1,5 @@
 (use-package company
-  :ensure t
+  :straight t
   :config
   (setq company-frontends '(company-pseudo-tooltip-frontend))
   (setq company-idle-delay 0)
@@ -57,7 +57,7 @@
    "<tab>" 'company-complete-selection-or-indent))
 
 (use-package company-box
-  :ensure t
+  :straight t
   :init
   (defun config/company-box-init (&rest _)
     (dolist (buffer (buffer-list))
@@ -81,7 +81,7 @@
   (setq company-tooltip-maximum-width 140))
 
 (use-package company-quickhelp
-  :ensure t
+  :straight t
   :after company
   :init
   (setq company-quickhelp-delay nil))

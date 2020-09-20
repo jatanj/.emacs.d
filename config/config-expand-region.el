@@ -1,5 +1,5 @@
 (use-package expand-region
-  :ensure t
+  :straight t
   :config
   (add-hook 'org-mode-hook
     (lambda ()

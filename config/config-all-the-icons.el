@@ -1,4 +1,4 @@
 (use-package all-the-icons
-  :ensure t)
+  :straight t)
 
 (provide 'config-all-the-icons)

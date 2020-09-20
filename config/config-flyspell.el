@@ -26,7 +26,7 @@
     (flyspell-mode 1)))
 
 (use-package synosaurus
-  :ensure t
+  :straight t
   :init
   (synosaurus-mode 1))
 

@@ -1,5 +1,5 @@
 (use-package dashboard
-  :ensure t
+  :straight t
   :after evil
   :config
   (setq dashboard-startup-banner 'logo)
