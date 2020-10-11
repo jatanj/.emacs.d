@@ -94,6 +94,7 @@
 (setq enable-recursive-minibuffers t)
 (setq echo-keystrokes 0.02)
 (setq inhibit-compacting-font-caches t)
+(setq fci-rule-width 1)
 (advice-add #'yes-or-no-p :override #'y-or-n-p)
 
 ;; Performance
@@ -271,9 +272,6 @@
 (setq leader-key "C-l")
 (global-set-key (kbd leader-key) nil)
 
-;; DocView
-(add-hook 'doc-view-mode-hook (lambda () (linum-mode -1)))
-
 ;; File Templates
 (auto-insert-mode 1)
 (setq auto-insert t)
@@ -322,6 +320,7 @@
                 cql
                 d
                 dashboard
+                docview
                 doom
                 dumb-jump
                 emacs-lisp
@@ -360,6 +359,7 @@
                 super-save
                 systemd
                 term
+                text
                 treemacs
                 typescript
                 uniquify

@@ -6,8 +6,10 @@
   :config
   (evil-mode 1)
   (fset 'evil-visual-update-x-selection 'ignore)
+
   (setq evil-disable-insert-state-bindings t)
   (setq-default evil-shift-width 2)
+
   (dolist (mode '(Buffer-menu-mode
                   neotree-mode
                   flycheck-error-list-mode))
@@ -45,6 +47,12 @@
   (evil-declare-motion 'evil-forward-char-jump)
   (evil-declare-motion 'evil-backward-char-jump)
 
+  (defun config/evil-goto-definition ()
+    "We create our own goto definition function here so LSP mode can advice it without
+     touching `evil-goto-definition'."
+    (interactive)
+    (evil-goto-definition))
+
   (general-define-key
    :states 'insert
    "C-k" ctl-x-map
@@ -79,7 +87,7 @@
 
   (general-define-key
    :states '(normal insert visual)
-   "C-]" 'evil-goto-definition
+   "C-]" 'config/evil-goto-definition
    "C-q" 'evil-scroll-line-up)
 
   (general-define-key

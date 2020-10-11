@@ -18,10 +18,10 @@
 
   (remove-hook 'completion-at-point-functions #'tags-completion-at-point-function)
 
-  (defun config/company-completion-started (&rest args)
+  (defun config/company-completion-started (&rest _)
     (when (bound-and-true-p flycheck-mode)
       (setq flycheck-display-errors-function nil)))
-  (defun config/company-completion-finished (&rest args)
+  (defun config/company-completion-finished (&rest _)
     (when (bound-and-true-p flycheck-mode)
       (setq flycheck-display-errors-function
             #'flycheck-display-error-messages-unless-error-list)))
@@ -38,10 +38,15 @@
         (company-complete-selection)
     (tab-to-tab-stop)))
 
-  (defun company-quit ()
+  (defun config/company-quit ()
     (interactive)
     (company-cancel)
     (evil-normal-state))
+
+  (defun config/company-box-too-small-fix ()
+    (interactive)
+    (company-box-hide)
+    (company-box-show))
 
   (general-define-key "C-j" nil)
   (general-define-key
@@ -49,7 +54,8 @@
    "C-SPC" 'company-complete)
   (general-define-key
    :keymaps 'company-active-map
-   "<escape>" 'company-quit
+   "<escape>" 'config/company-quit
+   "C-d" 'config/company-box-too-small-fix
    "<tab>" nil
    "<return>" (general-simulate-key "RET" :state 'insert))
   (general-define-key
@@ -75,10 +81,10 @@
   (setq company-box-max-candidates 50)
   (setq company-box-backends-colors nil)
   (setq company-box-icons-alist 'company-box-icons-images)
-  (setq company-box-scrollbar nil)
+  (setq company-box-scrollbar t)
   (setq company-box-doc-enable nil)
-  (setq company-tooltip-minimum-width 60)
-  (setq company-tooltip-maximum-width 140))
+  (setq company-tooltip-minimum-width 80)
+  (setq company-tooltip-maximum-width 80))
 
 (use-package company-quickhelp
   :straight t

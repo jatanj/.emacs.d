@@ -180,6 +180,7 @@
       `(lsp-face-highlight-read ((,class (:foreground ,fg1 :background ,match))))
       `(lsp-face-highlight-write ((,class (:foreground ,fg1 :background ,match))))
       `(lsp-face-highlight-textual ((,class (:foreground ,fg1 :background ,match))))
+      `(lsp-ui-doc-highlight-hover ((,class (:foreground nil, :background nil))))
       `(magit-blame-heading ((,class (:foreground ,fg3 :background ,bg3 :box (:line-width 1 :color ,bg4)))))
       `(magit-branch ((,class (:foreground ,const :weight bold))))
       `(magit-branch-current ((,class :foreground ,success)))
@@ -370,6 +371,7 @@
       `(custom-theme-color-ml-border ,ml-border t)
       `(company-quickhelp-color-foreground ,fg1)
       `(company-quickhelp-color-background ,bg6)
-      `(beacon-color ,success))))
+      `(beacon-color ,success)
+      `(fci-rule-color ,bg2))))
 
 (provide 'custom-theme-common)

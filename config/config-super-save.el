@@ -1,8 +1,7 @@
 (use-package super-save
   :straight t
   :init
-  (setq super-save-auto-save-when-idle t)
-  (setq super-save-idle-duration 5)
+  (setq super-save-auto-save-when-idle nil)
   (setq super-save-remote-files nil)
 
   (defun config/super-save-command-a (orig-fun &rest args)

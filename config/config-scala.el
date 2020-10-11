@@ -43,14 +43,57 @@
     'scala-font-lock:parentheses-face)
   (setq scala-indent:use-javadoc-style t)
 
+  (defun config/flycheck-scala-set-scalastylerc ()
+    (let* ((stylelintrc "scalastyle.xml")
+           (candidates (list (concat (file-name-as-directory (or (projectile-project-p) "")) stylelintrc)
+                             (expand-file-name (concat "~/" stylelintrc)))))
+      (setq-local flycheck-scalastylerc (--first (file-exists-p it) candidates))))
+
+  (defun config/scala-enable-fill-column ()
+    (let* ((scalafmt-conf (concat (file-name-directory (projectile-project-p (buffer-file-name)))
+                                  ".scalafmt.conf"))
+           (rule-column (or (when (file-exists-p scalafmt-conf)
+                              (when-let ((max-column
+                                          (with-temp-buffer
+                                            (insert-file-contents scalafmt-conf)
+                                            (when (re-search-forward "maxColumn[\\t ]*=[\\t ]*" nil t)
+                                              (let ((p (point)))
+                                                (end-of-line)
+                                                (buffer-substring p (point)))))))
+                                (string-to-number (s-trim max-column))))
+                          130)))
+      (setq-local fci-rule-column rule-column)
+      (turn-on-fci-mode)))
+
   (defun config/scala-mode-init ()
     (rainbow-delimiters-mode 1)
     (yas-minor-mode 1)
     (eldoc-mode -1)
-    ;; Metals only seems to check for errors after a save, so we'll save often.
-    (when (bound-and-true-p super-save-mode)
-      (setq-local super-save-idle-duration 1)))
+    (config/flycheck-scala-set-scalastylerc))
   (add-hook 'scala-mode-hook #'config/scala-mode-init)
+
+  (defun config/scala-add-package-to-new-file ()
+    (let* ((path (buffer-file-name))
+           (ext (file-name-extension path)))
+      (when (and (member ext '("scala" "sc"))
+                 (= (point-min) (point-max)))
+        (let* ((slice (cadr (s-slice-at "src/main" (file-name-directory path)))))
+          (when (s-starts-with? "src/main" slice)
+            (let ((parts (--filter (not (s-blank? it)) (-drop 2 (s-split "/" slice)))))
+              (when (s-matches? "scala.*" (car parts))
+                (setq parts (cdr parts)))
+              (insert (format "package %s" (s-join "." parts)))
+              (newline 2)))))))
+  (add-hook 'find-file-hook #'config/scala-add-package-to-new-file)
+
+  (defun config/scala-after-company-complete (completion)
+    "Remove the empty parens from Java-style accessor methods when completing."
+    (when (and  (stringp completion)
+                (eq major-mode 'scala-mode)
+                (s-matches-p "\\(get\\)\\|\\(is\\)[A-Z]?" completion)
+                (looking-back "()"))
+      (delete-backward-char 2)))
+  (add-hook 'company-after-completion-hook #'config/scala-after-company-complete)
 
   :config
   (setq scala-auto-insert-asterisk-in-comments t)
@@ -64,6 +107,16 @@
       (previous-line)
       (end-of-line)
       (newline-and-indent))
+    (when (save-excursion
+            (next-line)
+            (looking-at "[\t ]+\\."))
+      (let ((indentation (save-excursion
+                           (next-line)
+                           (beginning-of-line)
+                           (let ((pos (point)))
+                             (search-forward ".")
+                             (- (point) pos 1)))))
+        (scala-indent:indent-line-to indentation)))
     (when scala-auto-insert-asterisk-in-comments
       (scala-indent:insert-asterisk-on-multiline-comment)))
 

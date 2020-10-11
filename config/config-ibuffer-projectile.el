@@ -2,14 +2,14 @@
   :straight t
   :after projectile
   :init
-  (add-hook 'ibuffer-hook
-    (lambda ()
-      (setq ibuffer-display-summary nil)
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic))
-      (centaur-tabs-local-disable)
-      (centaur-tabs-blend-header-line "Buffers")))
+  (defun config/ibuffer-init()
+    (setq ibuffer-display-summary nil)
+    (ibuffer-projectile-set-filter-groups)
+    (unless (eq ibuffer-sorting-mode 'alphabetic)
+      (ibuffer-do-sort-by-alphabetic))
+    (centaur-tabs-local-disable)
+    (centaur-tabs-blend-header-line (message "Buffers [%s total]" (length (buffer-list)))))
+  (add-hook 'ibuffer-hook #'config/ibuffer-init)
   :config
   (general-define-key
    :keymaps 'ibuffer-mode-map

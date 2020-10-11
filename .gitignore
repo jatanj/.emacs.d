@@ -28,3 +28,9 @@ company-statistics-cache.el
 /transient/
 *.elc
 /eln-cache/
+/straight/build
+/straight/build-cache.el
+/straight/modified
+/straight/repos
+/workspace
+.dap-breakpoints
