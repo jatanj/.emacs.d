@@ -5,6 +5,9 @@
   (setq treemacs-show-hidden-files t)
   (setq treemacs-space-between-root-nodes nil)
 
+  (add-hook 'config/configure-frame-functions
+            (lambda (&rest _) (setq treemacs-width (if (> (x-display-pixel-width) 1920) 45 35))))
+
   (defun config/treemacs-is-treemacs-buffer? (&optional buffer)
     (let ((buffer (or buffer (current-buffer))))
       (s-starts-with? "*Treemacs" (s-trim-left (buffer-name buffer)))))
@@ -58,7 +61,7 @@
     (hscroll-mode 1)
     (setq buffer-face-mode-face `(:background ,(car (get 'custom-theme-color-bg6 'saved-value))
                                   :family ,(car (s-split "-" local-menu-font-face))
-                                  :height 110))
+                                  :height 100))
     (buffer-face-mode 1))
 
   (add-hook 'treemacs-mode-hook #'config/treemacs-init)
@@ -77,17 +80,17 @@
 
 (use-package treemacs-projectile
   :straight t
-  :after treemacs projectile
+  :after (treemacs projectile)
   :init)
 
 (use-package treemacs-evil
   :straight t
-  :after treemacs evil
+  :after (treemacs evil)
   :init)
 
 (use-package treemacs-magit
   :straight t
-  :after treemacs magit
+  :after (treemacs magit)
   :init)
 
 (use-package treemacs-all-the-icons

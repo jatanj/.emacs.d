@@ -1,9 +1,11 @@
 (use-package cc-mode
   :init
-  (add-hook 'java-mode-hook #'customize-cc-mode)
+  (defun config/java-mode-init ()
+    (config/set-local-tab-width 4))
+  (add-hook 'java-mode-hook #'config/java-mode-init)
   :config
   (general-define-key
-   :keymaps 'java-mode-map
+   :keymaps 'java
    :states 'insert
    "C-<return>" 'c-indent-new-comment-line))
 

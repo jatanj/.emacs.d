@@ -1,8 +1,6 @@
 (use-package smartparens
   :straight t
-  :config
-  (require 'smartparens-config)
-  (smartparens-global-mode 1)
+  :init
   (setq sp-highlight-pair-overlay nil)
   (setq sp-highlight-wrap-overlay nil)
   (setq sp-highlight-wrap-tag-overlay nil)
@@ -10,7 +8,9 @@
   (setq sp-escape-wrapped-region nil)
   (setq sp-autoinsert-quote-if-followed-by-closing-pair nil)
 
-  (sp-pair "\\\"" nil :actions :rem)
+  :config
+  (require 'smartparens-config)
+  (smartparens-global-mode 1)
 
   (dolist (mode '(c-mode
                   c++-mode

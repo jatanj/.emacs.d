@@ -47,6 +47,12 @@
   (evil-declare-motion 'evil-forward-char-jump)
   (evil-declare-motion 'evil-backward-char-jump)
 
+  ;; https://blog.meain.io/2020/emacs-highlight-yanked/
+  (defun config/evil-yank-advice (orig-fn beg end &rest args)
+    (pulse-momentary-highlight-region beg end 'highlight)
+    (apply orig-fn beg end args))
+  (advice-add 'evil-yank :around 'config/evil-yank-advice)
+
   (defun config/evil-goto-definition ()
     "We create our own goto definition function here so LSP mode can advice it without
      touching `evil-goto-definition'."

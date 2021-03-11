@@ -16,17 +16,20 @@
   (setq lsp-modeline-code-actions-segments '(count icon))
   (setq lsp-enable-file-watchers nil)
 
+  (setq lsp-clients-clangd-args '("-header-insertion=never"))
+
   (defun config/lsp-enable (&rest args)
     (interactive)
-    (when-let* ((file-name (buffer-file-name))
-                (_ (and (file-exists-p file-name))))
-      (when (and (not lsp--buffer-workspaces)
-                 (--any? (eq major-mode (car it)) lsp-language-id-configuration))
-        (lsp)
-        (company-mode 1))
-      (when (eq flycheck-checker 'lsp)
-        (lsp-diagnostics--enable)
-        (flycheck-buffer))))
+    (when-let* ((file-name (buffer-file-name)))
+      (when (file-exists-p file-name)
+        (when (and (not lsp--buffer-workspaces)
+                   (--any? (eq major-mode (car it)) lsp-language-id-configuration))
+          (lsp)
+          (company-mode 1)
+          (eldoc-mode -1))
+        (when (eq flycheck-checker 'lsp)
+          (lsp-diagnostics--enable)
+          (flycheck-buffer)))))
 
   (defun config/lsp-evil-goto-to-definition-a (orig-fun &rest args)
     (let ((do-first-jump (lambda (funcs)
@@ -71,39 +74,48 @@
     (add-to-list 'lsp-file-watch-ignored ignored))
 
   (setq config/lsp--custom-code-actions
-        (list (ht ("title" "Add missing libspec (CLJR)")
-                  ("kind" "quickfix")
-                  ("isPreferred" t)
-                  ("X-isCustom" t)
-                  ("X-customPredicate"
-                   '(lambda ()
-                      (->> (seq-map #'flycheck-error-message (flycheck-overlay-errors-at (point)))
-                           (-any (lambda (s)
-                                   (--any (s-starts-with? it s t)
-                                          '("Unknown namespace"
-                                            "Unresolved symbol"
-                                            "Unresolved namespace")))))))
-                  ("X-customHandler" #'cljr-add-missing-libspec))))
+        (list
+         ;; (ht ("title" "Add missing libspec (CLJR)")
+         ;;          ("kind" "quickfix")
+         ;;          ("isPreferred" t)
+         ;;          ("X-isCustom" t)
+         ;;          ("X-customPredicate"
+         ;;           '(lambda ()
+         ;;              (->> (seq-map #'flycheck-error-message (flycheck-overlay-errors-at (point)))
+         ;;                   (-any (lambda (s)
+         ;;                           (--any (s-starts-with? it s t)
+         ;;                                  '("Unknown namespace"
+         ;;                                    "Unresolved symbol"
+         ;;                                    "Unresolved namespace")))))))
+         ;;          ("X-customHandler" #'cljr-add-missing-libspec))
+         ))
 
   (defun config/lsp-execute-code-action-custom ()
     "Show a LSP code action popup with custom (non-LSP) commands."
     (interactive)
     (let ((actions (lsp-code-actions-at-point)))
       (dolist (a config/lsp--custom-code-actions)
-        (if (and (if-let ((p (ht-get a "X-customPredicate"))) (funcall p) t)
-                 (-none? (lambda (x) (eq (ht-get x "title") (ht-get a "title"))) actions))
-            (add-to-list 'actions a))
-        (cond
-         ((seq-empty-p actions)
-          (signal 'lsp-no-code-actions nil))
-         ((and (eq (seq-length actions) 1) lsp-auto-execute-action)
-          (lsp-seq-first actions))
-         (t (let ((selected (lsp--select-action actions)))
-              (if (ht-get selected "X-isCustom")
-                  (progn
-                    (funcall (ht-get selected "X-customHandler")))
-                (lsp-execute-code-action selected))))))))
+        (when (and (if-let ((p (ht-get a "X-customPredicate"))) (funcall p) t)
+                   (-none? (lambda (x) (eq (ht-get x "title") (ht-get a "title"))) actions))
+          (add-to-list 'actions a)))
+      (cond
+       ((seq-empty-p actions)
+        (signal 'lsp-no-code-actions nil))
+       ((and (eq (seq-length actions) 1) lsp-auto-execute-action)
+        (lsp-seq-first actions))
+       (t (let ((selected (lsp--select-action actions)))
+            (if (ht-get selected "X-isCustom")
+                (progn
+                  (funcall (ht-get selected "X-customHandler")))
+              (lsp-execute-code-action selected)))))))
 
+  (defun config/lsp-rename-custom ()
+    " Save all newly modified buffers after calling `lsp-rename'."
+    (interactive)
+    (let ((buffers (--filter (not (buffer-modified-p it)) (buffer-list))))
+      (call-interactively 'lsp-rename)
+      (dolist (b (--filter (buffer-modified-p it) buffers))
+        (save-buffer b))))
   (defun config/lsp-mode-init ()
     ;; Disable company initially until we connect to server
     (when (not lsp--buffer-workspaces)
@@ -114,13 +126,16 @@
     (eldoc-mode -1))
   (add-hook 'lsp-mode-hook #'config/lsp-mode-init)
 
+  (defvar config/lsp-switch-buffer-hook 'window-buffer-change-functions
+    "The hook used to enable LSP on switching buffers.")
+
   (add-hook 'lsp-after-initialize-hook
-            (lambda ()
-              (add-hook 'switch-buffer-functions #'config/lsp-enable)))
+            (lambda (&rest _)
+              (add-hook config/lsp-switch-buffer-hook #'config/lsp-enable)))
 
   (add-hook 'lsp-after-uninitialized-functions
-            (lambda ()
-              (remove-hook 'switch-buffer-functions #'config/lsp-enable)))
+            (lambda (&rest _)
+              (remove-hook config/lsp-switch-buffer-hook #'config/lsp-enable)))
 
   (general-define-key
    :keymaps 'lsp-mode-map
@@ -129,6 +144,8 @@
    "C-c C-r r" 'lsp-rename
    "C-c C-r C-r" 'lsp-rename
    "C-}" 'lsp-find-references
+   "C-c C-\\" 'lsp-format-region
+   "C-c C-d" 'config/lsp-ui-doc-glance
    "C-C C-n C-n" 'flycheck-next-error)
 
   (general-define-key
@@ -137,7 +154,9 @@
               web-mode-map
               css-mode-map
               scss-mode-map
-              scala-mode-map)
+              scala-mode-map
+              rust-mode-map
+              c++-mode-map)
    "C-c C-a C-s" 'lsp)
 
   (add-to-list 'display-buffer-alist
@@ -323,12 +342,10 @@
 ;;   :after lsp-mode
 ;;   :init
 ;;   (setq lsp-sonarlint-disable-telemetry t)
-
 ;;   (defun config/lsp-sonarlint-enable (lang)
 ;;     (let ((pkg (intern (message "lsp-sonarlint-%s" lang))))
 ;;       (require pkg)
 ;;       (set (intern (message "%s-enabled" pkg)) t)))
-
 ;;   :config
 ;;   (config/lsp-sonarlint-enable 'java)
 ;;   (config/lsp-sonarlint-enable 'scala)

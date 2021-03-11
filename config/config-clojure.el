@@ -9,6 +9,7 @@
     (config/set-local-tab-width 2)
     (when (functionp 'lsp)
       (setq-local lsp-completion-enable nil))
+    (setq-local warning-minimum-level :emergency)
     (general-define-key
      :keymaps 'clojure-mode-map
      "C-:" 'eval-expression

@@ -119,7 +119,7 @@
     (face-remap-add-relative 'header-line `(:box (:line-width 7 :color ,(car (get 'custom-theme-color-bg6 'saved-value)))))
     (setq header-line-format
           (concat (propertize " " 'display '((space :align-to 0)))
-                  (or (propertize text 'face `(:foreground ,(car (get 'custom-theme-color-delim 'saved-value)) :weight bold :family "Mononoki" :height 110)) " "))))
+                  (or (propertize text 'face `(:foreground ,(car (get 'custom-theme-color-delim 'saved-value)) :weight bold :family ,(car (s-split "-" local-menu-font-face)) :height 110)) " "))))
   (defalias 'tabbar-blend-header-line 'centaur-tabs-blend-header-line)
 
   (general-define-key

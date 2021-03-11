@@ -19,7 +19,7 @@
   (bg3 "#434c5e")
   (bg4 "#4c566a")
   (bg5 "#5d6678")
-  (bg6 "#242839")
+  (bg6 "#292d3e")
   (bg7 "#747f94")
   (red       "#bf616a")
   (green     "#a3be8c")
@@ -44,7 +44,7 @@
   (error2    "#663333")
   (warning   "#ffff00")
   (delim     "#89ddff")
-  (ml-border "#242839")))
+  (ml-border "#292d3e")))
 
 ;;;###autoload
 (when load-file-name

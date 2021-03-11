@@ -49,11 +49,11 @@
 (setq browse-url-mosaic-program nil)
 
 ;; Configuration dependencies
-(use-package general :ensure t :demand)
-(use-package hydra :ensure t :demand)
-(use-package dash :ensure t :demand)
-(use-package s :ensure t :demand)
-(use-package ht :ensure t :demand)
+(use-package general :straight t :demand)
+(use-package hydra :straight t :demand)
+(use-package dash :straight t :demand)
+(use-package s :straight t :demand)
+(use-package ht :straight t :demand)
 
 (load init-defuns-path)
 
@@ -95,6 +95,8 @@
 (setq echo-keystrokes 0.02)
 (setq inhibit-compacting-font-caches t)
 (setq fci-rule-width 1)
+(setq-default line-spacing 0)
+(setq warning-minimum-level :emergency)
 (advice-add #'yes-or-no-p :override #'y-or-n-p)
 
 ;; Performance
@@ -237,9 +239,53 @@
 (advice-add 'isearch-update :before #'isearch-center-cursor)
 (advice-add 'evil-search :after #'isearch-center-cursor)
 
+;; Splitting
+;; https://emacs.stackexchange.com/a/40517
+(defun split-window-sensibly-prefer-horizontal (&optional window)
+  "Based on split-window-sensibly, but designed to prefer a horizontal split,
+  i.e. windows tiled side-by-side."
+  (let ((window (or window (selected-window))))
+    (or (and (window-splittable-p window t)
+             ;; Split window horizontally
+             (with-selected-window window
+               (split-window-right)))
+        (and (window-splittable-p window)
+             ;; Split window vertically
+             (with-selected-window window
+               (split-window-below)))
+        (and
+         ;; If WINDOW is the only usable window on its frame (it is
+         ;; the only one or, not being the only one, all the other
+         ;; ones are dedicated) and is not the minibuffer window, try
+         ;; to split it horizontally disregarding the value of
+         ;; `split-height-threshold'.
+         (let ((frame (window-frame window)))
+           (or
+            (eq window (frame-root-window frame))
+            (catch 'done
+              (walk-window-tree (lambda (w)
+                                  (unless (or (eq w window)
+                                              (window-dedicated-p w))
+                                    (throw 'done nil)))
+                                frame)
+              t)))
+         (not (window-minibuffer-p window))
+         (let ((split-width-threshold 0))
+           (when (window-splittable-p window t)
+             (with-selected-window window
+               (split-window-right))))))))
+(defun split-window-really-sensibly (&optional window)
+  (let ((window (or window (selected-window))))
+    (if (> (window-total-width window) (* 2 (window-total-height window)))
+        (with-selected-window window (split-window-sensibly-prefer-horizontal window))
+      (with-selected-window window (split-window-sensibly window)))))
+(setq split-height-threshold 4)
+(setq split-width-threshold 40)
+(setq split-window-preferred-function 'split-window-really-sensibly)
+
 ;; Switching buffers
 (use-package switch-buffer-functions
-  :ensure t)
+  :straight t)
 
 ;; Use UTF-8 everywhere
 (set-language-environment "UTF-8")
@@ -326,6 +372,7 @@
                 emacs-lisp
                 evil
                 expand-region
+                fennel
                 fill-column-indicator
                 flycheck
                 flyspell
@@ -427,6 +474,7 @@
  "C-M-p" 'helm-M-x
  "C-'" 'helm-apropos
  "C-p" 'helm-projectile-find-file
+ "C-S-s" 'save-some-buffers
  "C-<backspace>" 'backward-kill-word-fixed
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
  "C-<tab>" 'previous-buffer
@@ -481,7 +529,7 @@
  "C-a" 'config/treemacs-toggle-find-file-collapse-other-projects
  "C-b" 'config/treemacs-toggle-find-file
  "C-w" treemacs-project-map
- "C-f" 'helm-do-grep-ag
+ "C-f" 'helm-do-ag-project-root
  "n" 'new-empty-buffer
  "v" 'magit-file-popup
  "C-v" 'magit-status)

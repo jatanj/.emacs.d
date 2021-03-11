@@ -2,6 +2,7 @@
   :straight t
   :config
   (setq company-frontends '(company-pseudo-tooltip-frontend))
+  (setq company-tooltip-limit 15)
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1)
   (setq company-require-match nil)
@@ -34,7 +35,8 @@
     (if (and (bound-and-true-p company-mode)
              (or (company-tooltip-visible-p)
                  (and (bound-and-true-p company-box-mode)
-                      (frame-visible-p (company-box--get-frame)))))
+                      (when-let ((frame (company-box--get-frame)))
+                        (frame-visible-p frame)))))
         (company-complete-selection)
     (tab-to-tab-stop)))
 

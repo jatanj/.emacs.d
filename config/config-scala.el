@@ -66,6 +66,7 @@
       (turn-on-fci-mode)))
 
   (defun config/scala-mode-init ()
+    (setq-local company-minimum-prefix-length 0)
     (rainbow-delimiters-mode 1)
     (yas-minor-mode 1)
     (eldoc-mode -1)

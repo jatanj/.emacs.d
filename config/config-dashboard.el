@@ -1,6 +1,6 @@
 (use-package dashboard
   :straight t
-  :after evil
+  :after (evil treemacs)
   :config
   (setq dashboard-startup-banner 'logo)
   (setq dashboard-items '((recents  . 5)
