@@ -4,11 +4,11 @@
          ("\\.cljs\\'" . clojurescript-mode))
   :init
   (defun config/clojure-mode-init ()
+    (company-mode 1)
     (eldoc-mode -1)
+    (setq-local lsp-completion-enable nil)
     (highlight-indent-guides-mode -1)
     (config/set-local-tab-width 2)
-    (when (functionp 'lsp)
-      (setq-local lsp-completion-enable nil))
     (setq-local warning-minimum-level :emergency)
     (general-define-key
      :keymaps 'clojure-mode-map
@@ -19,6 +19,7 @@
      "C-c C-q" nil
      "C-c C-\\" 'clojure-align))
   (add-hook 'clojure-mode-hook #'config/clojure-mode-init)
+
   :config
   (setq clojure-indent-style 'always-align)
   (define-clojure-indent
@@ -60,7 +61,7 @@
                lsp--buffer-workspaces)
       (setq-local completion-at-point-functions nil)
       (add-hook 'completion-at-point-functions #'lsp-completion-at-point nil t)))
-  ;; (add-hook 'cider-file-loaded-hook #'config/cider-set-completion-at-point)
+  (add-hook 'cider-file-loaded-hook #'config/cider-set-completion-at-point)
 
   (defun config/cider-mode-init ()
     (setq-local safe-local-variable-values

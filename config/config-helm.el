@@ -96,7 +96,7 @@ parent frame."
         (set-face-background 'internal-border (face-foreground 'default))
         (helm-display-buffer-popup-frame buffer default-frame-alist))
       (helm-log-run-hook 'helm-window-configuration-hook)))
-  (setq helm-display-function 'config/helm-display-frame-center)
+  ;; (setq helm-display-function 'config/helm-display-frame-center)
 
   (defun config/helm-skip-dots (old-func &rest args)
     "Skip . and .. initially in helm-find-files.  First call OLD-FUNC with ARGS."

@@ -70,6 +70,10 @@
    "<" 'evil-shift-left-visual)
 
   (general-define-key
+   :states 'motion
+   "C-b" nil)
+
+  (general-define-key
    :states '(normal insert visual)
    "S-<up>" 'evil-previous-line-jump
    "S-<down>" 'evil-next-line-jump
@@ -84,12 +88,12 @@
 
   (general-define-key
    :states '(normal insert visual)
-   "C-s" 'save-buffer
+   "C-s" 'config/save-buffer
    "C-f" 'isearch-forward-regexp
    "C-S-f" 'isearch-backward-regexp
    "C-h" 'query-replace-regexp
    "C-S-h" 'anzu-query-replace-at-cursor-thing
-   "C-b" 'do-nothing)
+   "C-b" nil)
 
   (general-define-key
    :states '(normal insert visual)

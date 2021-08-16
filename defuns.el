@@ -60,9 +60,16 @@
      (list (line-beginning-position) (line-beginning-position 2)))))
 (advice-add 'kill-ring-save :before #'slick-copy)
 
-;; Fix Ctrl+Backspace
+;; https://www.emacswiki.org/emacs/BackwardDeleteWord
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
+;; Smart Ctrl+Backspace
 ;; http://stackoverflow.com/questions/28221079#answer-39438119
-(defun backward-kill-word-fixed ()
+(defun backward-delete-word-smart ()
   (interactive)
   (let* ((cp (point))
          (backword)
@@ -87,11 +94,11 @@
                         (s-contains? "\n" backword))
                 (setq end pos))))
           (if end
-              (kill-region cp end)
+              (delete-region cp end)
             (if space-pos
-                (kill-region cp space-pos)
-              (backward-kill-word 1))))
-      (kill-region cp (- cp 1)))))
+                (delete-region cp space-pos)
+              (backward-delete-word 1))))
+      (delete-region cp (- cp 1)))))
 
 (defun backspace-whitespace-to-tab-stop ()
   "Delete whitespace backwards to the next tab-stop, otherwise delete one character.

@@ -18,12 +18,39 @@
 
   (setq lsp-clients-clangd-args '("-header-insertion=never"))
 
+  (defun config/lsp-projectile-workspace-root ()
+    (let ((lsp-roots (config/lsp-buffer-workspace-roots))
+          (projectile-root (file-name-directory (projectile-project-p (buffer-file-name)))))
+      (car (member projectile-root lsp-roots))))
+
+  (defun config/lsp-buffer-workspace-roots ()
+    (->> (buffer-list)
+         (--map (with-current-buffer it lsp--buffer-workspaces))
+         (-non-nil)
+         (--mapcat (-map (lambda (w)
+                           (when-let ((root (lsp--workspace-root w)))
+                             (file-name-as-directory root)))
+                         it))
+         (-distinct)))
+
+  (defun config/lsp-project-enabled-p ()
+    (and (functionp 'lsp)
+         (config/lsp-projectile-workspace-root)))
+
+  (defun config/lsp-enabled-p ()
+      (and (functionp 'lsp)
+           lsp--buffer-workspaces))
+
+  (defun config/lsp-major-mode-supported? ()
+    (--any? (eq major-mode (car it)) lsp-language-id-configuration))
+
   (defun config/lsp-enable (&rest args)
     (interactive)
     (when-let* ((file-name (buffer-file-name)))
       (when (file-exists-p file-name)
-        (when (and (not lsp--buffer-workspaces)
-                   (--any? (eq major-mode (car it)) lsp-language-id-configuration))
+        (when (and (not (config/lsp-enabled-p))
+                   (config/lsp-project-enabled-p)
+                   (config/lsp-major-mode-supported?))
           (lsp)
           (company-mode 1)
           (eldoc-mode -1))
@@ -31,7 +58,7 @@
           (lsp-diagnostics--enable)
           (flycheck-buffer)))))
 
-  (defun config/lsp-evil-goto-to-definition-a (orig-fun &rest args)
+  (defun config/lsp-evil-goto-definition-a (orig-fun &rest args)
     (let ((do-first-jump (lambda (funcs)
                            (let ((pos (point))
                                  (buffer (current-buffer)))
@@ -52,7 +79,7 @@
         (message "lsp-jump-to-definition : %s" result)
         (when (not result)
           (apply orig-fun args)))))
-  (advice-add 'config/evil-goto-definition :around #'config/lsp-evil-goto-to-definition-a)
+  (advice-add 'config/evil-goto-definition :around #'config/lsp-evil-goto-definition-a)
 
   (defun config/lsp-goto-location-a (orig &rest args)
     (let* ((data (car args))
@@ -74,21 +101,24 @@
     (add-to-list 'lsp-file-watch-ignored ignored))
 
   (setq config/lsp--custom-code-actions
-        (list
-         ;; (ht ("title" "Add missing libspec (CLJR)")
-         ;;          ("kind" "quickfix")
-         ;;          ("isPreferred" t)
-         ;;          ("X-isCustom" t)
-         ;;          ("X-customPredicate"
-         ;;           '(lambda ()
-         ;;              (->> (seq-map #'flycheck-error-message (flycheck-overlay-errors-at (point)))
-         ;;                   (-any (lambda (s)
-         ;;                           (--any (s-starts-with? it s t)
-         ;;                                  '("Unknown namespace"
-         ;;                                    "Unresolved symbol"
-         ;;                                    "Unresolved namespace")))))))
-         ;;          ("X-customHandler" #'cljr-add-missing-libspec))
-         ))
+        '(
+          ;; (ht ("title" "Add missing libspec (CLJR)")
+          ;;          ("kind" "quickfix")
+          ;;          ("isPreferred" t)
+          ;;          ("X-isCustom" t)
+          ;;          ("X-customPredicate"
+          ;;           '(lambda ()
+          ;;              (->> (seq-map #'flycheck-error-message (flycheck-overlay-errors-at (point)))
+          ;;                   (-any (lambda (s)
+          ;;                           (--any (s-starts-with? it s t)
+          ;;                                  '("Unknown namespace"
+          ;;                                    "Unresolved symbol"
+          ;;                                    "Unresolved namespace")))))))
+          ;;          ("X-customHandler" #'cljr-add-missing-libspec))
+          ))
+
+  (setq config/lsp--always-first-code-actions
+        '("Import" "Add"))
 
   (defun config/lsp-execute-code-action-custom ()
     "Show a LSP code action popup with custom (non-LSP) commands."
@@ -96,8 +126,15 @@
     (let ((actions (lsp-code-actions-at-point)))
       (dolist (a config/lsp--custom-code-actions)
         (when (and (if-let ((p (ht-get a "X-customPredicate"))) (funcall p) t)
-                   (-none? (lambda (x) (eq (ht-get x "title") (ht-get a "title"))) actions))
+                   (-none? (lambda (x) (eq (ht-get x "title") (ht-get a title))) actions))
           (add-to-list 'actions a)))
+      (let ((head-actions '())
+            (tail-actions '()))
+        (dolist (a actions)
+          (if (not (--any (s-starts-with? it (ht-get a "title")) config/lsp--always-first-code-actions))
+              (add-to-list 'tail-actions a t)
+            (add-to-list 'head-actions a)))
+        (setq actions (append head-actions tail-actions)))
       (cond
        ((seq-empty-p actions)
         (signal 'lsp-no-code-actions nil))
@@ -116,12 +153,12 @@
       (call-interactively 'lsp-rename)
       (dolist (b (--filter (buffer-modified-p it) buffers))
         (save-buffer b))))
+
   (defun config/lsp-mode-init ()
     ;; Disable company initially until we connect to server
-    (when (not lsp--buffer-workspaces)
+    (when (not (config/lsp-enabled-p))
       (company-mode -1))
     (setq-local company-backends '(company-capf))
-    (setq-local company-idle-delay 0)
     (setq-local flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch mode-enabled))
     (eldoc-mode -1))
   (add-hook 'lsp-mode-hook #'config/lsp-mode-init)
@@ -145,8 +182,7 @@
    "C-c C-r C-r" 'lsp-rename
    "C-}" 'lsp-find-references
    "C-c C-\\" 'lsp-format-region
-   "C-c C-d" 'config/lsp-ui-doc-glance
-   "C-C C-n C-n" 'flycheck-next-error)
+   "C-c C-d" 'config/lsp-ui-doc-glance)
 
   (general-define-key
    :keymaps '(clojure-mode-map
@@ -156,7 +192,10 @@
               scss-mode-map
               scala-mode-map
               rust-mode-map
-              c++-mode-map)
+              c++-mode-map
+              js-mode-map
+              rjsx-mode-map
+              typescript-mode-map)
    "C-c C-a C-s" 'lsp)
 
   (add-to-list 'display-buffer-alist

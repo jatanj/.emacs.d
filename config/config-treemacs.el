@@ -6,7 +6,7 @@
   (setq treemacs-space-between-root-nodes nil)
 
   (add-hook 'config/configure-frame-functions
-            (lambda (&rest _) (setq treemacs-width (if (> (x-display-pixel-width) 1920) 45 35))))
+            (lambda (&rest _) (setq treemacs-width (if (> (x-display-pixel-width) 1920) 60 35))))
 
   (defun config/treemacs-is-treemacs-buffer? (&optional buffer)
     (let ((buffer (or buffer (current-buffer))))

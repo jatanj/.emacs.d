@@ -22,8 +22,10 @@
                   typescript-mode
                   js-mode
                   js2-mode
+                  rjsx-mode
                   css-mode
-                  scss-mode))
+                  scss-mode
+                  web-mode))
     (sp-local-pair mode "{" nil :post-handlers '((newline-and-enter-sexp "RET"))))
 
   (dolist (mode '(fsharp-mode

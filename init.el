@@ -54,6 +54,7 @@
 (use-package dash :straight t :demand)
 (use-package s :straight t :demand)
 (use-package ht :straight t :demand)
+(use-package switch-buffer-functions :straight t :demand)
 
 (load init-defuns-path)
 
@@ -105,6 +106,7 @@
 
 (setq config/configure-frame-functions '())
 (setq config/quick-kill-buffer-list '())
+(setq config/save-keybind-hook '())
 
 ;; Useful minor modes
 (show-paren-mode 1)
@@ -283,10 +285,6 @@
 (setq split-width-threshold 40)
 (setq split-window-preferred-function 'split-window-really-sensibly)
 
-;; Switching buffers
-(use-package switch-buffer-functions
-  :straight t)
-
 ;; Use UTF-8 everywhere
 (set-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8)
@@ -380,6 +378,7 @@
                 haskell
                 helm
                 help
+                highlight-numbers
                 ibuffer-projectile
                 ido
                 indent-guides
@@ -410,7 +409,7 @@
                 treemacs
                 typescript
                 uniquify
-                web-mode
+                web
                 which-key
                 window-numbering
                 winner
@@ -452,6 +451,17 @@
                     (slot . 1)
                     (window-height . 0.30))))))
 
+(defun config/save-buffer ()
+  (interactive)
+  (dolist (func config/save-keybind-hook)
+    (when (functionp func)
+      (funcall func)))
+  (save-buffer))
+
+(defun config/reset-minibuffer ()
+  (interactive)
+  (set-window-buffer (minibuffer-window) (get-buffer " *Minibuf-0*")))
+
 ;; Unbind some keys
 (dolist (key '("M-<DEL>" "M-`" "M-u" "M-i" "M-o" "M-p" "M-k" "M-l" "M-m" "M-:" "M-/"
                "M-<lwindow>" "C-<lwindow>"))
@@ -475,7 +485,8 @@
  "C-'" 'helm-apropos
  "C-p" 'helm-projectile-find-file
  "C-S-s" 'save-some-buffers
- "C-<backspace>" 'backward-kill-word-fixed
+ "C-b" nil
+ "C-<backspace>" 'backward-delete-word-smart
  "C-S-<backspace>" 'backspace-whitespace-to-tab-stop
  "C-<tab>" 'previous-buffer
  "<C-iso-lefttab>" 'next-buffer
@@ -507,6 +518,7 @@
  "p" 'helm-projectile-find-file-in-known-projects
  "k" 'ido-kill-buffer
  "C-f" 'helm-find-files
+ "C-g" 'config/reset-minibuffer
  "f" 'find-file
  "b" 'helm-buffers-list
  "t" 'new-empty-buffer
@@ -530,6 +542,7 @@
  "C-b" 'config/treemacs-toggle-find-file
  "C-w" treemacs-project-map
  "C-f" 'helm-do-ag-project-root
+ "C-g" 'config/reset-minibuffer
  "n" 'new-empty-buffer
  "v" 'magit-file-popup
  "C-v" 'magit-status)

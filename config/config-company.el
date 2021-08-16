@@ -3,7 +3,7 @@
   :config
   (setq company-frontends '(company-pseudo-tooltip-frontend))
   (setq company-tooltip-limit 15)
-  (setq company-idle-delay 0)
+  (setq company-idle-delay 0.3)
   (setq company-minimum-prefix-length 1)
   (setq company-require-match nil)
   (setq company-auto-complete nil)
@@ -20,12 +20,20 @@
   (remove-hook 'completion-at-point-functions #'tags-completion-at-point-function)
 
   (defun config/company-completion-started (&rest _)
+    (let ((surrounding (list (char-before) (char-after))))
+      ;; Cancel company if we're inside braces, parentheses, or brackets
+      (when (or (equal surrounding '(?( ?)))
+                (equal surrounding '(?{ ?}))
+                (equal surrounding '(?[ ?])))
+        (company-cancel)))
     (when (bound-and-true-p flycheck-mode)
       (setq flycheck-display-errors-function nil)))
+
   (defun config/company-completion-finished (&rest _)
     (when (bound-and-true-p flycheck-mode)
       (setq flycheck-display-errors-function
             #'flycheck-display-error-messages-unless-error-list)))
+
   (add-hook 'company-completion-started-hook #'config/company-completion-started)
   (add-hook 'company-completion-finished-hook #'config/company-completion-finished)
   (add-hook 'company-completion-cancelled-hook #'config/company-completion-finished)
@@ -80,7 +88,7 @@
   (setq company-box-frame-behavior 'default)
   (setq company-box-show-single-candidate 'always)
   (setq company-box-highlight-prefix t)
-  (setq company-box-max-candidates 50)
+  (setq company-box-max-candidates 30)
   (setq company-box-backends-colors nil)
   (setq company-box-icons-alist 'company-box-icons-images)
   (setq company-box-scrollbar t)
