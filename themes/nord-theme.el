@@ -21,6 +21,7 @@
   (bg5 "#5d6678")
   (bg6 "#292d3e")
   (bg7 "#747f94")
+  (bg8 "#676e95")
   (red       "#bf616a")
   (green     "#a3be8c")
   (yellow    "#ebcb8b")

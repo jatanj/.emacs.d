@@ -113,6 +113,7 @@
 (global-superword-mode 1)
 (global-auto-revert-mode 1)
 (column-number-mode 1)
+(electric-indent-mode 1)
 
 ;; Window size and position
 (setq default-frame-alist
