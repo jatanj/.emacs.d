@@ -339,6 +339,7 @@
                 lua
                 magit
                 markdown
+                nginx
                 org
                 projectile
                 quickrun
