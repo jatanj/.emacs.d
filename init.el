@@ -99,6 +99,7 @@
 (setq-default line-spacing 0)
 (setq warning-minimum-level :emergency)
 (advice-add #'yes-or-no-p :override #'y-or-n-p)
+(put 'erase-buffer 'disabled nil)
 
 ;; Performance
 (setq gc-cons-threshold 100000000)
