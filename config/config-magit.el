@@ -103,49 +103,49 @@
   (global-git-commit-mode)
   (setq vc-follow-symlinks t))
 
-(use-package gitconfig-mode
-  :straight t
-  :defer t
-  :mode ("\\.gitconfig\\'" . gitconfig-mode)
-  :init
-  (add-hook 'gitconfig-mode-hook
-    (lambda ()
-      (when (bound-and-true-p electric-indent-mode)
-        (electric-indent-local-mode)))))
+; (use-package gitconfig-mode
+;   :straight t
+;   :defer t
+;   :mode ("\\.gitconfig\\'" . gitconfig-mode)
+;   :init
+;   (add-hook 'gitconfig-mode-hook
+;     (lambda ()
+;       (when (bound-and-true-p electric-indent-mode)
+;         (electric-indent-local-mode)))))
 
-(use-package gitignore-mode
-  :straight t
-  :defer t
-  :mode ("\\.gitignore\\'" . gitignore-mode)
-  :init
-  (add-hook 'gitignore-mode-hook
-    (lambda ()
-      (setq indent-line-function 'indent-relative-maybe))))
+; (use-package gitignore-mode
+;   :straight t
+;   :defer t
+;   :mode ("\\.gitignore\\'" . gitignore-mode)
+;   :init
+;   (add-hook 'gitignore-mode-hook
+;     (lambda ()
+;       (setq indent-line-function 'indent-relative-maybe))))
 
-(use-package git-gutter-fringe
-  :straight t
-  :init
-  (setq git-gutter-fr:side 'right-fringe)
-  ;; https://github.com/hlissner/doom-emacs
-  (defun git-gutter-maybe ()
-    (when (and (buffer-file-name)
-               (not (file-remote-p (buffer-file-name))))
-      (setq-default fringes-outside-margins t)
-      (set-window-buffer (get-buffer-window) (current-buffer))
-      (git-gutter-mode +1)))
-  (-map (lambda (x) (add-hook x #'git-gutter-maybe))
-        '(text-mode-hook prog-mode-hook conf-mode-hook))
-  (add-hook 'focus-in-hook #'git-gutter:update-all-windows)
-  :config
-  (fringe-helper-define 'git-gutter-fr:added '(center repeated)
-    "XXX.....")
-  (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
-    "XXX.....")
-  (fringe-helper-define 'git-gutter-fr:deleted 'bottom
-    "X......."
-    "XX......"
-    "XXX....."
-    "XXXX...."))
+; (use-package git-gutter-fringe
+;   :straight t
+;   :init
+;   (setq git-gutter-fr:side 'right-fringe)
+;   ;; https://github.com/hlissner/doom-emacs
+;   (defun git-gutter-maybe ()
+;     (when (and (buffer-file-name)
+;                (not (file-remote-p (buffer-file-name))))
+;       (setq-default fringes-outside-margins t)
+;       (set-window-buffer (get-buffer-window) (current-buffer))
+;       (git-gutter-mode +1)))
+;   (-map (lambda (x) (add-hook x #'git-gutter-maybe))
+;         '(text-mode-hook prog-mode-hook conf-mode-hook))
+;   (add-hook 'focus-in-hook #'git-gutter:update-all-windows)
+;   :config
+;   (fringe-helper-define 'git-gutter-fr:added '(center repeated)
+;     "XXX.....")
+;   (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
+;     "XXX.....")
+;   (fringe-helper-define 'git-gutter-fr:deleted 'bottom
+;     "X......."
+;     "XX......"
+;     "XXX....."
+;     "XXXX...."))
 
 (use-package fringe-helper
   :straight t)

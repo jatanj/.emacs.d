@@ -163,7 +163,7 @@
 (setq-default cursor-in-non-selected-windows nil)
 
 ;; Line numbers
-(linum-mode -1)
+; (linum-mode -1)
 (setq-default left-fringe-width 10)
 (global-display-line-numbers-mode 1)
 (setq-default display-line-numbers t)
@@ -309,6 +309,7 @@
                 beacon
                 c-cpp
                 centaur-tabs
+                indent-guides
                 clojure
                 company
                 cql
@@ -331,7 +332,6 @@
                 highlight-numbers
                 ibuffer-projectile
                 ido
-                indent-guides
                 java
                 javascript
                 json
